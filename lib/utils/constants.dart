@@ -1,4 +1,8 @@
 class Constants {
+  static const List<String> cellPopupMenuOptions = [
+    "Approve",
+    "Recalculate",
+  ];
   static const String AUDIT_TASK_COLUMN_DATA = """ 
    [{
  		"displayName": "Date",

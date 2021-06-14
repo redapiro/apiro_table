@@ -1,3 +1,4 @@
+import 'package:apiro_table/utils/app_colors.dart';
 import 'package:flutter/material.dart';
 
 class CustomDropDownWidget extends StatelessWidget {
@@ -45,7 +46,7 @@ class CustomDropDownWidget extends StatelessWidget {
             isExpanded: true,
 
             style: _themeData.textTheme.bodyText1!
-                .copyWith(color: textColor ?? Theme.of(context).dividerColor),
+                .copyWith(color: textColor ?? AppColors.dividerColor),
             underline: Container(),
             // itemHeight: kMinInteractiveDimension,
 
@@ -60,8 +61,7 @@ class CustomDropDownWidget extends StatelessWidget {
                           child: Text(
                           value,
                           style: _themeData.textTheme.bodyText1!.copyWith(
-                              color:
-                                  textColor ?? Colors.black),
+                              color: textColor ?? AppColors.dividerColor),
                         )),
                   value: value,
                 );
