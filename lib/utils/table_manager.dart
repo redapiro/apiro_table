@@ -50,12 +50,12 @@ class TableManager {
     this.columnIds = List<String>.from(this.staticColumnIds);
     this.columnNames = List<String>.from(this.staticColumnsData);
     //Updatetable filters
-    AppNotifiers.getInstance().filterListUpdateNotifier.value =
-        !AppNotifiers.getInstance().filterListUpdateNotifier.value;
 
     this.applyAnyFilterHiddenColumnRowAndColumnPinningIfExists();
     //refresh the view
     this.refreshDataTable();
+    AppNotifiers.getInstance().filterListUpdateNotifier.value =
+        !AppNotifiers.getInstance().filterListUpdateNotifier.value;
   }
 
   void addFilterToColumn(String columnId) {

@@ -8,7 +8,14 @@ import 'package:flutter/material.dart';
 
 class HiddenColumnDropDown extends StatelessWidget {
   final Widget? leftWidget;
-  HiddenColumnDropDown({Key? key, this.leftWidget}) : super(key: key);
+  final Function? clearAllPress;
+  final Function? showAllPress;
+  HiddenColumnDropDown({
+    Key? key,
+    this.leftWidget,
+    this.clearAllPress,
+    this.showAllPress,
+  }) : super(key: key);
 
   late ThemeData _themeData;
 
@@ -157,6 +164,7 @@ class HiddenColumnDropDown extends StatelessWidget {
   void _onShowAllPress(BuildContext context) {
     TableManager.getInstance().showAllColumn();
     Navigator.pop(context);
+    this.showAllPress!();
   }
 
   void _onHiddenColumnShowPress(String colName, BuildContext context) {
@@ -166,5 +174,6 @@ class HiddenColumnDropDown extends StatelessWidget {
 
   void _clearAllFiltersPressed() {
     TableManager.getInstance().removeAllFilter();
+    this.clearAllPress!();
   }
 }

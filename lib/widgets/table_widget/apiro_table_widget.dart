@@ -172,6 +172,12 @@ class ApiroTableWidget extends StatelessWidget {
                     if (this.showTableHeaderBar)
                       HiddenColumnDropDown(
                         leftWidget: this.widgetInTableHeaderRow,
+                        clearAllPress: () {
+                          this.updateDataOnFilterColumn!([], "");
+                        },
+                        showAllPress: () {
+                          this.updateDataOnHideColumn!([]);
+                        },
                       ),
                     Row(
                       children: [
