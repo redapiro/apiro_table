@@ -2,10 +2,13 @@ import 'package:apiro_table/utils/app_colors.dart';
 import 'package:apiro_table/utils/app_notifiers.dart';
 import 'package:apiro_table/utils/common_methods.dart';
 import 'package:apiro_table/utils/table_manager.dart';
+import 'package:apiro_table/widgets/custom_widgets/adaptive_outlined_button.dart';
+import 'package:apiro_table/widgets/custom_widgets/adaptive_text_button.dart';
 import 'package:flutter/material.dart';
 
 class HiddenColumnDropDown extends StatelessWidget {
-  HiddenColumnDropDown({Key? key}) : super(key: key);
+  final Widget? leftWidget;
+  HiddenColumnDropDown({Key? key, this.leftWidget}) : super(key: key);
 
   late ThemeData _themeData;
 
@@ -17,11 +20,33 @@ class HiddenColumnDropDown extends StatelessWidget {
       children: [
         Divider(height: 0.3, color: AppColors.disabledColor),
         SizedBox(height: 10),
-        _getHiddenColumnDropDown(),
+        Row(
+          children: [
+            SizedBox(width: 15),
+            Expanded(child: (leftWidget == null) ? Container() : leftWidget!),
+            _getClearAllButton(),
+            _getHiddenColumnDropDown(),
+            SizedBox(width: 15),
+          ],
+        ),
         SizedBox(height: 10),
         Divider(height: 0.3, color: AppColors.disabledColor),
       ],
     ));
+  }
+
+  Widget _getClearAllButton() {
+    return Container(
+        width: 150,
+        height: 30,
+        child: AdaptiveOutlinedButton(
+          buttonColor: AppColors.appBlueColor,
+          borderRadius: BorderRadius.circular(40),
+          onPressed: () {
+            _clearAllFiltersPressed();
+          },
+          text: "Clear All Filters",
+        ));
   }
 
   Widget _getHiddenColumnDropDown() {
@@ -132,21 +157,14 @@ class HiddenColumnDropDown extends StatelessWidget {
   void _onShowAllPress(BuildContext context) {
     TableManager.getInstance().showAllColumn();
     Navigator.pop(context);
-    // TableConfig.getInstance().showAllHiddenColumns();
-    // List<String> hidColNamesList =
-    //     TableConfig.getInstance().hiddenColumnsInfo.keys.toList();
-    // PageManager.getInstance().hiddenColumnNotifier.value =
-    //     hidColNamesList.length > 0 ? hidColNamesList.last : null;
   }
 
   void _onHiddenColumnShowPress(String colName, BuildContext context) {
-    print("column id to show -- $colName");
     TableManager.getInstance().showColumn(colName);
     Navigator.pop(context);
-    // TableConfig.getInstance().showHiddenColumn(colName);
-    // List<String> hidColNamesList =
-    //     TableConfig.getInstance().hiddenColumnsInfo.keys.toList();
-    // PageManager.getInstance().hiddenColumnNotifier.value =
-    //     hidColNamesList.length > 0 ? hidColNamesList.last : null;
+  }
+
+  void _clearAllFiltersPressed() {
+    TableManager.getInstance().removeAllFilter();
   }
 }

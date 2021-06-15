@@ -9,12 +9,18 @@ import 'package:flutter/material.dart';
 
 class TableColumnHeaderPopMenuButtonWidget extends StatelessWidget {
   final String title;
+  final String id;
   final String subtitle;
   final String tootipName;
 
   final Map<String, dynamic> metadata;
   final bool isPinned;
   final List<String>? tableFilterList;
+
+  final bool isFilterOn;
+  final bool selectableText;
+  final bool iscolumnOrderingOn;
+  final bool iscolumnHidingOn;
 
   final Function()? onColumnmPinClick;
   final Function()? onColumnmHideClick;
@@ -27,7 +33,12 @@ class TableColumnHeaderPopMenuButtonWidget extends StatelessWidget {
       this.onColumnmFilterClick,
       this.onColumnmHideClick,
       this.tableFilterList,
+      this.isFilterOn = true,
+      this.iscolumnHidingOn = true,
+      this.iscolumnOrderingOn = true,
+      this.selectableText = false,
       required this.tootipName,
+      required this.id,
       this.onColumnmPinClick,
       this.onColumnOrderingSet,
       this.isPinned = false,
@@ -101,13 +112,23 @@ class TableColumnHeaderPopMenuButtonWidget extends StatelessWidget {
                             Expanded(
                               child: Tooltip(
                                 message: this.title,
-                                child: Text(this.title,
-                                    textAlign: TextAlign.center,
-                                    style: _themeData!.textTheme.subtitle2!
-                                        .copyWith(
-                                            color: isPopUpButtonPressed.value
-                                                ? AppColors.appBlueColor
-                                                : AppColors.dividerColor)),
+                                child: (this.selectableText)
+                                    ? SelectableText(this.title,
+                                        textAlign: TextAlign.center,
+                                        style: _themeData!.textTheme.subtitle2!
+                                            .copyWith(
+                                                color: isPopUpButtonPressed
+                                                        .value
+                                                    ? AppColors.appBlueColor
+                                                    : AppColors.dividerColor))
+                                    : Text(this.title,
+                                        textAlign: TextAlign.center,
+                                        style: _themeData!.textTheme.subtitle2!
+                                            .copyWith(
+                                                color: isPopUpButtonPressed
+                                                        .value
+                                                    ? AppColors.appBlueColor
+                                                    : AppColors.dividerColor)),
                               ),
                             ),
                             SizedBox(width: 3),
@@ -124,7 +145,7 @@ class TableColumnHeaderPopMenuButtonWidget extends StatelessWidget {
 
   Widget _getTableColumnFilterIcon() {
     if (TableManager.getInstance().tableColumnFilterList.length > 1 &&
-        (TableManager.getInstance().currentFilterColumnId == this.title))
+        (TableManager.getInstance().currentFilterColumnId == this.id))
       return TableColumnFilterIconWidget(
         margin: EdgeInsets.only(right: 3),
         text: ((TableManager.getInstance().tableColumnFilterList.length - 1)
@@ -209,20 +230,22 @@ class TableColumnHeaderPopMenuButtonWidget extends StatelessWidget {
                 textColor: Theme.of(context).scaffoldBackgroundColor,
                 onClick: _onColumnPinClick),
             SizedBox(width: 10),
-            _getButtonWithTitle("Filter", Icons.filter_alt_rounded,
-                Theme.of(context).scaffoldBackgroundColor,
-                addBorder: true, onClick: _onColumnFilterClick),
+            if (this.isFilterOn)
+              _getButtonWithTitle("Filter", Icons.filter_alt_rounded,
+                  Theme.of(context).scaffoldBackgroundColor,
+                  addBorder: true, onClick: _onColumnFilterClick),
             SizedBox(width: 10),
           ],
         ),
         SizedBox(height: 10),
         Row(
           children: [
-            _getButtonWithTitle("Hide", Icons.remove_red_eye_outlined,
-                Theme.of(context).scaffoldBackgroundColor,
-                onClick: _onColumnHideClick),
+            if (this.iscolumnHidingOn)
+              _getButtonWithTitle("Hide", Icons.remove_red_eye_outlined,
+                  Theme.of(context).scaffoldBackgroundColor,
+                  onClick: _onColumnHideClick),
             SizedBox(width: 10),
-            _getColumnOrderTextField(),
+            if (this.iscolumnOrderingOn) _getColumnOrderTextField(),
           ],
         ),
         SizedBox(height: 5),

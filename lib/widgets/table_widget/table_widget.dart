@@ -20,12 +20,12 @@ import 'package:syncfusion_flutter_datagrid/datagrid.dart';
 class TableWidget extends StatelessWidget {
   TableWidget({
     Key? key,
-    required this.gridRow,
+    this.gridRow = const [],
     required this.columnData,
     required this.columnIds,
     required this.rowData,
     this.groupColumnPinning = false,
-    this.rowColumnPinning = false,
+    this.rowGroupPinning = false,
     this.selectableColumnText = false,
     this.selectableCellText = false,
     this.cellEditDialog = false,
@@ -39,7 +39,9 @@ class TableWidget extends StatelessWidget {
   }) : super(key: key) {
     //Init table manager
     _tableManager = TableManager.getInstance();
-    setupData();
+    setupData(inConstructor: this.gridRow.length == 0);
+
+    perPageRowCountList = paginationPageSizes.map((e) => e.toString()).toList();
 
     //Initialize app notifier
     _appNotifiers = AppNotifiers.getInstance();
@@ -54,7 +56,7 @@ class TableWidget extends StatelessWidget {
   bool groupColumnPinning;
 
   //Row column pinning
-  bool rowColumnPinning;
+  bool rowGroupPinning;
 
   //Selectable column header text
   bool selectableColumnText;
@@ -175,8 +177,13 @@ class TableWidget extends StatelessWidget {
                                     label: TableColumnHeaderPopMenuButtonWidget(
                                       title: _tableManager.columnNames[index],
                                       popUpButtonHeight: 50,
+                                      isFilterOn: this.filtersOn,
+                                      iscolumnOrderingOn: this.columnOrderingOn,
+                                      iscolumnHidingOn: this.columnHidingOn,
+                                      selectableText: selectableColumnText,
                                       metadata: {},
                                       isPinned: colInfo.columnId != null,
+                                      id: _tableManager.columnIds[index],
                                       tableFilterList:
                                           _tableManager.tableColumnFilterList,
                                       onColumnmPinClick: () {
@@ -250,9 +257,6 @@ class TableWidget extends StatelessWidget {
   }
 
   TableDataGrid _tableDataGridSource() {
-    print("grid row length ${this.gridRow.length}");
-    print("grid row length ${this.columnIds.length}");
-    print("grid row length ${this.columnData.length}");
     return TableDataGrid(
         context: this.context, gridRow: _tableManager.datagridRow);
   }
@@ -271,7 +275,7 @@ class TableWidget extends StatelessWidget {
     int currentPosition,
     bool isUnPin,
   ) {
-    if (this.rowColumnPinning) {
+    if (this.rowGroupPinning) {
       _appNotifiers.frozenRowCountNotifier.value += 1;
     } else {
       _tableManager.singleRowPinning(currentPosition, isUnPin);
@@ -349,10 +353,40 @@ class TableWidget extends StatelessWidget {
     TableManager.getInstance().refreshDataTable();
   }
 
-  void setupData() {
+  void setupData({bool inConstructor = false}) {
+    if (inConstructor) {
+      //Setting up table data when it is coming from constructor
+      _tableManager.columnNames = List<String>.from(this.columnData);
+      _tableManager.columnIds = List<String>.from(this.columnIds);
+      _tableManager.staticColumnIds = List<String>.from(this.columnData);
+      _tableManager.staticColumnsData = List<String>.from(this.columnIds);
+
+      _tableManager.staticRowData =
+          List<Map<String, dynamic>>.from(this.rowData);
+      _tableManager.rowData = List<Map<String, dynamic>>.from(this.rowData);
+
+      //Data grid row
+      _tableManager.datagridRow = [];
+      List<DataGridRow> rowss = this.gridRow.map((e) {
+        return DataGridRow(
+            cells: List.generate(e.getCells().length, (index) {
+          return DataGridCell(
+              value: e.getCells()[index].value,
+              columnName: this.columnIds[index]);
+        }));
+      }).toList();
+      _tableManager.datagridRow = List<DataGridRow>.from(this.gridRow);
+
+      _tableManager.staticDatagridRow = [];
+      _tableManager.staticDatagridRow = List<DataGridRow>.from(rowss);
+    }
+
     _getColumnData();
     _getDataGridRow();
   }
+
+  //*************** These methods will be added by the client whenever client sends customized rows */
+  //**************** If datagrid rows not provided then these methodss will be called with only call available shown to the user */
 
   List<String> _getColumnData() {
     List<String> colNamesList = [];
@@ -401,9 +435,13 @@ class TableWidget extends StatelessWidget {
                       _onRowClick(colIndex, rowIndex);
                     },
                     child: Container(
-                        child: Text(rowData["results"][rowIndex]
-                                [this.colIds[colIndex]]
-                            .toString())))
+                        child: this.selectableCellText
+                            ? SelectableText(rowData["results"][rowIndex]
+                                    [this.colIds[colIndex]]
+                                .toString())
+                            : Text(rowData["results"][rowIndex]
+                                    [this.colIds[colIndex]]
+                                .toString())))
                 : TableGridCell(
                     onCellDoubleTap: () {
                       _onDataCellDoubleTap(
@@ -413,6 +451,9 @@ class TableWidget extends StatelessWidget {
                           colName: this.colIds[colIndex],
                           colIndex: colIndex);
                     },
+                    cellMenuOn: cellMenuOn,
+                    isSelectable: this.selectableCellText,
+                    isEditable: this.cellInlineEditing,
                     rowIndex: rowIndex,
                     colIndex: colIndex,
                     title: rowData["results"][rowIndex][this.colIds[colIndex]]
@@ -448,7 +489,6 @@ class TableWidget extends StatelessWidget {
   }
 
   void _onRowClick(int colIndex, int rowIndex) {
-    print("pressed row click with row col index === $rowIndex and $colIndex");
     if (colIndex == 0 && rowIndex == 0) {
       this.onRowPinClick(rowIndex, colIndex);
     }

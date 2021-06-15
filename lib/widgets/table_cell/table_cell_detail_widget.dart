@@ -40,7 +40,6 @@ class TableCellDetailWidget extends StatelessWidget {
       required this.aggregators}) {
     textColor = AppColors.dividerColor;
     backgroundColor = AppColors.scaffoldBackgroundColor;
-    print("showOnly final value -- $shouldShowOnlyFinalValue");
   }
   double? screenWidth;
 

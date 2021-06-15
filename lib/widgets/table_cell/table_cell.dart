@@ -9,6 +9,8 @@ class TableGridCell extends StatelessWidget {
   final String title;
   final TextStyle? style;
   final bool isEditable;
+  final bool cellMenuOn;
+
   final bool isSelectable;
   final int rowIndex;
   final int colIndex;
@@ -21,6 +23,7 @@ class TableGridCell extends StatelessWidget {
       required this.colIndex,
       this.style,
       this.isEditable = true,
+      this.cellMenuOn = true,
       required this.onCellDoubleTap,
       this.isSelectable = false})
       : super(key: key) {
@@ -58,7 +61,7 @@ class TableGridCell extends StatelessWidget {
                 _onDataCellDoubleTap();
               },
               onSecondaryTap: () {
-                _onCellRightClick();
+                if (this.cellMenuOn) _onCellRightClick();
               },
               child: Container(
                   height: 60,

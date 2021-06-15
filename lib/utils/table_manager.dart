@@ -42,13 +42,16 @@ class TableManager {
     this.datagridRow = [];
 
     this.rowData = List<Map<String, dynamic>>.from(this.staticRowData);
-    this.datagridRow = List<DataGridRow>.from(this.staticDatagridRow);
+    this.datagridRow = this.decoupleCellObjects();
 
     this.columnIds = [];
     this.columnNames = [];
 
     this.columnIds = List<String>.from(this.staticColumnIds);
     this.columnNames = List<String>.from(this.staticColumnsData);
+    //Updatetable filters
+    AppNotifiers.getInstance().filterListUpdateNotifier.value =
+        !AppNotifiers.getInstance().filterListUpdateNotifier.value;
 
     this.applyAnyFilterHiddenColumnRowAndColumnPinningIfExists();
     //refresh the view
@@ -56,7 +59,6 @@ class TableManager {
   }
 
   void addFilterToColumn(String columnId) {
-    print("inside filter");
     List<Map<String, dynamic>> tempRowData = [];
     List<DataGridRow> _dataGridRow = [];
     int rowIndex = 0;
@@ -76,6 +78,10 @@ class TableManager {
 
     this.currentFilterColumnId = columnId;
 
+    //Updatetable filters
+    AppNotifiers.getInstance().filterListUpdateNotifier.value =
+        !AppNotifiers.getInstance().filterListUpdateNotifier.value;
+
     //refreshTable
     this.refreshDataTable();
   }
@@ -87,26 +93,31 @@ class TableManager {
   //Hidden ColumnsWorking
   void hideColumn(String columnId) {
     int rowIndex = 0;
-    Map<String, dynamic> cellsData = {};
-    List<DataGridRow> gridRows = [];
-    cellsData["cells_data"] = [];
+
+    List<DataGridCell> cells = [];
     for (var row in this.rowData) {
       //Remove col data fro rows
       row.remove(columnId);
       if (this.datagridRow.length > 0) {
         int colIndex = this.columnIds.indexOf(columnId);
-
-        removeDataGridRowForColumn(colIndex, rowIndex, columnId);
+        DataGridCell? gridCell =
+            removeDataGridRowForColumn(colIndex, rowIndex, columnId);
+        if (gridCell != null) {
+          cells.add(gridCell);
+        }
       }
     }
 
     // remove data from column id and name
     int colIndex = this.columnIds.indexOf(columnId);
     this.columnIds.remove(columnId);
-    this.columnNames.removeAt(colIndex);
+    var colName = this.columnNames.removeAt(colIndex);
 
     //save the columnId to unhide colum in future
-    this.hiddenColumnIds.add({columnId: colIndex});
+
+    this
+        .hiddenColumnIds
+        .add({columnId: colIndex, "cells_data": cells, "column_name": colName});
 
     AppNotifiers.getInstance().hiddenColumnNotifier.value =
         this.hiddenColumnIds.length.toString();
@@ -127,33 +138,50 @@ class TableManager {
     return rowss;
   }
 
+  DataGridCell _decoupleGridCellsObjects(DataGridCell cells) {
+    DataGridCell gridCells =
+        DataGridCell(columnName: cells.columnName, value: cells.value);
+
+    return gridCells;
+  }
+
   //remove data from datagrid row if exists
   DataGridCell? removeDataGridRowForColumn(
       int colIndex, int rowIndex, String colId) {
     List<DataGridCell<dynamic>> dataGridCells =
         datagridRow[rowIndex].getCells();
     DataGridCell? cell;
+
     if (dataGridCells[colIndex].columnName == colId) {
       cell = dataGridCells.removeAt(colIndex);
 
       datagridRow[rowIndex] = DataGridRow(cells: dataGridCells);
     }
+
     return cell;
   }
 
   void showColumn(String columnId) {
     int rowIndex = 0;
+    //Add back the column at index
+    Map<String, dynamic> getHiddenColumnData =
+        _getHiddenColumnDataWithColumnId(columnId);
+
+    int insertToColIndex = getHiddenColumnData[columnId];
+
     for (var row in this.staticRowData) {
-      print("row data -- $rowData");
       if (!this.rowData[rowIndex].containsKey(columnId)) {
         this.rowData[rowIndex][columnId] = row[columnId];
         List<DataGridCell<dynamic>> dataGridCells =
             datagridRow[rowIndex].getCells();
-        int colIndex = this.staticColumnIds.indexOf(columnId);
+
         List<DataGridCell<dynamic>> maindataGridCells =
             this.staticDatagridRow[rowIndex].getCells();
 
-        dataGridCells.insert(colIndex, maindataGridCells[colIndex]);
+        dataGridCells.insert(
+            insertToColIndex,
+            this._decoupleGridCellsObjects(
+                getHiddenColumnData["cells_data"][rowIndex]));
 
         datagridRow[rowIndex] = DataGridRow(cells: dataGridCells);
       }
@@ -161,20 +189,11 @@ class TableManager {
       rowIndex++;
     }
 
-    //Add back the column at index
-    Map<String, dynamic> getHiddenColumnData =
-        _getHiddenColumnDataWithColumnId(columnId);
-    print(
-        "both column data comparision column length ${this.staticColumnsData.length}");
-    print(
-        "both column data comparision column length ${this.columnNames.length}");
-    print("hidden column data -- $getHiddenColumnData");
-    print(
-        "hidden column data -- ${this.staticColumnsData[getHiddenColumnData[columnId]]}");
     if (getHiddenColumnData.length > 0) {
-      this.columnNames.insert(getHiddenColumnData[columnId],
-          this.staticColumnsData[getHiddenColumnData[columnId]]);
-      this.columnIds.insert(getHiddenColumnData[columnId], columnId);
+      this
+          .columnNames
+          .insert(insertToColIndex, getHiddenColumnData["column_name"]);
+      this.columnIds.insert(insertToColIndex, columnId);
     }
 
     this
@@ -286,7 +305,7 @@ class TableManager {
               }).lastPosition ??
               0
           : 0);
-      print("unpin insert at -- ${insertIndex}");
+
       int rowIndex = 0;
       for (var rowActData in tempRowData) {
         List<DataGridCell<dynamic>> dataGridCells =
@@ -372,8 +391,6 @@ class TableManager {
 
   void updateCellValue(
       int rowIndex, int colIndex, String value, Function() onCellDoubleClick) {
-    print(
-        "updated last value ${this.rowData[rowIndex][this.columnIds[colIndex]]} with $value ");
     this.rowData[rowIndex][this.columnIds[colIndex]] = value;
     List<DataGridCell> cells = this.datagridRow[rowIndex].getCells();
 
