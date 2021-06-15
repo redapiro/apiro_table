@@ -1,4 +1,4 @@
-import 'package:apiro_table/widgets/table_widget/table_widget.dart';
+import 'package:apiro_table/widgets/table_widget/apiro_table_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 
@@ -33,7 +33,7 @@ class MyApp extends StatelessWidget {
         GlobalWidgetsLocalizations.delegate,
         GlobalCupertinoLocalizations.delegate,
       ],
-      home: TableWidget(
+      home: ApiroTableWidget(
         columnData: [],
         columnIds: colIds,
         rowData: rowData,

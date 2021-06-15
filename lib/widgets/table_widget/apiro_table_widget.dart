@@ -17,8 +17,8 @@ import 'package:apiro_table/widgets/table_header_cell/table_header_popup_menu_ce
 import 'package:flutter/material.dart';
 import 'package:syncfusion_flutter_datagrid/datagrid.dart';
 
-class TableWidget extends StatelessWidget {
-  TableWidget({
+class ApiroTableWidget extends StatelessWidget {
+  ApiroTableWidget({
     Key? key,
     this.gridRow = const [],
     required this.columnData,
