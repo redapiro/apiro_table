@@ -379,10 +379,10 @@ class ApiroTableWidget extends StatelessWidget {
 
       _tableManager.staticDatagridRow = [];
       _tableManager.staticDatagridRow = List<DataGridRow>.from(rowss);
+    } else {
+      _getColumnData();
+      _getDataGridRow();
     }
-
-    _getColumnData();
-    _getDataGridRow();
   }
 
   //*************** These methods will be added by the client whenever client sends customized rows */
