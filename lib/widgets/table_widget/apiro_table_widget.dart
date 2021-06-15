@@ -116,7 +116,7 @@ class ApiroTableWidget extends StatelessWidget {
   //****************Pagination callback methods */
   Function(int, int) onPageNumberClick;
   Function(int, int) onNextClick;
-  Function(int, int) onItemPerPageChange;
+  Function(int, int, int) onItemPerPageChange;
   Function(int, int, int) onPageNumberDropDownSelect;
   Function(int, int) onPreviousClick;
   Function(int, int) onPageNumberTextFieldSubmit;
@@ -371,10 +371,9 @@ class ApiroTableWidget extends StatelessWidget {
 
   void _onItemPerPageChange() {
     this.currentPageNumberNotifier.value = 1;
-    this.onPageNumberDropDownSelect(this.currentPageNumberNotifier.value,
-        this.totalNumberOfPages, int.parse(this.perPageRowCountNotifier.value));
-    // this.onItemPerPageChange(
-    //     this.currentPageNumberNotifier.value, this.totalNumberOfPages);
+    
+    this.onItemPerPageChange(
+        this.currentPageNumberNotifier.value, this.totalNumberOfPages, int.parse(this.perPageRowCountNotifier.value));
     _reloadTableData();
   }
 
