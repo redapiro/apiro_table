@@ -105,6 +105,7 @@ class TableManager {
           cells.add(gridCell);
         }
       }
+      rowIndex++;
     }
 
     // remove data from column id and name
