@@ -40,7 +40,7 @@ class MyApp extends StatelessWidget {
         filtersOn: true,
         selectableCellText: false,
         cellInlineEditing: false,
-        columnHidingOn: false,
+        columnHidingOn: true,
         columnOrderingOn: true,
         paginationPageSize: 50,
         cellMenuOn: true,

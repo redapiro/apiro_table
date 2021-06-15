@@ -96,8 +96,11 @@ class TableManager {
       row.remove(columnId);
       if (this.datagridRow.length > 0) {
         int colIndex = this.columnIds.indexOf(columnId);
+        print("column Id index -- $colIndex $columnId");
         DataGridCell? gridCell =
             removeDataGridRowForColumn(colIndex, rowIndex, columnId);
+        print("Grid Cell is there -- $gridCell");
+
         if (gridCell != null) {
           cells.add(gridCell);
         }
@@ -109,17 +112,19 @@ class TableManager {
     this.columnIds.remove(columnId);
     var colName = this.columnNames.removeAt(colIndex);
 
+    print(
+        "length of grid row -- ${this.datagridRow.length} and column ${columnIds.length}  and column name ${this.columnNames.length} and current col id $columnId");
+
     //save the columnId to unhide colum in future
 
     this
         .hiddenColumnIds
         .add({columnId: colIndex, "cells_data": cells, "column_name": colName});
 
-    AppNotifiers.getInstance().hiddenColumnNotifier.value =
-        this.hiddenColumnIds.length.toString();
-
     //refresh the table
     this.refreshDataTable();
+    AppNotifiers.getInstance().hiddenColumnNotifier.value =
+        this.hiddenColumnIds.length.toString();
   }
 
   List<DataGridRow> decoupleCellObjects({List<DataGridRow>? gridRows}) {
