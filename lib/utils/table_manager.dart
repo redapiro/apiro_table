@@ -340,7 +340,7 @@ class TableManager {
   void singleRowPinning(int currentPosition, bool isUnPin) {
     if (!isUnPin) {
       int insertIndex =
-          this.pinnedRowInfo.length > 0 ? this.pinnedRowInfo.length - 1 : 0;
+          this.pinnedRowInfo.length > 0 ? this.pinnedRowInfo.length : 0;
 
       var value = datagridRow.removeAt(currentPosition);
       datagridRow.insert(insertIndex, value);
