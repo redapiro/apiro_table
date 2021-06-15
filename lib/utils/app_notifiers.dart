@@ -22,5 +22,5 @@ class AppNotifiers {
 
   //Controller to notify client about row pinning
   StreamController<List<Map<String, dynamic>>> isRowunpinController =
-      StreamController<List<Map<String, dynamic>>>();
+      StreamController<List<Map<String, dynamic>>>.broadcast();
 }
