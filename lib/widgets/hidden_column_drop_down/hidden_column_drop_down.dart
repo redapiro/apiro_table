@@ -18,7 +18,7 @@ class HiddenColumnDropDown extends StatelessWidget {
     return Container(
         child: Column(
       children: [
-        Divider(height: 0.3, color: AppColors.disabledColor),
+        // Divider(height: 0.3, color: AppColors.disabledColor),
         SizedBox(height: 10),
         Row(
           children: [
@@ -30,7 +30,7 @@ class HiddenColumnDropDown extends StatelessWidget {
           ],
         ),
         SizedBox(height: 10),
-        Divider(height: 0.3, color: AppColors.disabledColor),
+        Divider(height: 0.2, color: AppColors.tableRowBackgroundColor),
       ],
     ));
   }

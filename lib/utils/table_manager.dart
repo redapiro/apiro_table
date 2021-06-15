@@ -368,6 +368,11 @@ class TableManager {
       AppNotifiers.getInstance().frozenRowCountNotifier.value -= 1;
     }
 
+    //Notify client about pinned or unpinned row
+    AppNotifiers.getInstance()
+        .isRowunpinController
+        .add(this.pinnedRowInfo.map((e) => e.currentPosition ?? 0).toList());
+
     //refresh table with new data
     this.refreshDataTable();
   }

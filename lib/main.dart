@@ -1,3 +1,6 @@
+import 'dart:async';
+
+import 'package:apiro_table/utils/app_notifiers.dart';
 import 'package:apiro_table/widgets/table_widget/apiro_table_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
@@ -17,6 +20,7 @@ class MyApp extends StatelessWidget {
   List<String> colData = [];
   List<String> colIds = [];
   List<Map<String, dynamic>> rowData = [];
+  List<int> pinnedRowIndex = [];
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
@@ -47,6 +51,13 @@ class MyApp extends StatelessWidget {
         paginationPageSizes: [5, 10, 50, 300, 700],
         selectableColumnText: false,
         gridRow: [],
+        getPinnedRowStream: (pinnedRows, rowPinCallback) {
+          // pinnedRows.listen((event) {
+          //   print("pinned rows list -- ${event}");
+          //   this.pinnedRowIndex = event;
+          // });
+          // rowPinCallback()
+        },
         tableHeight: 400,
       ),
     );

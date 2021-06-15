@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 
 class AppNotifiers {
@@ -17,4 +19,8 @@ class AppNotifiers {
   //Table pinned row and column pointers
   ValueNotifier<int> frozenColumnCountNotifier = ValueNotifier<int>(0);
   ValueNotifier<int> frozenRowCountNotifier = ValueNotifier<int>(0);
+
+  //Controller to notify client about row pinning
+  StreamController<List<int>> isRowunpinController =
+      StreamController<List<int>>();
 }

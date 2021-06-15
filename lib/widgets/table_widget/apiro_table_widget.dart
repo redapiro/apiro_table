@@ -12,7 +12,6 @@ import 'package:apiro_table/widgets/hidden_column_drop_down/hidden_column_drop_d
 import 'package:apiro_table/widgets/pinned_row_pop_up/pinned_row_pop_up_widget.dart';
 import 'package:apiro_table/widgets/table_cell/table_cell.dart';
 import 'package:apiro_table/widgets/table_cell/table_cell_detail_widget.dart';
-import 'package:apiro_table/widgets/table_header_cell/table_header_cell.dart';
 import 'package:apiro_table/widgets/table_header_cell/table_header_popup_menu_cell.dart';
 import 'package:flutter/material.dart';
 import 'package:syncfusion_flutter_datagrid/datagrid.dart';
@@ -24,10 +23,12 @@ class ApiroTableWidget extends StatelessWidget {
     required this.columnData,
     required this.columnIds,
     required this.rowData,
+    this.getPinnedRowStream,
     required this.tableHeight,
     this.widgetInTableHeaderRow,
     this.groupColumnPinning = false,
     this.rowGroupPinning = false,
+    this.showTableHeaderBar = true,
     this.selectableColumnText = false,
     this.selectableCellText = false,
     this.cellEditDialog = false,
@@ -95,6 +96,12 @@ class ApiroTableWidget extends StatelessWidget {
   //cell inline editing
   bool filtersOn = true;
 
+  //table header shiw hide
+  bool showTableHeaderBar = true;
+
+  //Callback for row pinning
+  Function(Stream<List<int>>, Function(int, bool))? getPinnedRowStream;
+
   // /Pagination variables
   int totalNumberOfPages = 1;
   TextEditingController _jumpToPageController = TextEditingController();
@@ -127,9 +134,10 @@ class ApiroTableWidget extends StatelessWidget {
                 constraints: BoxConstraints(maxHeight: screenHeight),
                 child: Column(
                   children: [
-                    HiddenColumnDropDown(
-                      leftWidget: this.widgetInTableHeaderRow,
-                    ),
+                    if (this.showTableHeaderBar)
+                      HiddenColumnDropDown(
+                        leftWidget: this.widgetInTableHeaderRow,
+                      ),
                     Row(
                       children: [
                         Expanded(child: _getSFDataTable()),
@@ -388,10 +396,19 @@ class ApiroTableWidget extends StatelessWidget {
 
       _tableManager.staticDatagridRow = [];
       _tableManager.staticDatagridRow = List<DataGridRow>.from(rowss);
+      if (this.getPinnedRowStream != null) {
+        print("added pn row click listener");
+      }
     } else {
       _getColumnData();
       _getDataGridRow();
     }
+
+    this.getPinnedRowStream!(
+        AppNotifiers.getInstance().isRowunpinController.stream,
+        (index, isUnPin) {
+      _tableManager.singleRowPinning(index, isUnPin);
+    });
   }
 
   //*************** These methods will be added by the client whenever client sends customized rows */
