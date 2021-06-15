@@ -24,6 +24,8 @@ class ApiroTableWidget extends StatelessWidget {
     required this.columnData,
     required this.columnIds,
     required this.rowData,
+    required this.tableHeight,
+    this.widgetInTableHeaderRow,
     this.groupColumnPinning = false,
     this.rowGroupPinning = false,
     this.selectableColumnText = false,
@@ -52,6 +54,8 @@ class ApiroTableWidget extends StatelessWidget {
   List<Map<String, dynamic>> rowData = [];
   List<DataGridRow> gridRow = [];
 
+  Widget? widgetInTableHeaderRow;
+
   //Column pinning properties
   bool groupColumnPinning;
 
@@ -63,6 +67,9 @@ class ApiroTableWidget extends StatelessWidget {
 
   //Selectable table cell text
   bool selectableCellText;
+
+  //Table height
+  double tableHeight;
 
   //Pagination page size
   int paginationPageSize;
@@ -120,7 +127,9 @@ class ApiroTableWidget extends StatelessWidget {
                 constraints: BoxConstraints(maxHeight: screenHeight),
                 child: Column(
                   children: [
-                    HiddenColumnDropDown(),
+                    HiddenColumnDropDown(
+                      leftWidget: this.widgetInTableHeaderRow,
+                    ),
                     Row(
                       children: [
                         Expanded(child: _getSFDataTable()),
@@ -146,7 +155,7 @@ class ApiroTableWidget extends StatelessWidget {
                         valueListenable: _appNotifiers.frozenRowCountNotifier,
                         builder: (context, value, child) {
                           return Container(
-                            height: screenHeight - 120,
+                            height: tableHeight - 120,
                             child: SfDataGrid(
                                 source: _tableDataGridSource(),
                                 frozenColumnsCount: _appNotifiers

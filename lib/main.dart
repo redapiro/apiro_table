@@ -47,6 +47,7 @@ class MyApp extends StatelessWidget {
         paginationPageSizes: [5, 10, 50, 300, 700],
         selectableColumnText: false,
         gridRow: [],
+        tableHeight: 400,
       ),
     );
   }
