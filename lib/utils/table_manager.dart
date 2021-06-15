@@ -366,7 +366,7 @@ class TableManager {
       datagridRow.insert(insertIndex, value);
       this
           .pinnedRowInfo
-          .removeWhere((element) => element.lastPosition == currentPosition);
+          .removeWhere((element) => element.currentPosition == currentPosition);
       //Notify client about pinned or unpinned row
 
       AppNotifiers.getInstance().frozenRowCountNotifier.value -= 1;
