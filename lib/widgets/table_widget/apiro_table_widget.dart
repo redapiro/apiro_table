@@ -39,7 +39,7 @@ class ApiroTableWidget extends StatelessWidget {
   }) : super(key: key) {
     //Init table manager
     _tableManager = TableManager.getInstance();
-    setupData(inConstructor: this.gridRow.length == 0);
+    setupData(inConstructor: this.gridRow.length != 0);
 
     perPageRowCountList = paginationPageSizes.map((e) => e.toString()).toList();
 
