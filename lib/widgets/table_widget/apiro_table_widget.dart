@@ -32,6 +32,9 @@ class ApiroTableWidget extends StatelessWidget {
     required this.onPageNumberTextFieldSubmit,
     required this.onPreviousClick,
     this.widgetInTableHeaderRow,
+    this.updateDataOnColumnPinned,
+    this.updateDataOnFilterColumn,
+    this.updateDataOnHideColumn,
     this.groupColumnPinning = false,
     this.rowGroupPinning = false,
     this.showTableHeaderBar = true,
@@ -122,6 +125,9 @@ class ApiroTableWidget extends StatelessWidget {
   Function(int, int) onPageNumberTextFieldSubmit;
 
   //************* Call back methods to work after filter and hide columns */
+  Function(List<Map<String, dynamic>>)? updateDataOnHideColumn;
+  Function(List<String>)? updateDataOnFilterColumn;
+  Function()? updateDataOnColumnPinned;
 
   // /Pagination variables
   int totalNumberOfPages = 1;
@@ -323,10 +329,14 @@ class ApiroTableWidget extends StatelessWidget {
   void _onColumnFiterClick(List<String> filterList, String columnId) {
     _tableManager.tableColumnFilterList = filterList;
     _tableManager.addFilterToColumn(columnId);
+    if (updateDataOnFilterColumn != null)
+      updateDataOnFilterColumn!(_tableManager.tableColumnFilterList);
   }
 
   void _onHideColumnClick(String columnId) {
     _tableManager.hideColumn(columnId);
+    if (updateDataOnHideColumn != null)
+      updateDataOnHideColumn!(_tableManager.hiddenColumnIds);
   }
 
   void _onColumnOrdering(String columnId, int sendTo, int currentPosition) {
