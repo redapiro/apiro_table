@@ -121,6 +121,8 @@ class ApiroTableWidget extends StatelessWidget {
   Function(int, int) onPreviousClick;
   Function(int, int) onPageNumberTextFieldSubmit;
 
+  //************* Call back methods to work after filter and hide columns */
+
   // /Pagination variables
   int totalNumberOfPages = 1;
   TextEditingController _jumpToPageController = TextEditingController();
@@ -263,8 +265,6 @@ class ApiroTableWidget extends StatelessWidget {
                           _onNextClick();
                         },
                         onItemsPerPageChange: () {
-                          print(
-                              "pagination size -- ${this.perPageRowCountNotifier.value}");
                           _onItemPerPageChange();
                         },
                         jumpToPageTextFieldFocusNode:
@@ -373,8 +373,6 @@ class ApiroTableWidget extends StatelessWidget {
 
   void _onItemPerPageChange() {
     this.currentPageNumberNotifier.value = 1;
-    print(
-        "pagination per page count -- ${int.parse(this.perPageRowCountNotifier.value)}");
 
     this.onItemPerPageChange(this.currentPageNumberNotifier.value,
         this.totalNumberOfPages, int.parse(this.perPageRowCountNotifier.value));

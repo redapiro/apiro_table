@@ -53,7 +53,6 @@ class MyApp extends StatelessWidget {
         gridRow: [],
         getPinnedRowStream: (pinnedRows, rowPinCallback) {
           pinnedRows.listen((event) {
-            print("pinned rows list -- ${event}");
             // this.pinnedRowIndex = event;
           });
           // rowPinCallback()
