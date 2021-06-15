@@ -349,6 +349,8 @@ class TableManager {
       info.lastPosition = currentPosition;
 
       this.pinnedRowInfo.add(info);
+      //Notify client about pinned or unpinned row
+
       AppNotifiers.getInstance().frozenRowCountNotifier.value += 1;
     } else {
       int insertIndex = this.pinnedRowInfo.length > 0
@@ -365,18 +367,21 @@ class TableManager {
       this
           .pinnedRowInfo
           .removeWhere((element) => element.lastPosition == currentPosition);
+      //Notify client about pinned or unpinned row
+
       AppNotifiers.getInstance().frozenRowCountNotifier.value -= 1;
     }
 
-    //Notify client about pinned or unpinned row
     AppNotifiers.getInstance()
         .isRowunpinController
-        .add(this.pinnedRowInfo.map((e) {
-          return {
-            "current_position": e.currentPosition ?? 0,
-            "last_position": e.lastPosition ?? 0
-          };
-        }).toList());
+        .add(this.pinnedRowInfo.length == 0
+            ? []
+            : this.pinnedRowInfo.map((e) {
+                return {
+                  "current_position": e.currentPosition ?? 0,
+                  "last_position": e.lastPosition ?? 0
+                };
+              }).toList());
 
     //refresh table with new data
     this.refreshDataTable();
