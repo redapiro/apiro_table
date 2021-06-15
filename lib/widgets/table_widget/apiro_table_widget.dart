@@ -51,6 +51,10 @@ class ApiroTableWidget extends StatelessWidget {
     setupData(inConstructor: this.gridRow.length != 0);
 
     perPageRowCountList = paginationPageSizes.map((e) => e.toString()).toList();
+    perPageRowCountNotifier.value = paginationPageSizes.firstWhere(
+        (element) => element == this.paginationPageSize, orElse: () {
+      return 0;
+    }).toString();
 
     //Initialize app notifier
     _appNotifiers = AppNotifiers.getInstance();
