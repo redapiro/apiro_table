@@ -29,7 +29,7 @@ class TableDataGrid extends DataGridSource {
       }
       int index = gridRow.indexOf(row) + 1;
       if (index % 2 == 0) {
-        return this.evenRowColor ?? AppColors.disabledColor;
+        return this.evenRowColor ?? AppColors.tableRowBackgroundColor;
       } else {
         return this.oddRowColor ?? Colors.white;
       }

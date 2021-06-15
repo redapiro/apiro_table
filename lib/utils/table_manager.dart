@@ -78,12 +78,12 @@ class TableManager {
 
     this.currentFilterColumnId = columnId;
 
+    //refreshTable
+    this.refreshDataTable();
+
     //Updatetable filters
     AppNotifiers.getInstance().filterListUpdateNotifier.value =
         !AppNotifiers.getInstance().filterListUpdateNotifier.value;
-
-    //refreshTable
-    this.refreshDataTable();
   }
 
   //Hidden ColumnsWorking
