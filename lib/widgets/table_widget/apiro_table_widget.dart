@@ -100,7 +100,8 @@ class ApiroTableWidget extends StatelessWidget {
   bool showTableHeaderBar = true;
 
   //Callback for row pinning
-  Function(Stream<List<int>>, Function(int, bool))? getPinnedRowStream;
+  Function(Stream<List<Map<String, dynamic>>>, Function(int, bool))?
+      getPinnedRowStream;
 
   // /Pagination variables
   int totalNumberOfPages = 1;

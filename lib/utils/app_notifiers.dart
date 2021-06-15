@@ -21,6 +21,6 @@ class AppNotifiers {
   ValueNotifier<int> frozenRowCountNotifier = ValueNotifier<int>(0);
 
   //Controller to notify client about row pinning
-  StreamController<List<int>> isRowunpinController =
-      StreamController<List<int>>();
+  StreamController<List<Map<String, dynamic>>> isRowunpinController =
+      StreamController<List<Map<String, dynamic>>>();
 }
