@@ -354,12 +354,13 @@ class TableManager {
       AppNotifiers.getInstance().frozenRowCountNotifier.value += 1;
     } else {
       int insertIndex = this.pinnedRowInfo.length > 0
-          ? this
-                  .pinnedRowInfo
-                  .firstWhere(
-                      (element) => element.currentPosition == currentPosition)
-                  .lastPosition ??
-              0
+          ? (this
+                      .pinnedRowInfo
+                      .firstWhere((element) =>
+                          element.currentPosition == currentPosition)
+                      .lastPosition ??
+                  0) +
+              (this.pinnedRowInfo.length > 1 ? this.pinnedRowInfo.length : 0)
           : 0;
 
       var value = datagridRow.removeAt(currentPosition);
