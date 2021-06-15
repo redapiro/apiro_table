@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'package:apiro_table/utils/app_colors.dart';
 import 'package:flutter/material.dart';
 
 class TableColumnFilterIconWidget extends StatelessWidget {
@@ -50,7 +51,7 @@ class TableColumnFilterIconWidget extends StatelessWidget {
               alignment: AlignmentDirectional.center,
               decoration: BoxDecoration(
                 shape: BoxShape.circle,
-                color: Colors.blueAccent,
+                color: AppColors.appBlueColor,
               ),
               child: Text(
                 this.text!,
@@ -66,7 +67,7 @@ class TableColumnFilterIconWidget extends StatelessWidget {
                   image: assetImage,
                   height: height,
                   width: width,
-                  color: this.color,
+                  color: AppColors.appBlueColor,
                   fit: BoxFit.contain,
                 )),
           ],

@@ -72,7 +72,7 @@ class TableManager {
       rowIndex++;
     }
     this.datagridRow = [];
-    this.datagridRow = List<DataGridRow>.from(_dataGridRow);
+    this.datagridRow = this.decoupleCellObjects(gridRows: _dataGridRow);
     this.rowData = [];
     this.rowData = List<Map<String, dynamic>>.from(tempRowData);
 
@@ -84,10 +84,6 @@ class TableManager {
 
     //refreshTable
     this.refreshDataTable();
-  }
-
-  void _removeRowFromDataGridWithRowIndex(int rowIndex) {
-    datagridRow.removeAt(rowIndex);
   }
 
   //Hidden ColumnsWorking
@@ -126,8 +122,9 @@ class TableManager {
     this.refreshDataTable();
   }
 
-  List<DataGridRow> decoupleCellObjects() {
-    List<DataGridRow> rowss = this.staticDatagridRow.map((e) {
+  List<DataGridRow> decoupleCellObjects({List<DataGridRow>? gridRows}) {
+    List<DataGridRow> rowss =
+        (gridRows != null ? gridRows : this.staticDatagridRow).map((e) {
       return DataGridRow(
           cells: List.generate(e.getCells().length, (index) {
         return DataGridCell(

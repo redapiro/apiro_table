@@ -1,3 +1,4 @@
+import 'package:apiro_table/utils/app_colors.dart';
 import 'package:apiro_table/utils/table_manager.dart';
 import 'package:apiro_table/widgets/table_cell/table_cell.dart';
 import 'package:flutter/material.dart';
@@ -28,7 +29,7 @@ class TableDataGrid extends DataGridSource {
       }
       int index = gridRow.indexOf(row) + 1;
       if (index % 2 == 0) {
-        return this.evenRowColor ?? Colors.grey.withOpacity(0.3);
+        return this.evenRowColor ?? AppColors.disabledColor;
       } else {
         return this.oddRowColor ?? Colors.white;
       }
