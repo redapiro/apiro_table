@@ -27,40 +27,45 @@ class MyApp extends StatelessWidget {
     this.context = context;
 
     return MaterialApp(
-        title: 'Apiro Table',
-        debugShowCheckedModeBanner: false,
-        theme: ThemeData(
-          primarySwatch: Colors.blue,
-        ),
-        localizationsDelegates: [
-          GlobalMaterialLocalizations.delegate,
-          GlobalWidgetsLocalizations.delegate,
-          GlobalCupertinoLocalizations.delegate,
-        ],
-        home: Container()
-        // ApiroTableWidget(
-        //   columnData: [],
-        //   columnIds: colIds,
-        //   rowData: rowData,
-        //   filtersOn: true,
-        //   selectableCellText: false,
-        //   cellInlineEditing: false,
-        //   columnHidingOn: true,
-        //   columnOrderingOn: true,
-        //   paginationPageSize: 50,
-        //   cellMenuOn: true,
-        //   paginationPageSizes: [5, 10, 50, 300, 700],
-        //   selectableColumnText: false,
-        //   gridRow: [],
-        //   getPinnedRowStream: (pinnedRows, rowPinCallback) {
-        // pinnedRows.listen((event) {
-        //   print("pinned rows list -- ${event}");
-        //   this.pinnedRowIndex = event;
-        // });
-        // rowPinCallback()
-        //   },
-        //   tableHeight: 400,
-        // ),
-        );
+      title: 'Apiro Table',
+      debugShowCheckedModeBanner: false,
+      theme: ThemeData(
+        primarySwatch: Colors.blue,
+      ),
+      localizationsDelegates: [
+        GlobalMaterialLocalizations.delegate,
+        GlobalWidgetsLocalizations.delegate,
+        GlobalCupertinoLocalizations.delegate,
+      ],
+      home: ApiroTableWidget(
+        columnData: [],
+        columnIds: colIds,
+        rowData: rowData,
+        filtersOn: true,
+        selectableCellText: false,
+        cellInlineEditing: false,
+        columnHidingOn: true,
+        columnOrderingOn: true,
+        paginationPageSize: 50,
+        cellMenuOn: true,
+        paginationPageSizes: [5, 10, 50, 300, 700],
+        selectableColumnText: false,
+        gridRow: [],
+        getPinnedRowStream: (pinnedRows, rowPinCallback) {
+          pinnedRows.listen((event) {
+            print("pinned rows list -- ${event}");
+            // this.pinnedRowIndex = event;
+          });
+          // rowPinCallback()
+        },
+        tableHeight: 400,
+        onItemPerPageChange: (int, ds, sdf) {},
+        onNextClick: (int, sdf) {},
+        onPageNumberClick: (int, sdf) {},
+        onPageNumberDropDownSelect: (int, dfds, sdf) {},
+        onPageNumberTextFieldSubmit: (int, sadsa) {},
+        onPreviousClick: (int, asd) {},
+      ),
+    );
   }
 }

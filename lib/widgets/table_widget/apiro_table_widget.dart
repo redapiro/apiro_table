@@ -263,6 +263,8 @@ class ApiroTableWidget extends StatelessWidget {
                           _onNextClick();
                         },
                         onItemsPerPageChange: () {
+                          print(
+                              "pagination size -- ${this.perPageRowCountNotifier.value}");
                           _onItemPerPageChange();
                         },
                         jumpToPageTextFieldFocusNode:
@@ -371,9 +373,11 @@ class ApiroTableWidget extends StatelessWidget {
 
   void _onItemPerPageChange() {
     this.currentPageNumberNotifier.value = 1;
-    
-    this.onItemPerPageChange(
-        this.currentPageNumberNotifier.value, this.totalNumberOfPages, int.parse(this.perPageRowCountNotifier.value));
+    print(
+        "pagination per page count -- ${int.parse(this.perPageRowCountNotifier.value)}");
+
+    this.onItemPerPageChange(this.currentPageNumberNotifier.value,
+        this.totalNumberOfPages, int.parse(this.perPageRowCountNotifier.value));
     _reloadTableData();
   }
 
