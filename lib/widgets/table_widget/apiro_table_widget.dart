@@ -25,6 +25,12 @@ class ApiroTableWidget extends StatelessWidget {
     required this.rowData,
     this.getPinnedRowStream,
     required this.tableHeight,
+    required this.onItemPerPageChange,
+    required this.onNextClick,
+    required this.onPageNumberClick,
+    required this.onPageNumberDropDownSelect,
+    required this.onPageNumberTextFieldSubmit,
+    required this.onPreviousClick,
     this.widgetInTableHeaderRow,
     this.groupColumnPinning = false,
     this.rowGroupPinning = false,
@@ -102,6 +108,14 @@ class ApiroTableWidget extends StatelessWidget {
   //Callback for row pinning
   Function(Stream<List<Map<String, dynamic>>>, Function(int, bool))?
       getPinnedRowStream;
+
+  //****************Pagination callback methods */
+  Function(int, int) onPageNumberClick;
+  Function(int, int) onNextClick;
+  Function(int, int) onItemPerPageChange;
+  Function(int, int) onPageNumberDropDownSelect;
+  Function(int, int) onPreviousClick;
+  Function(int, int) onPageNumberTextFieldSubmit;
 
   // /Pagination variables
   int totalNumberOfPages = 1;
@@ -316,6 +330,8 @@ class ApiroTableWidget extends StatelessWidget {
   //Pagination Methods
   void _onPageNumberClick(int pageNumber) {
     this.currentPageNumberNotifier.value = pageNumber;
+    this.onPageNumberClick(
+        this.currentPageNumberNotifier.value, this.totalNumberOfPages);
     _reloadTableData();
   }
 
@@ -331,6 +347,8 @@ class ApiroTableWidget extends StatelessWidget {
       } else {
         this.currentPageNumberNotifier.value =
             int.parse(_jumpToPageController.text.trim());
+        this.onPageNumberTextFieldSubmit(
+            this.currentPageNumberNotifier.value, this.totalNumberOfPages);
         _reloadTableData();
       }
     }
@@ -349,21 +367,29 @@ class ApiroTableWidget extends StatelessWidget {
 
   void _onItemPerPageChange() {
     this.currentPageNumberNotifier.value = 1;
+    this.onItemPerPageChange(
+        this.currentPageNumberNotifier.value, this.totalNumberOfPages);
     _reloadTableData();
   }
 
   void _onNextClick() {
     this.currentPageNumberNotifier.value += 1;
+    this.onNextClick(
+        this.currentPageNumberNotifier.value, this.totalNumberOfPages);
     _reloadTableData();
   }
 
   void _onPageNumberDropDownSelect(int value) {
     this.perPageRowCountNotifier.value = value.toString();
+    this.onPageNumberDropDownSelect(
+        this.currentPageNumberNotifier.value, this.totalNumberOfPages);
     _reloadTableData();
   }
 
   void _onPreviousClick() {
     this.currentPageNumberNotifier.value -= 1;
+    this.onPreviousClick(
+        this.currentPageNumberNotifier.value, this.totalNumberOfPages);
     _reloadTableData();
   }
 
@@ -397,9 +423,6 @@ class ApiroTableWidget extends StatelessWidget {
 
       _tableManager.staticDatagridRow = [];
       _tableManager.staticDatagridRow = List<DataGridRow>.from(rowss);
-      if (this.getPinnedRowStream != null) {
-        print("added pn row click listener");
-      }
     } else {
       _getColumnData();
       _getDataGridRow();

@@ -96,10 +96,9 @@ class TableManager {
       row.remove(columnId);
       if (this.datagridRow.length > 0) {
         int colIndex = this.columnIds.indexOf(columnId);
-        print("column Id index -- $colIndex $columnId");
+
         DataGridCell? gridCell =
             removeDataGridRowForColumn(colIndex, rowIndex, columnId);
-        print("Grid Cell is there -- $gridCell");
 
         if (gridCell != null) {
           cells.add(gridCell);
@@ -112,9 +111,6 @@ class TableManager {
     int colIndex = this.columnIds.indexOf(columnId);
     this.columnIds.remove(columnId);
     var colName = this.columnNames.removeAt(colIndex);
-
-    print(
-        "length of grid row -- ${this.datagridRow.length} and column ${columnIds.length}  and column name ${this.columnNames.length} and current col id $columnId");
 
     //save the columnId to unhide colum in future
 
