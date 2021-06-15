@@ -322,18 +322,6 @@ class ApiroTableWidget extends StatelessWidget {
     }
   }
 
-  //onrow pinning click
-  void _rowPinClick(
-    int currentPosition,
-    bool isUnPin,
-  ) {
-    if (this.rowGroupPinning) {
-      _appNotifiers.frozenRowCountNotifier.value += 1;
-    } else {
-      _tableManager.singleRowPinning(currentPosition, isUnPin);
-    }
-  }
-
   void _onColumnFiterClick(List<String> filterList, String columnId) {
     _tableManager.tableColumnFilterList = filterList;
     _tableManager.addFilterToColumn(columnId);
@@ -345,7 +333,10 @@ class ApiroTableWidget extends StatelessWidget {
   void _onHideColumnClick(String columnId) {
     _tableManager.hideColumn(columnId);
     if (updateDataOnHideColumn != null)
-      updateDataOnHideColumn!(_tableManager.hiddenColumnIds);
+      updateDataOnHideColumn!(_tableManager.hiddenColumnIds.map((e) {
+        e.remove("cells_data");
+        return e;
+      }).toList());
   }
 
   void _onColumnOrdering(String columnId, int sendTo, int currentPosition) {
