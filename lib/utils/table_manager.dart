@@ -116,9 +116,15 @@ class TableManager {
 
     //save the columnId to unhide colum in future
 
-    this
-        .hiddenColumnIds
-        .add({columnId: colIndex, "cells_data": cells, "column_name": colName});
+    if ((this
+            .hiddenColumnIds
+            .firstWhere((element) => element.containsKey(columnId), orElse: () {
+          return {};
+        })).length ==
+        0) {
+      this.hiddenColumnIds.add(
+          {columnId: colIndex, "cells_data": cells, "column_name": colName});
+    }
 
     //refresh the table
     this.refreshDataTable();
