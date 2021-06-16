@@ -50,6 +50,8 @@ class TableManager {
     this.columnIds = List<String>.from(this.staticColumnIds);
     this.columnNames = List<String>.from(this.staticColumnsData);
     //Updatetable filters
+    AppNotifiers.getInstance().frozenRowCountNotifier.value = 0;
+    AppNotifiers.getInstance().frozenColumnCountNotifier.value = 0;
 
     this.applyAnyFilterHiddenColumnRowAndColumnPinningIfExists();
     //refresh the view
@@ -226,6 +228,9 @@ class TableManager {
     this.rowData = List<Map<String, dynamic>>.from(this.staticRowData);
     this.datagridRow = [];
     this.datagridRow = List<DataGridRow>.from(this.decoupleCellObjects());
+
+    AppNotifiers.getInstance().frozenRowCountNotifier.value = 0;
+    AppNotifiers.getInstance().frozenColumnCountNotifier.value = 0;
 
     //apply if any row column pinning and filters are there
     this.applyAnyFilterHiddenColumnRowAndColumnPinningIfExists();
