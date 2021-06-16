@@ -47,6 +47,7 @@ class MyApp extends StatelessWidget {
         columnHidingOn: true,
         columnOrderingOn: true,
         paginationPageSize: 50,
+        updateDataOnHideColumn: (data) {},
         cellMenuOn: true,
         paginationPageSizes: [5, 10, 50, 300, 700],
         selectableColumnText: false,
