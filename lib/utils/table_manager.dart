@@ -177,7 +177,6 @@ class TableManager {
         List<DataGridCell<dynamic>> maindataGridCells =
             this.staticDatagridRow[rowIndex].getCells();
 
-        print("hidden column data --- $getHiddenColumnData");
         dataGridCells.insert(
             insertToColIndex,
             this._decoupleGridCellsObjects(
