@@ -40,26 +40,27 @@ class TableManager {
       //Updatetable filters
       AppNotifiers.getInstance().frozenRowCountNotifier.value = 0;
       AppNotifiers.getInstance().frozenColumnCountNotifier.value = 0;
+
+      this.tableColumnFilterList = [];
+      this.rowData = [];
+
+      this.datagridRow = [];
+
+      this.rowData = List<Map<String, dynamic>>.from(this.staticRowData);
+      this.datagridRow = this.decoupleCellObjects();
+
+      this.columnIds = [];
+      this.columnNames = [];
+
+      this.columnIds = List<String>.from(this.staticColumnIds);
+      this.columnNames = List<String>.from(this.staticColumnsData);
+
+      this.applyAnyFilterHiddenColumnRowAndColumnPinningIfExists();
+      //refresh the view
+      this.refreshDataTable();
+      AppNotifiers.getInstance().filterListUpdateNotifier.value =
+          !AppNotifiers.getInstance().filterListUpdateNotifier.value;
     }
-    this.tableColumnFilterList = [];
-    this.rowData = [];
-
-    this.datagridRow = [];
-
-    this.rowData = List<Map<String, dynamic>>.from(this.staticRowData);
-    this.datagridRow = this.decoupleCellObjects();
-
-    this.columnIds = [];
-    this.columnNames = [];
-
-    this.columnIds = List<String>.from(this.staticColumnIds);
-    this.columnNames = List<String>.from(this.staticColumnsData);
-
-    this.applyAnyFilterHiddenColumnRowAndColumnPinningIfExists();
-    //refresh the view
-    this.refreshDataTable();
-    AppNotifiers.getInstance().filterListUpdateNotifier.value =
-        !AppNotifiers.getInstance().filterListUpdateNotifier.value;
   }
 
   void addFilterToColumn(String columnId) {
@@ -230,24 +231,25 @@ class TableManager {
     if (this.hiddenColumnIds.length > 0) {
       AppNotifiers.getInstance().frozenRowCountNotifier.value = 0;
       AppNotifiers.getInstance().frozenColumnCountNotifier.value = 0;
+
+      this.hiddenColumnIds = [];
+      this.columnNames = [];
+      this.columnIds = [];
+      this.columnIds = List<String>.from(this.staticColumnIds);
+      this.columnNames = List<String>.from(this.staticColumnsData);
+      this.rowData = [];
+      this.rowData = List<Map<String, dynamic>>.from(this.staticRowData);
+      this.datagridRow = [];
+      this.datagridRow = List<DataGridRow>.from(this.decoupleCellObjects());
+
+      //apply if any row column pinning and filters are there
+      this.applyAnyFilterHiddenColumnRowAndColumnPinningIfExists();
+      AppNotifiers.getInstance().hiddenColumnNotifier.value =
+          this.hiddenColumnIds.length.toString();
+
+      //refresh table
+      this.refreshDataTable();
     }
-    this.hiddenColumnIds = [];
-    this.columnNames = [];
-    this.columnIds = [];
-    this.columnIds = List<String>.from(this.staticColumnIds);
-    this.columnNames = List<String>.from(this.staticColumnsData);
-    this.rowData = [];
-    this.rowData = List<Map<String, dynamic>>.from(this.staticRowData);
-    this.datagridRow = [];
-    this.datagridRow = List<DataGridRow>.from(this.decoupleCellObjects());
-
-    //apply if any row column pinning and filters are there
-    this.applyAnyFilterHiddenColumnRowAndColumnPinningIfExists();
-    AppNotifiers.getInstance().hiddenColumnNotifier.value =
-        this.hiddenColumnIds.length.toString();
-
-    //refresh table
-    this.refreshDataTable();
   }
 
   //Column Ordering Working
