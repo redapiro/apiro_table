@@ -36,6 +36,11 @@ class TableManager {
 
   //Filters working
   void removeAllFilter() {
+    if (this.tableColumnFilterList.length > 0) {
+      //Updatetable filters
+      AppNotifiers.getInstance().frozenRowCountNotifier.value = 0;
+      AppNotifiers.getInstance().frozenColumnCountNotifier.value = 0;
+    }
     this.tableColumnFilterList = [];
     this.rowData = [];
 
@@ -49,9 +54,6 @@ class TableManager {
 
     this.columnIds = List<String>.from(this.staticColumnIds);
     this.columnNames = List<String>.from(this.staticColumnsData);
-    //Updatetable filters
-    AppNotifiers.getInstance().frozenRowCountNotifier.value = 0;
-    AppNotifiers.getInstance().frozenColumnCountNotifier.value = 0;
 
     this.applyAnyFilterHiddenColumnRowAndColumnPinningIfExists();
     //refresh the view
@@ -225,6 +227,10 @@ class TableManager {
   }
 
   void showAllColumn() {
+    if (this.hiddenColumnIds.length > 0) {
+      AppNotifiers.getInstance().frozenRowCountNotifier.value = 0;
+      AppNotifiers.getInstance().frozenColumnCountNotifier.value = 0;
+    }
     this.hiddenColumnIds = [];
     this.columnNames = [];
     this.columnIds = [];
@@ -234,9 +240,6 @@ class TableManager {
     this.rowData = List<Map<String, dynamic>>.from(this.staticRowData);
     this.datagridRow = [];
     this.datagridRow = List<DataGridRow>.from(this.decoupleCellObjects());
-
-    AppNotifiers.getInstance().frozenRowCountNotifier.value = 0;
-    AppNotifiers.getInstance().frozenColumnCountNotifier.value = 0;
 
     //apply if any row column pinning and filters are there
     this.applyAnyFilterHiddenColumnRowAndColumnPinningIfExists();
