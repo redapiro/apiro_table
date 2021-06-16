@@ -40,6 +40,7 @@ class TableDataGrid extends DataGridSource {
         color: getBackgroundColor(),
         cells: row.getCells().map<Widget>((e) {
           return Container(
+            key: UniqueKey(),
             alignment: Alignment.center,
             padding: EdgeInsets.all(3.0),
             child: e.value,

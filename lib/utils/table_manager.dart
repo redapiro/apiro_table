@@ -131,7 +131,7 @@ class TableManager {
           cells: List.generate(e.getCells().length, (index) {
         return DataGridCell(
             value: e.getCells()[index].value,
-            columnName: this.columnIds[index]);
+            columnName: e.getCells()[index].columnName);
       }));
     }).toList();
     return rowss;
