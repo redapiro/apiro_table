@@ -36,6 +36,7 @@ class TableDataGrid extends DataGridSource {
     }
 
     return DataGridRowAdapter(
+        key: UniqueKey(),
         color: getBackgroundColor(),
         cells: row.getCells().map<Widget>((e) {
           return Container(
