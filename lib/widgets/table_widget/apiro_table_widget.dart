@@ -338,11 +338,15 @@ class ApiroTableWidget extends StatelessWidget {
 
   void _onHideColumnClick(String columnId) {
     _tableManager.hideColumn(columnId);
-    if (updateDataOnHideColumn != null)
-      updateDataOnHideColumn!(_tableManager.hiddenColumnIds.map((e) {
+    if (updateDataOnHideColumn != null) {
+      List<Map<String, dynamic>> tempHiddenData = [];
+      tempHiddenData =
+          List<Map<String, dynamic>>.from(_tableManager.hiddenColumnIds);
+      updateDataOnHideColumn!(tempHiddenData.map((e) {
         e.remove("cells_data");
         return e;
       }).toList());
+    }
   }
 
   void _onColumnOrdering(String columnId, int sendTo, int currentPosition) {
