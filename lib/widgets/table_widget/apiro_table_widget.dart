@@ -398,6 +398,12 @@ class ApiroTableWidget extends StatelessWidget {
 
   void _onItemPerPageChange() {
     this.currentPageNumberNotifier.value = 1;
+    this.totalNumberOfPages =
+        (this.rowData.length ~/ int.parse(this.perPageRowCountNotifier.value));
+    if ((this.rowData.length % int.parse(this.perPageRowCountNotifier.value)) >
+        0) {
+      this.totalNumberOfPages += 1;
+    }
 
     this.onItemPerPageChange(this.currentPageNumberNotifier.value,
         this.totalNumberOfPages, int.parse(this.perPageRowCountNotifier.value));
