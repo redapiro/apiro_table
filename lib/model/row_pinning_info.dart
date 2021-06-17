@@ -31,7 +31,6 @@ class RowPinningInfo {
   Map<String, dynamic> toJson() => {
         "last_position": lastPosition,
         "current_position": currentPosition,
-        "row": row,
       };
 
   RowPinningInfo copyFrom() {

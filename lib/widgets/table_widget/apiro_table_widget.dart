@@ -55,8 +55,9 @@ class ApiroTableWidget extends StatelessWidget {
     //Init table manager
     _tableManager = TableManager.getInstance();
     setupData(inConstructor: this.gridRow.length != 0);
-    _tableManager.hiddenColumnIds = this.hiddenColumnInfos;
-    _tableManager.tableColumnFilterList = this.filterList;
+    _tableManager.hiddenColumnIds =
+        List<Map<String, dynamic>>.from(this.hiddenColumnInfos);
+    _tableManager.tableColumnFilterList = List<String>.from(this.filterList);
 
     _tableManager.applyAnyFilterHiddenColumnRowAndColumnPinningIfExists();
 

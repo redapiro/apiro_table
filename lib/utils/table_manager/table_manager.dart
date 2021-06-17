@@ -125,7 +125,7 @@ class TableManager {
           return {};
         })).length ==
         0) {
-      this.hiddenColumnIds.add(
+      (this.hiddenColumnIds).add(
           {columnId: colIndex, "cells_data": cells, "column_name": colName});
     }
 
