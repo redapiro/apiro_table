@@ -345,10 +345,8 @@ class ApiroTableWidget extends StatelessWidget {
     _tableManager.hideColumn(columnId);
     if (updateDataOnHideColumn != null) {
       List<Map<String, dynamic>> tempHiddenData = [];
-      tempHiddenData = List<Map<String, dynamic>>.from(json
-          .decode(json.encode(_tableManager.hiddenColumnIds))
-          .map((e) => e)
-          .toList());
+      tempHiddenData = List<Map<String, dynamic>>.from(
+          _tableManager.hiddenColumnIds.map((e) => e).toList());
       updateDataOnHideColumn!(tempHiddenData.map((e) {
         e.remove("cells_data");
         return e;
