@@ -1,7 +1,7 @@
 import 'package:apiro_table/utils/app_colors.dart';
 import 'package:apiro_table/utils/common_methods.dart';
 import 'package:apiro_table/utils/constants.dart';
-import 'package:apiro_table/utils/table_manager.dart';
+import 'package:apiro_table/utils/table_manager/table_manager.dart';
 import 'package:apiro_table/widgets/custom_widgets/app_text_field.dart';
 import 'package:flutter/material.dart';
 

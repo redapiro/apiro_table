@@ -1,4 +1,4 @@
-import 'package:apiro_table/utils/table_manager.dart';
+import 'package:apiro_table/utils/table_manager/table_manager.dart';
 import 'package:apiro_table/widgets/custom_widgets/adaptive_elevated_button.dart';
 import 'package:apiro_table/widgets/custom_widgets/adaptive_text_button.dart';
 import 'package:apiro_table/widgets/custom_widgets/app_text_field.dart';

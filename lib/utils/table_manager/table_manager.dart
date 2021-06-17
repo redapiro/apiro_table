@@ -420,7 +420,24 @@ class TableManager {
     }
 
     //Pin columns if there are any
+    var tempColInfos = this.pinnedColumnInfo.map((e) => e.copyFrom()).toList();
+
+    this.pinnedColumnInfo = [];
+    if (tempColInfos.length > 0) {
+      for (var pinnedColInfos in tempColInfos) {
+        this.singleColumnPinning(pinnedColInfos.lastPosition ?? 0,
+            pinnedColInfos.columnId ?? "", false);
+      }
+    }
+
     //Pin rows if there are any
+    var tempRowInfos = this.pinnedRowInfo.map((e) => e.copyFrom()).toList();
+    this.pinnedRowInfo = [];
+    if (tempRowInfos.length > 0) {
+      for (var pinnedROwInfos in tempRowInfos) {
+        this.singleRowPinning(pinnedROwInfos.lastPosition ?? 0, false);
+      }
+    }
   }
 
   void updateCellValue(

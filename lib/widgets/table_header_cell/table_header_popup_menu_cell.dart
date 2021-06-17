@@ -1,6 +1,6 @@
 import 'package:apiro_table/utils/app_colors.dart';
 import 'package:apiro_table/utils/app_notifiers.dart';
-import 'package:apiro_table/utils/table_manager.dart';
+import 'package:apiro_table/utils/table_manager/table_manager.dart';
 import 'package:apiro_table/widgets/custom_widgets/adaptive_elevated_button.dart';
 import 'package:apiro_table/widgets/custom_widgets/custom_drop_down.dart';
 import 'package:apiro_table/widgets/table_header_cell/add_filter_widget.dart';

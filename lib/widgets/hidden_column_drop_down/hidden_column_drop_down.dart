@@ -1,7 +1,7 @@
 import 'package:apiro_table/utils/app_colors.dart';
 import 'package:apiro_table/utils/app_notifiers.dart';
 import 'package:apiro_table/utils/common_methods.dart';
-import 'package:apiro_table/utils/table_manager.dart';
+import 'package:apiro_table/utils/table_manager/table_manager.dart';
 import 'package:apiro_table/widgets/custom_widgets/adaptive_outlined_button.dart';
 import 'package:apiro_table/widgets/custom_widgets/adaptive_text_button.dart';
 import 'package:flutter/material.dart';

@@ -33,4 +33,9 @@ class RowPinningInfo {
         "current_position": currentPosition,
         "row": row,
       };
+
+  RowPinningInfo copyFrom() {
+    RowPinningInfo info = RowPinningInfo.fromJson(this.toJson());
+    return info;
+  }
 }

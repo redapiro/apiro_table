@@ -37,4 +37,8 @@ class ColumnPinningInfo {
         "last_position": lastPosition,
         "current_position": currentPosition,
       };
+  ColumnPinningInfo copyFrom() {
+    ColumnPinningInfo colInfo = ColumnPinningInfo.fromJson(this.toJson());
+    return colInfo;
+  }
 }

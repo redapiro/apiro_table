@@ -5,7 +5,7 @@ import 'package:apiro_table/model/row_pinning_info.dart';
 import 'package:apiro_table/utils/app_notifiers.dart';
 import 'package:apiro_table/utils/constants.dart';
 import 'package:apiro_table/utils/enum/cell_data_type.dart';
-import 'package:apiro_table/utils/table_manager.dart';
+import 'package:apiro_table/utils/table_manager/table_manager.dart';
 import 'package:apiro_table/widgets/custom_pagination/custom_paginations.dart';
 import 'package:apiro_table/widgets/data_grid/table_data_grid.dart';
 import 'package:apiro_table/widgets/hidden_column_drop_down/hidden_column_drop_down.dart';
@@ -55,6 +55,10 @@ class ApiroTableWidget extends StatelessWidget {
     //Init table manager
     _tableManager = TableManager.getInstance();
     setupData(inConstructor: this.gridRow.length != 0);
+    _tableManager.hiddenColumnIds = this.hiddenColumnInfos;
+    _tableManager.tableColumnFilterList = this.filterList;
+
+    _tableManager.applyAnyFilterHiddenColumnRowAndColumnPinningIfExists();
 
     perPageRowCountList = paginationPageSizes.map((e) => e.toString()).toList();
     perPageRowCountNotifier.value = paginationPageSizes.firstWhere(

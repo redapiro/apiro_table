@@ -42,6 +42,8 @@ class MyApp extends StatelessWidget {
         columnIds: colIds,
         rowData: rowData,
         filtersOn: true,
+        updateDataOnColumnPinned: () {},
+        updateDataOnFilterColumn: (data, data1) {},
         selectableCellText: false,
         cellInlineEditing: false,
         columnHidingOn: true,
