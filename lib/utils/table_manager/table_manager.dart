@@ -9,7 +9,7 @@ class TableManager {
   static TableManager getInstance() => _instance;
   TableManager._internal();
   TableManager.resetTableManager() {
-    _instance = TableManager._internal();
+    TableManager.getInstance().resetTableManagerConfiguration();
   }
 
   //Table data variables
@@ -458,6 +458,14 @@ class TableManager {
         ));
     this.datagridRow[rowIndex] = DataGridRow(cells: cells);
     this.refreshDataTable();
+  }
+
+  void resetTableManagerConfiguration() {
+    //reset all  values from table manager
+    AppNotifiers.getInstance().frozenColumnCountNotifier.value = 0;
+    AppNotifiers.getInstance().frozenRowCountNotifier.value = 0;
+    this.tableColumnFilterList = [];
+    this.hiddenColumnIds = [];
   }
 
   void refreshDataTable() {
