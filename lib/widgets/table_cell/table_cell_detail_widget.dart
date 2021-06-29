@@ -190,6 +190,7 @@ class TableCellDetailWidget extends StatelessWidget {
                             defaultColumnWidth: 150,
                             headerGridLinesVisibility: GridLinesVisibility.none,
                             headerRowHeight: 60,
+                            columnWidthMode: ColumnWidthMode.fill,
                             rowHeight: 60,
                             gridLinesVisibility: GridLinesVisibility.none,
                             columns: List.generate(columnData.length, (index) {
