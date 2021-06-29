@@ -166,7 +166,8 @@ class CustomPaginationWidget extends StatelessWidget {
           ),
         InkWell(
           onTap: () {
-            this.paginationPageNumberNotifier.value = index + 1;
+            this.paginationPageNumberNotifier.value =
+                this.paginationPageNumberNotifier.value + 1;
             this.onPageNumberClick(index);
           },
           child: Container(
