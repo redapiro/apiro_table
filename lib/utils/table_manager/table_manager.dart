@@ -8,10 +8,6 @@ class TableManager {
   static TableManager _instance = TableManager._internal();
   static TableManager getInstance() => _instance;
   TableManager._internal();
-  TableManager.resetTableManager() {
-    _instance = TableManager._internal();
-    // TableManager.getInstance().resetTableManagerConfiguration();
-  }
 
   //Table data variables
 

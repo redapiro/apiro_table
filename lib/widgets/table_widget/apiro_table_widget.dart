@@ -54,7 +54,8 @@ class ApiroTableWidget extends StatelessWidget {
     this.paginationPageSizes = const [5, 10, 50, 100, 500],
   }) : super(key: key) {
     //Init table manager
-    if (shouldResetTableConfigs) TableManager.resetTableManager();
+    if (shouldResetTableConfigs)
+      TableManager.getInstance().resetTableManagerConfiguration();
     _tableManager = TableManager.getInstance();
 
     setupData(inConstructor: this.gridRow.length != 0);
