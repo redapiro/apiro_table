@@ -230,6 +230,7 @@ class ApiroTableWidget extends StatelessWidget {
                                 frozenRowsCount:
                                     _appNotifiers.frozenRowCountNotifier.value,
                                 defaultColumnWidth: 150,
+                                columnWidthMode: ColumnWidthMode.fill,
                                 headerGridLinesVisibility:
                                     GridLinesVisibility.none,
                                 headerRowHeight: 60,
