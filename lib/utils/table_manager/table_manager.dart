@@ -5,9 +5,12 @@ import 'package:apiro_table/widgets/table_cell/table_cell.dart';
 import 'package:syncfusion_flutter_datagrid/datagrid.dart';
 
 class TableManager {
-  static final TableManager _instance = TableManager._internal();
+  static TableManager _instance = TableManager._internal();
   static TableManager getInstance() => _instance;
   TableManager._internal();
+  TableManager.resetTableManager() {
+    _instance = TableManager._internal();
+  }
 
   //Table data variables
 

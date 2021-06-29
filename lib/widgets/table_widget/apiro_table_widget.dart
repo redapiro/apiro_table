@@ -40,6 +40,7 @@ class ApiroTableWidget extends StatelessWidget {
     this.updateDataOnHideColumn,
     this.groupColumnPinning = false,
     this.rowGroupPinning = false,
+    this.shouldResetTableConfigs = false,
     this.showTableHeaderBar = true,
     this.selectableColumnText = false,
     this.selectableCellText = false,
@@ -53,7 +54,9 @@ class ApiroTableWidget extends StatelessWidget {
     this.paginationPageSizes = const [5, 10, 50, 100, 500],
   }) : super(key: key) {
     //Init table manager
+    if (shouldResetTableConfigs) TableManager.resetTableManager();
     _tableManager = TableManager.getInstance();
+
     setupData(inConstructor: this.gridRow.length != 0);
     _tableManager.hiddenColumnIds =
         List<Map<String, dynamic>>.from(this.hiddenColumnInfos);
@@ -119,6 +122,9 @@ class ApiroTableWidget extends StatelessWidget {
 
   //table header shiw hide
   bool showTableHeaderBar = true;
+
+  //need to reset table config
+  bool shouldResetTableConfigs = false;
 
   //Callback for row pinning
   Function(Stream<List<Map<String, dynamic>>>, Function(int, bool))?
