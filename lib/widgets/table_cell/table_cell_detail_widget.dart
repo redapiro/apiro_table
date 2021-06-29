@@ -200,11 +200,10 @@ class TableCellDetailWidget extends StatelessWidget {
                                 label: Container(
                                     color: AppColors.secondaryColor,
                                     alignment: AlignmentDirectional.center,
-                                    child: Text(
-                                      columnData[index],
-                                      textAlign: TextAlign.center,
-                                      style: _themeData!.textTheme.subtitle1!,
-                                    )),
+                                    child: Text(columnData[index],
+                                        textAlign: TextAlign.center,
+                                        style: _themeData!.textTheme.subtitle1!
+                                            .copyWith(fontFamily: "OpenSans"))),
                               );
                             })),
                       ),
