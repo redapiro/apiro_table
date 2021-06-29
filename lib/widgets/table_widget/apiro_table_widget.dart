@@ -182,6 +182,7 @@ class ApiroTableWidget extends StatelessWidget {
           valueListenable: _appNotifiers.pinnedRowWidgetNotifier,
           builder: (context, value, child) {
             return Container(
+                width: double.maxFinite,
                 constraints: BoxConstraints(maxHeight: screenHeight),
                 child: Column(
                   children: [
