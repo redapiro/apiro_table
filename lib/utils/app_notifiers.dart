@@ -19,6 +19,7 @@ class AppNotifiers {
   //Table pinned row and column pointers
   ValueNotifier<int> frozenColumnCountNotifier = ValueNotifier<int>(0);
   ValueNotifier<int> frozenRowCountNotifier = ValueNotifier<int>(0);
+  ValueNotifier<int> paginationPageNumberNotifier = ValueNotifier<int>(1);
 
   //Controller to notify client about row pinning
   StreamController<List<Map<String, dynamic>>> isRowunpinController =

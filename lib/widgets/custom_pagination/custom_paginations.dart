@@ -1,4 +1,5 @@
 import 'package:apiro_table/utils/app_colors.dart';
+import 'package:apiro_table/utils/app_notifiers.dart';
 import 'package:apiro_table/widgets/custom_widgets/app_text_field.dart';
 import 'package:apiro_table/widgets/custom_widgets/custom_drop_down.dart';
 import 'package:flutter/material.dart';
@@ -14,7 +15,7 @@ class CustomPaginationWidget extends StatelessWidget {
   final Function(String) onTextFieldSubmit;
   final List<String> pageNumbers;
   final int totalNumberOfPages;
-  final ValueNotifier paginationPageNumberNotifier;
+  // final ValueNotiAppNotifiers.getInstance().paginationPageNumberNotifier;
   final ValueNotifier perPageRowCountNotifier;
 
   CustomPaginationWidget({
@@ -28,12 +29,12 @@ class CustomPaginationWidget extends StatelessWidget {
     required this.totalNumberOfPages,
     required this.onTextFieldSubmit,
     required this.jumpToPageNumberController,
-    required this.paginationPageNumberNotifier,
+    // required AppNotifiers.getInstance().paginationPageNumberNotifier,
     required this.jumpToPageTextFieldFocusNode,
     required this.perPageRowCountNotifier,
   }) : super(key: key) {
     jumpToPageNumberController.text =
-        paginationPageNumberNotifier.value.toString();
+        AppNotifiers.getInstance().paginationPageNumberNotifier.toString();
     rowCountPerPageList = this.pageNumbers;
   }
 
@@ -52,7 +53,8 @@ class CustomPaginationWidget extends StatelessWidget {
 
     return Scaffold(
       body: ValueListenableBuilder(
-          valueListenable: this.paginationPageNumberNotifier,
+          valueListenable:
+              AppNotifiers.getInstance().paginationPageNumberNotifier,
           builder: (context, value, child) {
             return Container(
                 height: 50,
@@ -147,7 +149,8 @@ class CustomPaginationWidget extends StatelessWidget {
 
   Widget _getPaginationPagesWidget(int index) {
     Color pageNumberBckColor =
-        ((this.paginationPageNumberNotifier.value - 1) == index)
+        ((AppNotifiers.getInstance().paginationPageNumberNotifier.value - 1) ==
+                index)
             ? AppColors.appBlueColor
             : Colors.transparent;
     return Container(
@@ -160,13 +163,17 @@ class CustomPaginationWidget extends StatelessWidget {
                   style: _themeData!.textTheme.bodyText1!
                       .copyWith(color: AppColors.disabledColor)),
               _getPagingContainerWith("<",
-                  clickable: this.paginationPageNumberNotifier.value > 1,
+                  clickable: AppNotifiers.getInstance()
+                          .paginationPageNumberNotifier
+                          .value >
+                      1,
                   onPress: this.onPreviousClick),
             ],
           ),
         InkWell(
           onTap: () {
-            this.paginationPageNumberNotifier.value = index + 1;
+            AppNotifiers.getInstance().paginationPageNumberNotifier.value =
+                index + 1;
             this.onPageNumberClick(index + 1);
           },
           child: Container(
@@ -182,7 +189,9 @@ class CustomPaginationWidget extends StatelessWidget {
         if (index == (totalNumberOfPages - 1))
           _getPagingContainerWith(">",
               clickable: ((this.totalNumberOfPages > 1) &&
-                  this.paginationPageNumberNotifier.value <
+                  AppNotifiers.getInstance()
+                          .paginationPageNumberNotifier
+                          .value <
                       this.totalNumberOfPages),
               onPress: onNextClick),
       ]),
@@ -191,7 +200,9 @@ class CustomPaginationWidget extends StatelessWidget {
 
   TextStyle _getSelectedPageTextStyle(int index) {
     return _themeData!.textTheme.bodyText1!.copyWith(
-        color: ((this.paginationPageNumberNotifier.value - 1) == index)
+        color: ((AppNotifiers.getInstance().paginationPageNumberNotifier.value -
+                    1) ==
+                index)
             ? AppColors.scaffoldBackgroundColor
             : AppColors.disabledColor);
   }

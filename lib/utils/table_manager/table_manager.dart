@@ -461,6 +461,7 @@ class TableManager {
     //reset all  values from table manager
     AppNotifiers.getInstance().frozenColumnCountNotifier.value = 0;
     AppNotifiers.getInstance().frozenRowCountNotifier.value = 0;
+    AppNotifiers.getInstance().paginationPageNumberNotifier.value = 1;
     this.tableColumnFilterList = [];
     this.hiddenColumnIds = [];
     this.pinnedColumnInfo = [];

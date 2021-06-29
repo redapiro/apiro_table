@@ -157,7 +157,7 @@ class ApiroTableWidget extends StatelessWidget {
 
   TextEditingController _jumpToPageController = TextEditingController();
   FocusNode _jumpToPageTextFiledFocusNode = FocusNode();
-  ValueNotifier<int> currentPageNumberNotifier = ValueNotifier<int>(1);
+
   ValueNotifier<String> perPageRowCountNotifier = ValueNotifier<String>("5");
   List<String> perPageRowCountList = ["5", "10", "30", "40", "50", "100"];
 
@@ -316,8 +316,8 @@ class ApiroTableWidget extends StatelessWidget {
                           _onTextFiledSubmit();
                         },
                         pageNumbers: perPageRowCountList,
-                        paginationPageNumberNotifier:
-                            this.currentPageNumberNotifier,
+                        // paginationPageNumberNotifier:
+                        //     AppNotifiers.getInstance().paginationPageNumberNotifier,
                         perPageRowCountNotifier: this.perPageRowCountNotifier,
                         totalNumberOfPages: this.totalNumberOfPages,
                       ),
@@ -371,9 +371,10 @@ class ApiroTableWidget extends StatelessWidget {
 
   //Pagination Methods
   void _onPageNumberClick(int pageNumber) {
-    this.currentPageNumberNotifier.value = pageNumber;
+    AppNotifiers.getInstance().paginationPageNumberNotifier.value = pageNumber;
     this.onPageNumberClick(
-        this.currentPageNumberNotifier.value, this.totalNumberOfPages);
+        AppNotifiers.getInstance().paginationPageNumberNotifier.value,
+        this.totalNumberOfPages);
     _reloadTableData();
   }
 
@@ -387,10 +388,11 @@ class ApiroTableWidget extends StatelessWidget {
             "Page number is not valid" + this.totalNumberOfPages.toString(),
             context: context);
       } else {
-        this.currentPageNumberNotifier.value =
+        AppNotifiers.getInstance().paginationPageNumberNotifier.value =
             int.parse(_jumpToPageController.text.trim());
         this.onPageNumberTextFieldSubmit(
-            this.currentPageNumberNotifier.value, this.totalNumberOfPages);
+            AppNotifiers.getInstance().paginationPageNumberNotifier.value,
+            this.totalNumberOfPages);
         _reloadTableData();
       }
     }
@@ -408,12 +410,14 @@ class ApiroTableWidget extends StatelessWidget {
   }
 
   void _onItemPerPageChange() {
-    this.currentPageNumberNotifier.value = 1;
+    AppNotifiers.getInstance().paginationPageNumberNotifier.value = 1;
     // this.totalNumberOfPages =
     //     (this.rowData.length ~/ int.parse(this.perPageRowCountNotifier.value));
 
-    this.onItemPerPageChange(this.currentPageNumberNotifier.value,
-        this.totalNumberOfPages, int.parse(this.perPageRowCountNotifier.value));
+    this.onItemPerPageChange(
+        AppNotifiers.getInstance().paginationPageNumberNotifier.value,
+        this.totalNumberOfPages,
+        int.parse(this.perPageRowCountNotifier.value));
     if ((this.rowData.length % int.parse(this.perPageRowCountNotifier.value)) >
         0) {
       this.totalNumberOfPages += 1;
@@ -423,9 +427,10 @@ class ApiroTableWidget extends StatelessWidget {
   }
 
   void _onNextClick() {
-    this.currentPageNumberNotifier.value += 1;
+    AppNotifiers.getInstance().paginationPageNumberNotifier.value += 1;
     this.onNextClick(
-        this.currentPageNumberNotifier.value, this.totalNumberOfPages);
+        AppNotifiers.getInstance().paginationPageNumberNotifier.value,
+        this.totalNumberOfPages);
     _reloadTableData();
   }
 
@@ -436,9 +441,10 @@ class ApiroTableWidget extends StatelessWidget {
   }
 
   void _onPreviousClick() {
-    this.currentPageNumberNotifier.value -= 1;
+    AppNotifiers.getInstance().paginationPageNumberNotifier.value -= 1;
     this.onPreviousClick(
-        this.currentPageNumberNotifier.value, this.totalNumberOfPages);
+        AppNotifiers.getInstance().paginationPageNumberNotifier.value,
+        this.totalNumberOfPages);
     _reloadTableData();
   }
 
