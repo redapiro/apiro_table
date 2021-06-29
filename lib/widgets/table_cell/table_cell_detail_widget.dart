@@ -198,6 +198,7 @@ class TableCellDetailWidget extends StatelessWidget {
                                 minimumWidth: 150,
                                 columnName: columnData[index],
                                 label: Container(
+                                    width: 150,
                                     color: AppColors.secondaryColor,
                                     alignment: AlignmentDirectional.center,
                                     child: Text(columnData[index],

@@ -31,6 +31,7 @@ class ApiroTableWidget extends StatelessWidget {
     required this.onPageNumberDropDownSelect,
     required this.onPageNumberTextFieldSubmit,
     required this.onPreviousClick,
+    required this.totalNumberOfPages,
     this.hiddenColumnInfos = const [],
     this.filterList = const [],
     this.columnIdFilterAppliedOn = "",
@@ -127,6 +128,9 @@ class ApiroTableWidget extends StatelessWidget {
   //need to reset table config
   bool shouldResetTableConfigs = false;
 
+  //number of pages
+  int totalNumberOfPages;
+
   //Callback for row pinning
   Function(Stream<List<Map<String, dynamic>>>, Function(int, bool))?
       getPinnedRowStream;
@@ -150,7 +154,7 @@ class ApiroTableWidget extends StatelessWidget {
   List<Map<String, dynamic>> hiddenColumnInfos = [];
 
   // /Pagination variables
-  int totalNumberOfPages = 1;
+
   TextEditingController _jumpToPageController = TextEditingController();
   FocusNode _jumpToPageTextFiledFocusNode = FocusNode();
   ValueNotifier<int> currentPageNumberNotifier = ValueNotifier<int>(1);
@@ -405,8 +409,8 @@ class ApiroTableWidget extends StatelessWidget {
 
   void _onItemPerPageChange() {
     this.currentPageNumberNotifier.value = 1;
-    this.totalNumberOfPages =
-        (this.rowData.length ~/ int.parse(this.perPageRowCountNotifier.value));
+    // this.totalNumberOfPages =
+    //     (this.rowData.length ~/ int.parse(this.perPageRowCountNotifier.value));
 
     this.onItemPerPageChange(this.currentPageNumberNotifier.value,
         this.totalNumberOfPages, int.parse(this.perPageRowCountNotifier.value));
@@ -414,6 +418,7 @@ class ApiroTableWidget extends StatelessWidget {
         0) {
       this.totalNumberOfPages += 1;
     }
+
     _reloadTableData();
   }
 

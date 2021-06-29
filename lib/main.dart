@@ -53,6 +53,7 @@ class MyApp extends StatelessWidget {
         cellMenuOn: true,
         paginationPageSizes: [5, 10, 50, 300, 700],
         selectableColumnText: false,
+        totalNumberOfPages: 2,
         gridRow: [],
         getPinnedRowStream: (pinnedRows, rowPinCallback) {
           pinnedRows.listen((event) {
