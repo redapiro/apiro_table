@@ -33,8 +33,10 @@ class CustomPaginationWidget extends StatelessWidget {
     required this.jumpToPageTextFieldFocusNode,
     required this.perPageRowCountNotifier,
   }) : super(key: key) {
-    jumpToPageNumberController.text =
-        AppNotifiers.getInstance().paginationPageNumberNotifier.toString();
+    jumpToPageNumberController.text = AppNotifiers.getInstance()
+        .paginationPageNumberNotifier
+        .value
+        .toString();
     rowCountPerPageList = this.pageNumbers;
   }
 
