@@ -168,7 +168,7 @@ class CustomPaginationWidget extends StatelessWidget {
           onTap: () {
             this.paginationPageNumberNotifier.value =
                 this.paginationPageNumberNotifier.value + 1;
-            this.onPageNumberClick(index);
+            this.onPageNumberClick(this.paginationPageNumberNotifier.value);
           },
           child: Container(
               padding: EdgeInsets.all(8),
