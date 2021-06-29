@@ -8,6 +8,7 @@ class TableManager {
   static TableManager _instance = TableManager._internal();
   static TableManager getInstance() => _instance;
   TableManager._internal();
+ 
 
   //Table data variables
 
@@ -463,6 +464,8 @@ class TableManager {
     AppNotifiers.getInstance().frozenRowCountNotifier.value = 0;
     this.tableColumnFilterList = [];
     this.hiddenColumnIds = [];
+    this.pinnedColumnInfo = [];
+    this.pinnedRowInfo = [];
   }
 
   void refreshDataTable() {
