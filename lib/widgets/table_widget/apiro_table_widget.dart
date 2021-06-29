@@ -221,6 +221,7 @@ class ApiroTableWidget extends StatelessWidget {
                         builder: (context, value, child) {
                           return Container(
                             height: tableHeight - 120,
+                            width: double.maxFinite,
                             child: SfDataGrid(
                                 source: _tableDataGridSource(),
                                 frozenColumnsCount: _appNotifiers
