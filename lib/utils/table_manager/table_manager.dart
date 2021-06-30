@@ -125,9 +125,13 @@ class TableManager {
           return {};
         })).length ==
         0) {
+          print("saving column data ---");
       (this.hiddenColumnIds).add(
           {columnId: colIndex, "cells_data": cells, "column_name": colName});
+    } else {
+      print("not able to save col data ");
     }
+    print("hidden column data after if else -- ${this.hiddenColumnIds}");
 
     //refresh the table
     this.refreshDataTable();
@@ -172,6 +176,7 @@ class TableManager {
   }
 
   void showColumn(String columnId) {
+    print("column ID -- $columnId");
     int rowIndex = 0;
     //Add back the column at index
     Map<String, dynamic> getHiddenColumnData =
@@ -218,6 +223,7 @@ class TableManager {
   //get hidden column data from column id
   Map<String, dynamic> _getHiddenColumnDataWithColumnId(String columnId) {
     Map<String, dynamic> hiddenColumnData = {};
+    print("hidden column data -- ${this.hiddenColumnIds}");
     if (this.hiddenColumnIds.length > 0) {
       hiddenColumnData = this.hiddenColumnIds.firstWhere(
           (element) => element.keys.toList()[0] == columnId, orElse: () {

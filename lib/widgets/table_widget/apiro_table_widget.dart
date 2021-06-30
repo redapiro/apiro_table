@@ -60,6 +60,7 @@ class ApiroTableWidget extends StatelessWidget {
     _tableManager = TableManager.getInstance();
 
     setupData(inConstructor: this.gridRow.length != 0);
+    print("hidden col info -- ${this.hiddenColumnInfos}");
     _tableManager.hiddenColumnIds =
         List<Map<String, dynamic>>.from(this.hiddenColumnInfos);
     _tableManager.tableColumnFilterList = List<String>.from(this.filterList);
@@ -359,10 +360,17 @@ class ApiroTableWidget extends StatelessWidget {
     _tableManager.hideColumn(columnId);
     if (updateDataOnHideColumn != null) {
       List<Map<String, dynamic>> tempHiddenData = [];
-      tempHiddenData = List<Map<String, dynamic>>.from(
-          _tableManager.hiddenColumnIds.map((e) => e).toList());
+      var tempDataList = _tableManager.hiddenColumnIds;
+      _tableManager.hiddenColumnIds = [];
+
+      for (var colData in tempDataList) {
+        var celssData = colData["cells_data"];
+        colData["cells_data"] = [];
+        tempHiddenData.add(colData);
+        colData["cells_data"] = celssData;
+        _tableManager.hiddenColumnIds.add(colData);
+      }
       updateDataOnHideColumn!(tempHiddenData.map((e) {
-        e.remove("cells_data");
         return e;
       }).toList());
     }
