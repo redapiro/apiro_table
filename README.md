@@ -39,10 +39,8 @@ dependencies:
 
 
 ## Usage
-![Untitled](https://user-images.githubusercontent.com/70631810/124572079-fb0e1780-de65-11eb-9b21-b81d84c2e6df.png)
 
-
-## Parameters 
+### Parameters 
 1. columnData - takes List<String> to show column names
 2. columnIds - takes List<String> to keep track on column used as column unique Id
 3. rowData - Rows data in Map 
@@ -63,6 +61,11 @@ dependencies:
 18. onPageNumberTextFieldSubmit - callback when age number submitted in text field
 19. onPreviousClick - Callback when previous button in pagination is clicked
 20. totalNumberOfPages - Total number of pages available in pagination
+
+![Untitled](https://user-images.githubusercontent.com/70631810/124572079-fb0e1780-de65-11eb-9b21-b81d84c2e6df.png)
+
+
+
 
 ```dart
   import 'package:apiro_table/widgets/table_widget/apiro_table_widget.dart';
