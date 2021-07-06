@@ -1,4 +1,4 @@
-[![Build Status]
+
 # Apiro Table
 
 This plugin allows Flutter apps to create a customized table grid with a lot of available options and column and row pinning options, user will also be able to use pagination option with this plugin.
@@ -39,6 +39,8 @@ dependencies:
 ## Usage
 ```dart
   import 'package:apiro_table/widgets/table_widget/apiro_table_widget.dart';
+  import 'package:syncfusion_flutter_datagrid/datagrid.dart';
+  
   List<String> columnName = [];
   List<String> columnIds = [];
   List<Map<String, dynamic>> rowData = [];
@@ -118,8 +120,7 @@ List<DataGridRow> _orderDataGridSource() {
 }
 
 
-import 'package:syncfusion_flutter_datagrid/datagrid.dart';
-  
+
   
   class TableGridSource {
   /// Creates the employee data source class with required details.
