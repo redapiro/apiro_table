@@ -104,7 +104,7 @@ dependencies:
           )
 
 
-//Generate gris source for the table row
+//Generate grid source for the table row
 List<DataGridRow> _orderDataGridSource() {
   TableGridSource dataSource = TableGridSource(
   rowData: tableRowData,
@@ -130,7 +130,7 @@ import 'package:syncfusion_flutter_datagrid/datagrid.dart';
   List<DataGridRow> dataGridRow = [];
 
   TableGridSource(
-      {@required this.rowData,
+      {required this.rowData,
       required this.columnNames,
       required this.onStatusWidgetClick,
       required this.context}) {
