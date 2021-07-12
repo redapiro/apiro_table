@@ -24,12 +24,15 @@ class TableColumnHeaderPopMenuButtonWidget extends StatelessWidget {
 
   final Function()? onColumnmPinClick;
   final Function()? onColumnmHideClick;
+  final Function(int)? onColumnClick;
   final Function(int)? onColumnOrderingSet;
   final Function(List<String>)? onColumnmFilterClick;
   final double? popUpButtonHeight;
+  int columnIndex;
 
   TableColumnHeaderPopMenuButtonWidget(
       {required this.metadata,
+      required this.columnIndex,
       this.onColumnmFilterClick,
       this.onColumnmHideClick,
       this.tableFilterList,
@@ -41,6 +44,7 @@ class TableColumnHeaderPopMenuButtonWidget extends StatelessWidget {
       required this.id,
       this.onColumnmPinClick,
       this.onColumnOrderingSet,
+      this.onColumnClick,
       this.isPinned = false,
       this.subtitle = "",
       this.popUpButtonHeight = 50.0,
@@ -101,6 +105,9 @@ class TableColumnHeaderPopMenuButtonWidget extends StatelessWidget {
                       behavior: HitTestBehavior.opaque,
                       onTap: () {
                         // _showPopUpMenu(context, tapDetails.globalPosition);
+                        if (this.onColumnClick != null) {
+                          this.onColumnClick!(columnIndex);
+                        }
                         _showPopUpMenu(context);
                         isPopUpButtonPressed.value =
                             !isPopUpButtonPressed.value;

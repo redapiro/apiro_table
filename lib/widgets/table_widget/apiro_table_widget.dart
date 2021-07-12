@@ -34,6 +34,7 @@ class ApiroTableWidget extends StatelessWidget {
     required this.totalNumberOfPages,
     this.hiddenColumnInfos = const [],
     this.filterList = const [],
+    this.onColumnClick,
     this.columnIdFilterAppliedOn = "",
     this.widgetInTableHeaderRow,
     this.updateDataOnColumnPinned,
@@ -143,6 +144,7 @@ class ApiroTableWidget extends StatelessWidget {
   Function(int, int, int) onPageNumberDropDownSelect;
   Function(int, int) onPreviousClick;
   Function(int, int) onPageNumberTextFieldSubmit;
+  Function(int)? onColumnClick;
 
   //************* Call back methods to work after filter and hide columns */
   Function(List<Map<String, dynamic>>)? updateDataOnHideColumn;
@@ -264,6 +266,11 @@ class ApiroTableWidget extends StatelessWidget {
                                       id: _tableManager.columnIds[index],
                                       tableFilterList:
                                           _tableManager.tableColumnFilterList,
+                                      onColumnClick: (index) {
+                                        if (this.onColumnClick != null) {
+                                          this.onColumnClick!(index);
+                                        }
+                                      },
                                       onColumnmPinClick: () {
                                         _columnPinClick(
                                             _tableManager.columnIds[index],
@@ -286,6 +293,7 @@ class ApiroTableWidget extends StatelessWidget {
                                       },
                                       tootipName:
                                           _tableManager.columnNames[index],
+                                      columnIndex: index,
                                     ),
                                   );
                                 })),
