@@ -24,11 +24,14 @@ class TableColumnHeaderPopMenuButtonWidget extends StatelessWidget {
 
   final Function()? onColumnmPinClick;
   final Function()? onColumnmHideClick;
-  final Function(int)? onColumnClick;
+  final Function(int, Function(bool))? onColumnClick;
   final Function(int)? onColumnOrderingSet;
   final Function(List<String>)? onColumnmFilterClick;
   final double? popUpButtonHeight;
   int columnIndex;
+  bool shouldShowSortWidget = false;
+
+  Widget? tableSortWidget;
 
   TableColumnHeaderPopMenuButtonWidget(
       {required this.metadata,
@@ -45,6 +48,7 @@ class TableColumnHeaderPopMenuButtonWidget extends StatelessWidget {
       this.onColumnmPinClick,
       this.onColumnOrderingSet,
       this.onColumnClick,
+      this.tableSortWidget,
       this.isPinned = false,
       this.subtitle = "",
       this.popUpButtonHeight = 50.0,
@@ -106,7 +110,10 @@ class TableColumnHeaderPopMenuButtonWidget extends StatelessWidget {
                       onTap: () {
                         // _showPopUpMenu(context, tapDetails.globalPosition);
                         if (this.onColumnClick != null) {
-                          this.onColumnClick!(columnIndex);
+                          this.onColumnClick!(columnIndex,
+                              (shouldShowSortWidget) {
+                            this.shouldShowSortWidget = shouldShowSortWidget;
+                          });
                         }
                         _showPopUpMenu(context);
                         isPopUpButtonPressed.value =
@@ -242,6 +249,7 @@ class TableColumnHeaderPopMenuButtonWidget extends StatelessWidget {
                   Theme.of(context).scaffoldBackgroundColor,
                   addBorder: true, onClick: _onColumnFilterClick),
             SizedBox(width: 10),
+            if (this.shouldShowSortWidget) this.tableSortWidget ?? Container()
           ],
         ),
         SizedBox(height: 10),

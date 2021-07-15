@@ -32,6 +32,7 @@ class ApiroTableWidget extends StatelessWidget {
     required this.onPageNumberTextFieldSubmit,
     required this.onPreviousClick,
     required this.totalNumberOfPages,
+    this.tableSortWidget,
     this.hiddenColumnInfos = const [],
     this.filterList = const [],
     this.onColumnClick,
@@ -84,6 +85,7 @@ class ApiroTableWidget extends StatelessWidget {
   List<DataGridRow> gridRow = [];
 
   Widget? widgetInTableHeaderRow;
+  Widget? tableSortWidget;
 
   //Column pinning properties
   bool groupColumnPinning;
@@ -144,7 +146,7 @@ class ApiroTableWidget extends StatelessWidget {
   Function(int, int, int) onPageNumberDropDownSelect;
   Function(int, int) onPreviousClick;
   Function(int, int) onPageNumberTextFieldSubmit;
-  Function(int)? onColumnClick;
+  Function(int, Function(bool))? onColumnClick;
 
   //************* Call back methods to work after filter and hide columns */
   Function(List<Map<String, dynamic>>)? updateDataOnHideColumn;
@@ -262,13 +264,16 @@ class ApiroTableWidget extends StatelessWidget {
                                       iscolumnHidingOn: this.columnHidingOn,
                                       selectableText: selectableColumnText,
                                       metadata: {},
+                                      tableSortWidget: this.tableSortWidget,
                                       isPinned: colInfo.columnId != null,
                                       id: _tableManager.columnIds[index],
                                       tableFilterList:
                                           _tableManager.tableColumnFilterList,
-                                      onColumnClick: (index) {
+                                      onColumnClick:
+                                          (index, shouldShowSortWidget) {
                                         if (this.onColumnClick != null) {
-                                          this.onColumnClick!(index);
+                                          this.onColumnClick!(
+                                              index, shouldShowSortWidget);
                                         }
                                       },
                                       onColumnmPinClick: () {
