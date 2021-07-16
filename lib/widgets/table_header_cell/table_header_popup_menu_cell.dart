@@ -175,7 +175,7 @@ class TableColumnHeaderPopMenuButtonWidget extends StatelessWidget {
   CustomPopUpMenuItem _getPopUpMenuItems(BuildContext context) {
     return CustomPopUpMenuItem(
         child: Container(
-          margin: EdgeInsets.only(left: 15, right: 15),
+          padding: EdgeInsets.only(left: 15, right: 15),
           child: ValueListenableBuilder<bool>(
               valueListenable: shouldShowFilterUI,
               builder: (context, value, child) {
