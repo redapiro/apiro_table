@@ -3,6 +3,7 @@ import 'package:apiro_table/utils/app_notifiers.dart';
 import 'package:apiro_table/utils/table_manager/table_manager.dart';
 import 'package:apiro_table/widgets/custom_widgets/adaptive_elevated_button.dart';
 import 'package:apiro_table/widgets/custom_widgets/custom_drop_down.dart';
+import 'package:apiro_table/widgets/custom_widgets/custom_pop_up_menu_item.dart';
 import 'package:apiro_table/widgets/table_header_cell/add_filter_widget.dart';
 import 'package:apiro_table/widgets/table_header_cell/table_column_filter_icon_widget.dart';
 import 'package:flutter/material.dart';
@@ -171,39 +172,69 @@ class TableColumnHeaderPopMenuButtonWidget extends StatelessWidget {
     }
   }
 
-  PopupMenuItem _getPopUpMenuItems(BuildContext context) {
-    return PopupMenuItem(
-      enabled: false,
-      child: ValueListenableBuilder<bool>(
-          valueListenable: shouldShowFilterUI,
-          builder: (context, value, child) {
-            if (value) {
+  CustomPopUpMenuItem _getPopUpMenuItems(BuildContext context) {
+    return CustomPopUpMenuItem(
+        child: ValueListenableBuilder<bool>(
+            valueListenable: shouldShowFilterUI,
+            builder: (context, value, child) {
+              if (value) {
+                return Container(
+                  color: Colors.white,
+                  child: AddFilterWidget(
+                    onApplyFilterClick: _applyFilterCallback,
+                    removeFilterUI: _hideFilterUI,
+                    columnName: this.title,
+                    filterList: this.tableFilterList ?? [],
+                  ),
+                );
+              }
               return Container(
                 color: Colors.white,
-                child: AddFilterWidget(
-                  onApplyFilterClick: _applyFilterCallback,
-                  removeFilterUI: _hideFilterUI,
-                  columnName: this.title,
-                  filterList: this.tableFilterList ?? [],
-                ),
+                child: Column(children: [
+                  _getTitleAndPopUpCloseRow(context),
+                  SizedBox(height: 5),
+                  _getSubtitleRow(),
+                  SizedBox(height: 5),
+                  _getPinFilterHideRow(),
+                  SizedBox(height: 5),
+                  _getHorizontalLine(),
+                  SizedBox(height: 5),
+                  _getMetadataWidget()
+                ]),
               );
-            }
-            return Container(
-              color: Colors.white,
-              child: Column(children: [
-                _getTitleAndPopUpCloseRow(context),
-                SizedBox(height: 5),
-                _getSubtitleRow(),
-                SizedBox(height: 5),
-                _getPinFilterHideRow(),
-                SizedBox(height: 5),
-                _getHorizontalLine(),
-                SizedBox(height: 5),
-                _getMetadataWidget()
-              ]),
-            );
-          }),
-    );
+            }));
+    // return PopupMenuItem(
+    //   enabled: false,
+    //   child: ValueListenableBuilder<bool>(
+    //       valueListenable: shouldShowFilterUI,
+    //       builder: (context, value, child) {
+    //         if (value) {
+    //           return Container(
+    //             color: Colors.white,
+    //             child: AddFilterWidget(
+    //               onApplyFilterClick: _applyFilterCallback,
+    //               removeFilterUI: _hideFilterUI,
+    //               columnName: this.title,
+    //               filterList: this.tableFilterList ?? [],
+    //             ),
+    //           );
+    //         }
+    //         return Container(
+    //           color: Colors.white,
+    //           child: Column(children: [
+    //             _getTitleAndPopUpCloseRow(context),
+    //             SizedBox(height: 5),
+    //             _getSubtitleRow(),
+    //             SizedBox(height: 5),
+    //             _getPinFilterHideRow(),
+    //             SizedBox(height: 5),
+    //             _getHorizontalLine(),
+    //             SizedBox(height: 5),
+    //             _getMetadataWidget()
+    //           ]),
+    //         );
+    //       }),
+    // );
   }
 
   Widget _getTitleAndPopUpCloseRow(BuildContext context) {
