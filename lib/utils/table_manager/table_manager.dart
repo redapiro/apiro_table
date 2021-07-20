@@ -418,12 +418,12 @@ class TableManager {
   void applyAnyFilterHiddenColumnRowAndColumnPinningIfExists() {
     //Apply filter if there are any
     if (this.tableColumnFilterList.length > 0) {
-      for (String columnId in this.tableColumnFilterList.length > 1
-          ? this.tableColumnFilterList.sublist(1)
-          : []) {
-        print("table column filter list $columnId");
-        this.addFilterToColumn(columnId);
-      }
+      // for (String columnId in this.tableColumnFilterList.length > 1
+      //     ? this.tableColumnFilterList.sublist(0, 1)
+      //     : []) {
+      print("table column filter list ${this.tableColumnFilterList[0]}");
+      this.addFilterToColumn(this.tableColumnFilterList[0]);
+      // }
     }
 
     // hide columns if here are any
