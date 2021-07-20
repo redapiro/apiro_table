@@ -430,6 +430,10 @@ class TableManager {
     if (this.hiddenColumnIds.length > 0) {
       for (var columnData in this.hiddenColumnIds) {
         String columnId = columnData["column_name"];
+        if (!columnData.containsKey("cells_data")) {
+          this.showAllColumn();
+          return;
+        }
         this.hideColumn(columnId);
       }
     }
