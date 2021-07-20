@@ -192,6 +192,7 @@ class TableColumnHeaderPopMenuButtonWidget extends StatelessWidget {
                   );
                 }
                 return Container(
+                  padding: EdgeInsets.only(left: 15, right: 15),
                   color: Colors.white,
                   child: Column(children: [
                     _getTitleAndPopUpCloseRow(context),
