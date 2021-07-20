@@ -429,7 +429,7 @@ class TableManager {
     // hide columns if here are any
     if (this.hiddenColumnIds.length > 0) {
       for (var columnData in this.hiddenColumnIds) {
-        String columnId = columnData.keys.toList()[0];
+        String columnId = columnData["column_name"];
         this.hideColumn(columnId);
       }
     }
