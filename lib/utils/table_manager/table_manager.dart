@@ -67,10 +67,16 @@ class TableManager {
     List<Map<String, dynamic>> tempRowData = [];
     List<DataGridRow> _dataGridRow = [];
     int rowIndex = 0;
+    var filterableList = [];
+    if (tableColumnFilterList.contains(columnId)) {
+      filterableList = tableColumnFilterList.sublist(1);
+    }
     for (var data in rowData) {
-      if (tableColumnFilterList.any((element) => element
-          .toLowerCase()
-          .contains(data[columnId].toString().toLowerCase()))) {
+      if (filterableList.any((element) {
+        return element
+            .toLowerCase()
+            .contains(data[columnId].toString().toLowerCase());
+      })) {
         tempRowData.add(data);
         _dataGridRow.add(this.datagridRow[rowIndex]);
       }
@@ -125,7 +131,7 @@ class TableManager {
           return {};
         })).length ==
         0) {
-          print("saving column data ---");
+      print("saving column data ---");
       (this.hiddenColumnIds).add(
           {columnId: colIndex, "cells_data": cells, "column_name": colName});
     } else {
@@ -413,6 +419,7 @@ class TableManager {
     //Apply filter if there are any
     if (this.tableColumnFilterList.length > 0) {
       for (String columnId in this.tableColumnFilterList) {
+        print("table column filter list $columnId");
         this.addFilterToColumn(columnId);
       }
     }
