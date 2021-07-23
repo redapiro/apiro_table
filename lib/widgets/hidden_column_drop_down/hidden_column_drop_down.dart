@@ -105,7 +105,7 @@ class HiddenColumnDropDown extends StatelessWidget {
   PopupMenuItem _getPopUpMenuItems(BuildContext context) {
     List<String> hiddenColumnNames = TableManager.getInstance()
         .hiddenColumnIds
-        .map((e) => e.keys.toList()[0].toString())
+        .map((e) => e.values.toList()[0].toString())
         .toList();
     return PopupMenuItem(
       enabled: false,
