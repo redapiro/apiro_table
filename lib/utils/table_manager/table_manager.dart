@@ -94,13 +94,14 @@ class TableManager {
     this.rowData = List<Map<String, dynamic>>.from(tempRowData);
 
     this.currentFilterColumnId = columnId;
-
+    print("rows finished");
     //refreshTable
     this.refreshDataTable();
 
     //Updatetable filters
     AppNotifiers.getInstance().filterListUpdateNotifier.value =
         !AppNotifiers.getInstance().filterListUpdateNotifier.value;
+    print(" refresh rows finished");
   }
 
   //Hidden ColumnsWorking
@@ -233,7 +234,7 @@ class TableManager {
 
     this
         .hiddenColumnIds
-        .removeWhere((element) => element.keys.toList()[0] == columnId);
+        .removeWhere((element) => element.keys.toList().contains(columnId));
     this.rowData = [];
 
     this.datagridRow = [];
@@ -454,7 +455,7 @@ class TableManager {
       this.addFilterToColumn(this.tableColumnFilterList[0]);
       // }
     }
-
+    print("added all filters");
     // hide columns if here are any
     if (this.hiddenColumnIds.length > 0) {
       for (var columnData in this.hiddenColumnIds) {
@@ -466,6 +467,8 @@ class TableManager {
         this.hideColumn(columnId);
       }
     }
+
+    print("hidded available columns");
 
     //Pin columns if there are any
     var tempColInfos = this.pinnedColumnInfo.map((e) => e.copyFrom()).toList();
