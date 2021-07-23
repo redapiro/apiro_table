@@ -74,6 +74,8 @@ class TableManager {
     }
 
     for (var data in rowData) {
+      print("row index -- $rowIndex");
+      print("row index with data grid row length  -- ${this.datagridRow}");
       if (filterableList.any((element) {
         return data[columnId]
             .toString()
