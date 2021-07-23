@@ -446,7 +446,7 @@ class TableManager {
 
   void applyAnyFilterHiddenColumnRowAndColumnPinningIfExists() {
     //Apply filter if there are any
-    
+
     if (this.tableColumnFilterList.length > 0) {
       // for (String columnId in this.tableColumnFilterList.length > 1
       //     ? this.tableColumnFilterList.sublist(0, 1)
@@ -464,6 +464,7 @@ class TableManager {
         //   this.showAllColumn();
         //   return;
         // }
+        print("column id to hide -- $columnId");
         this.hideColumn(columnId);
       }
     }
