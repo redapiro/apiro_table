@@ -128,27 +128,27 @@ class TableManager {
 
     // remove data from column id and name
     int colIndex = this.columnIds.indexOf(columnId);
-    this.columnIds.remove(columnId);
-    var colName = this.columnNames.removeAt(colIndex);
+    if (colIndex != -1) {
+      this.columnIds.remove(columnId);
+      var colName = this.columnNames.removeAt(colIndex);
+      //save the columnId to unhide colum in future
 
-    //save the columnId to unhide colum in future
-
-    if ((this
-            .hiddenColumnIds
-            .firstWhere((element) => element.containsKey(columnId), orElse: () {
-          return {};
-        })).length ==
-        0) {
-      print("saving column data ---");
-      (this.hiddenColumnIds).add({
-        columnId: colIndex,
-        "cells_data": cells.map((e) => e.value).toList(),
-        "column_name": colName
-      });
-    } else {
-      print("not able to save col data ");
+      if ((this.hiddenColumnIds.firstWhere(
+              (element) => element.containsKey(columnId), orElse: () {
+            return {};
+          })).length ==
+          0) {
+        print("saving column data ---");
+        (this.hiddenColumnIds).add({
+          columnId: colIndex,
+          "cells_data": cells.map((e) => e.value).toList(),
+          "column_name": colName
+        });
+      } else {
+        print("not able to save col data ");
+      }
+      print("hidden column data after if else -- ${this.hiddenColumnIds}");
     }
-    print("hidden column data after if else -- ${this.hiddenColumnIds}");
 
     //refresh the table
     this.refreshDataTable();
