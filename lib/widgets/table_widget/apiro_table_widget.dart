@@ -62,7 +62,7 @@ class ApiroTableWidget extends StatelessWidget {
     _tableManager = TableManager.getInstance();
 
     setupData(inConstructor: this.gridRow.length != 0);
-    
+
     _tableManager.hiddenColumnIds =
         List<Map<String, dynamic>>.from(this.hiddenColumnInfos);
     _tableManager.tableColumnFilterList = List<String>.from(this.filterList);
