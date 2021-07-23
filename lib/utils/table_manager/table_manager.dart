@@ -132,8 +132,11 @@ class TableManager {
         })).length ==
         0) {
       print("saving column data ---");
-      (this.hiddenColumnIds).add(
-          {columnId: colIndex, "cells_data": cells, "column_name": colName});
+      (this.hiddenColumnIds).add({
+        columnId: colIndex,
+        "cells_data": cells.map((e) => e.columnName).toList(),
+        "column_name": colName
+      });
     } else {
       print("not able to save col data ");
     }
@@ -196,13 +199,18 @@ class TableManager {
         List<DataGridCell<dynamic>> dataGridCells =
             datagridRow[rowIndex].getCells();
 
-        List<DataGridCell<dynamic>> maindataGridCells =
-            this.staticDatagridRow[rowIndex].getCells();
+        // List<DataGridCell<dynamic>> maindataGridCells =
+        //     this.staticDatagridRow[rowIndex].getCells();
 
+        // dataGridCells.insert(
+        //     insertToColIndex,
+        //     this._decoupleGridCellsObjects(
+        //         getHiddenColumnData["cells_data"][rowIndex]));
         dataGridCells.insert(
             insertToColIndex,
-            this._decoupleGridCellsObjects(
-                getHiddenColumnData["cells_data"][rowIndex]));
+            DataGridCell(
+                columnName: getHiddenColumnData["cells_data"][rowIndex],
+                value: getHiddenColumnData["cells_data"][rowIndex]));
 
         datagridRow[rowIndex] = DataGridRow(cells: dataGridCells);
       }
