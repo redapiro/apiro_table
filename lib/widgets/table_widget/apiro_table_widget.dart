@@ -478,6 +478,7 @@ class ApiroTableWidget extends StatelessWidget {
 
   void setupData({bool inConstructor = false}) {
     if (inConstructor) {
+      _tableManager.resetTableManagerConfiguration();
       //Setting up table data when it is coming from constructor
       _tableManager.columnNames = List<String>.from(this.columnData);
       _tableManager.columnIds = List<String>.from(this.columnIds);

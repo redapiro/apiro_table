@@ -138,7 +138,6 @@ class TableManager {
             return {};
           })).length ==
           0) {
-        print("saving column data ---");
         (this.hiddenColumnIds).add({
           columnId: colIndex,
           "cells_data": cells.map((e) => e.value).toList(),
@@ -447,7 +446,7 @@ class TableManager {
 
   void applyAnyFilterHiddenColumnRowAndColumnPinningIfExists() {
     //Apply filter if there are any
-
+    
     if (this.tableColumnFilterList.length > 0) {
       // for (String columnId in this.tableColumnFilterList.length > 1
       //     ? this.tableColumnFilterList.sublist(0, 1)
