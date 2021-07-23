@@ -175,39 +175,39 @@ class TableColumnHeaderPopMenuButtonWidget extends StatelessWidget {
   CustomPopUpMenuItem _getPopUpMenuItems(BuildContext context) {
     return CustomPopUpMenuItem(
         child: Container(
-          color: Colors.white,
-          child: ValueListenableBuilder<bool>(
-              valueListenable: shouldShowFilterUI,
-              builder: (context, value, child) {
-                if (value) {
-                  return Container(
-                    padding: EdgeInsets.only(left: 15, right: 15),
-                    color: Colors.white,
-                    child: AddFilterWidget(
-                      onApplyFilterClick: _applyFilterCallback,
-                      removeFilterUI: _hideFilterUI,
-                      columnName: this.title,
-                      filterList: this.tableFilterList ?? [],
-                    ),
-                  );
-                }
-                return Container(
-                  padding: EdgeInsets.only(left: 15, right: 15),
-                  color: Colors.white,
-                  child: Column(children: [
-                    _getTitleAndPopUpCloseRow(context),
-                    SizedBox(height: 5),
-                    _getSubtitleRow(),
-                    SizedBox(height: 5),
-                    _getPinFilterHideRow(),
-                    SizedBox(height: 5),
-                    _getHorizontalLine(),
-                    SizedBox(height: 5),
-                    _getMetadataWidget()
-                  ]),
-                );
-              }),
-        ));
+      color: Colors.white,
+      child: ValueListenableBuilder<bool>(
+          valueListenable: shouldShowFilterUI,
+          builder: (context, value, child) {
+            if (value) {
+              return Container(
+                padding: EdgeInsets.only(left: 15, right: 15),
+                color: Colors.white,
+                child: AddFilterWidget(
+                  onApplyFilterClick: _applyFilterCallback,
+                  removeFilterUI: _hideFilterUI,
+                  columnName: this.title,
+                  filterList: this.tableFilterList ?? [],
+                ),
+              );
+            }
+            return Container(
+              padding: EdgeInsets.only(left: 15, right: 15),
+              color: Colors.white,
+              child: Column(children: [
+                _getTitleAndPopUpCloseRow(context),
+                SizedBox(height: 5),
+                _getSubtitleRow(),
+                SizedBox(height: 5),
+                _getPinFilterHideRow(),
+                SizedBox(height: 5),
+                _getHorizontalLine(),
+                SizedBox(height: 5),
+                _getMetadataWidget()
+              ]),
+            );
+          }),
+    ));
     // return PopupMenuItem(
     //   enabled: false,
     //   child: ValueListenableBuilder<bool>(

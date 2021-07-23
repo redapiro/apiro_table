@@ -64,6 +64,7 @@ class TableManager {
   }
 
   void addFilterToColumn(String columnId) {
+    print("adding filter again -- $columnId");
     List<Map<String, dynamic>> tempRowData = [];
     List<DataGridRow> _dataGridRow = [];
     int rowIndex = 0;
@@ -71,11 +72,14 @@ class TableManager {
     if (tableColumnFilterList.contains(columnId)) {
       filterableList = tableColumnFilterList.sublist(1);
     }
+
     for (var data in rowData) {
       if (filterableList.any((element) {
-        return element
+        return data[columnId]
+            .toString()
+            .trim()
             .toLowerCase()
-            .contains(data[columnId].toString().toLowerCase());
+            .contains(element.toString().toLowerCase().trim());
       })) {
         tempRowData.add(data);
         _dataGridRow.add(this.datagridRow[rowIndex]);
@@ -240,10 +244,11 @@ class TableManager {
 
     this.columnIds = List<String>.from(this.staticColumnIds);
     this.columnNames = List<String>.from(this.staticColumnsData);
+
+    ///refresh table
+    this.applyAnyFilterHiddenColumnRowAndColumnPinningIfExists();
     AppNotifiers.getInstance().hiddenColumnNotifier.value =
         this.hiddenColumnIds.length.toString();
-    // //refresh table
-    this.applyAnyFilterHiddenColumnRowAndColumnPinningIfExists();
     this.refreshDataTable();
   }
 
@@ -438,6 +443,7 @@ class TableManager {
 
   void applyAnyFilterHiddenColumnRowAndColumnPinningIfExists() {
     //Apply filter if there are any
+    print("filter List -- ${this.tableColumnFilterList}");
     if (this.tableColumnFilterList.length > 0) {
       // for (String columnId in this.tableColumnFilterList.length > 1
       //     ? this.tableColumnFilterList.sublist(0, 1)
