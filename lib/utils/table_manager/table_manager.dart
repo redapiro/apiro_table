@@ -134,7 +134,7 @@ class TableManager {
       print("saving column data ---");
       (this.hiddenColumnIds).add({
         columnId: colIndex,
-        "cells_data": cells.map((e) => e.columnName).toList(),
+        "cells_data": cells.map((e) => e.value).toList(),
         "column_name": colName
       });
     } else {
@@ -209,7 +209,7 @@ class TableManager {
         dataGridCells.insert(
             insertToColIndex,
             DataGridCell(
-                columnName: getHiddenColumnData["cells_data"][rowIndex],
+                columnName: getHiddenColumnData["column_name"] ,
                 value: getHiddenColumnData["cells_data"][rowIndex]));
 
         datagridRow[rowIndex] = DataGridRow(cells: dataGridCells);
