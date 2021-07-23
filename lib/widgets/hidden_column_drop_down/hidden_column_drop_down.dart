@@ -9,12 +9,14 @@ import 'package:flutter/material.dart';
 class HiddenColumnDropDown extends StatelessWidget {
   final Widget? leftWidget;
   final Function? clearAllPress;
+  final Function? showColumnPress;
   final Function? showAllPress;
   HiddenColumnDropDown({
     Key? key,
     this.leftWidget,
     this.clearAllPress,
     this.showAllPress,
+    this.showColumnPress,
   }) : super(key: key);
 
   late ThemeData _themeData;
@@ -172,6 +174,7 @@ class HiddenColumnDropDown extends StatelessWidget {
 
   void _onHiddenColumnShowPress(String colName, BuildContext context) {
     TableManager.getInstance().showColumn(colName);
+    if (this.showColumnPress != null) this.showColumnPress!();
     Navigator.pop(context);
   }
 

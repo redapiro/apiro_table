@@ -200,6 +200,9 @@ class ApiroTableWidget extends StatelessWidget {
                         showAllPress: () {
                           this.updateDataOnHideColumn!([]);
                         },
+                        showColumnPress: () {
+                          sendUpdateCallback();
+                        }
                       ),
                     Row(
                       children: [
@@ -371,6 +374,10 @@ class ApiroTableWidget extends StatelessWidget {
 
   void _onHideColumnClick(String columnId) {
     _tableManager.hideColumn(columnId);
+    sendUpdateCallback();
+  }
+
+  void sendUpdateCallback() {
     if (updateDataOnHideColumn != null) {
       List<Map<String, dynamic>> tempHiddenData = [];
       var tempDataList = _tableManager.hiddenColumnIds;
