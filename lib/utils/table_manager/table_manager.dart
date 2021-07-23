@@ -64,7 +64,6 @@ class TableManager {
   }
 
   void addFilterToColumn(String columnId) {
-    print("adding filter again -- $columnId");
     List<Map<String, dynamic>> tempRowData = [];
     List<DataGridRow> _dataGridRow = [];
     int rowIndex = 0;
@@ -74,8 +73,6 @@ class TableManager {
     }
 
     for (var data in rowData) {
-      print("row index -- $rowIndex");
-      print("row index with data grid row length  -- ${this.datagridRow}");
       if (filterableList.any((element) {
         return data[columnId]
             .toString()
@@ -94,14 +91,13 @@ class TableManager {
     this.rowData = List<Map<String, dynamic>>.from(tempRowData);
 
     this.currentFilterColumnId = columnId;
-    print("rows finished");
+
     //refreshTable
     this.refreshDataTable();
 
     //Updatetable filters
     AppNotifiers.getInstance().filterListUpdateNotifier.value =
         !AppNotifiers.getInstance().filterListUpdateNotifier.value;
-    print(" refresh rows finished");
   }
 
   //Hidden ColumnsWorking
@@ -143,10 +139,7 @@ class TableManager {
           "cells_data": cells.map((e) => e.value).toList(),
           "column_name": colName
         });
-      } else {
-        print("not able to save col data ");
-      }
-      print("hidden column data after if else -- ${this.hiddenColumnIds}");
+      } else {}
     }
 
     //refresh the table
@@ -192,7 +185,6 @@ class TableManager {
   }
 
   void showColumn(String columnId) {
-    print("column ID -- $columnId");
     // int rowIndex = 0;
     // //Add back the column at index
     // Map<String, dynamic> getHiddenColumnData =
