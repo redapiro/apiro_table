@@ -186,51 +186,64 @@ class TableManager {
 
   void showColumn(String columnId) {
     print("column ID -- $columnId");
-    int rowIndex = 0;
-    //Add back the column at index
-    Map<String, dynamic> getHiddenColumnData =
-        _getHiddenColumnDataWithColumnId(columnId);
+    // int rowIndex = 0;
+    // //Add back the column at index
+    // Map<String, dynamic> getHiddenColumnData =
+    //     _getHiddenColumnDataWithColumnId(columnId);
 
-    int insertToColIndex = getHiddenColumnData[columnId];
+    // int insertToColIndex = getHiddenColumnData[columnId];
 
-    for (var row in this.staticRowData) {
-      if (!this.rowData[rowIndex].containsKey(columnId)) {
-        this.rowData[rowIndex][columnId] = row[columnId];
-        List<DataGridCell<dynamic>> dataGridCells =
-            datagridRow[rowIndex].getCells();
+    // for (var row in this.staticRowData) {
+    //   if (!this.rowData[rowIndex].containsKey(columnId)) {
+    //     this.rowData[rowIndex][columnId] = row[columnId];
+    //     List<DataGridCell<dynamic>> dataGridCells =
+    //         datagridRow[rowIndex].getCells();
 
-        // List<DataGridCell<dynamic>> maindataGridCells =
-        //     this.staticDatagridRow[rowIndex].getCells();
+    //     // List<DataGridCell<dynamic>> maindataGridCells =
+    //     //     this.staticDatagridRow[rowIndex].getCells();
 
-        // dataGridCells.insert(
-        //     insertToColIndex,
-        //     this._decoupleGridCellsObjects(
-        //         getHiddenColumnData["cells_data"][rowIndex]));
-        dataGridCells.insert(
-            insertToColIndex,
-            DataGridCell(
-                columnName: getHiddenColumnData["column_name"] ,
-                value: getHiddenColumnData["cells_data"][rowIndex]));
+    //     // dataGridCells.insert(
+    //     //     insertToColIndex,
+    //     //     this._decoupleGridCellsObjects(
+    //     //         getHiddenColumnData["cells_data"][rowIndex]));
+    //     dataGridCells.insert(
+    //         insertToColIndex,
+    //         DataGridCell(
+    //             columnName: getHiddenColumnData["column_name"] ,
+    //             value: getHiddenColumnData["cells_data"][rowIndex]));
 
-        datagridRow[rowIndex] = DataGridRow(cells: dataGridCells);
-      }
+    //     datagridRow[rowIndex] = DataGridRow(cells: dataGridCells);
+    //   }
 
-      rowIndex++;
-    }
+    //   rowIndex++;
+    // }
 
-    if (getHiddenColumnData.length > 0) {
-      this
-          .columnNames
-          .insert(insertToColIndex, getHiddenColumnData["column_name"]);
-      this.columnIds.insert(insertToColIndex, columnId);
-    }
+    // if (getHiddenColumnData.length > 0) {
+    //   this
+    //       .columnNames
+    //       .insert(insertToColIndex, getHiddenColumnData["column_name"]);
+    //   this.columnIds.insert(insertToColIndex, columnId);
+    // }
 
     this
         .hiddenColumnIds
         .removeWhere((element) => element.keys.toList()[0] == columnId);
+    this.rowData = [];
+
+    this.datagridRow = [];
+
+    this.rowData = List<Map<String, dynamic>>.from(this.staticRowData);
+    this.datagridRow = this.decoupleCellObjects();
+
+    this.columnIds = [];
+    this.columnNames = [];
+
+    this.columnIds = List<String>.from(this.staticColumnIds);
+    this.columnNames = List<String>.from(this.staticColumnsData);
     AppNotifiers.getInstance().hiddenColumnNotifier.value =
         this.hiddenColumnIds.length.toString();
-    //refresh table
+    // //refresh table
+    this.applyAnyFilterHiddenColumnRowAndColumnPinningIfExists();
     this.refreshDataTable();
   }
 
@@ -438,10 +451,10 @@ class TableManager {
     if (this.hiddenColumnIds.length > 0) {
       for (var columnData in this.hiddenColumnIds) {
         String columnId = columnData["column_name"];
-        if (!columnData.containsKey("cells_data")) {
-          this.showAllColumn();
-          return;
-        }
+        // if (!columnData.containsKey("cells_data")) {
+        //   this.showAllColumn();
+        //   return;
+        // }
         this.hideColumn(columnId);
       }
     }
