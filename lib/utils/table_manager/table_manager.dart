@@ -114,12 +114,13 @@ class TableManager {
       row.remove(columnId);
       if (this.datagridRow.length > 0) {
         int colIndex = this.columnIds.indexOf(columnId);
+        if (colIndex != -1) {
+          DataGridCell? gridCell =
+              removeDataGridRowForColumn(colIndex, rowIndex, columnId);
 
-        DataGridCell? gridCell =
-            removeDataGridRowForColumn(colIndex, rowIndex, columnId);
-
-        if (gridCell != null) {
-          cells.add(gridCell);
+          if (gridCell != null) {
+            cells.add(gridCell);
+          }
         }
       }
       rowIndex++;
@@ -446,16 +447,16 @@ class TableManager {
 
   void applyAnyFilterHiddenColumnRowAndColumnPinningIfExists() {
     //Apply filter if there are any
-    print("filter List -- ${this.tableColumnFilterList}");
+
     if (this.tableColumnFilterList.length > 0) {
       // for (String columnId in this.tableColumnFilterList.length > 1
       //     ? this.tableColumnFilterList.sublist(0, 1)
       //     : []) {
-      print("table column filter list ${this.tableColumnFilterList[0]}");
+
       this.addFilterToColumn(this.tableColumnFilterList[0]);
       // }
     }
-    print("added all filters");
+
     // hide columns if here are any
     if (this.hiddenColumnIds.length > 0) {
       for (var columnData in this.hiddenColumnIds) {
@@ -467,8 +468,6 @@ class TableManager {
         this.hideColumn(columnId);
       }
     }
-
-    print("hidded available columns");
 
     //Pin columns if there are any
     var tempColInfos = this.pinnedColumnInfo.map((e) => e.copyFrom()).toList();
