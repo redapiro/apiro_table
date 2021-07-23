@@ -103,10 +103,13 @@ class HiddenColumnDropDown extends StatelessWidget {
   }
 
   PopupMenuItem _getPopUpMenuItems(BuildContext context) {
-    List<String> hiddenColumnNames = TableManager.getInstance()
-        .hiddenColumnIds
-        .map((e) => e.values.toList()[0].toString())
-        .toList();
+    var tableColumnIds = TableManager.getInstance().hiddenColumnIds;
+    List<String> hiddenColumnNames = tableColumnIds.map((e) {
+      var keysList = e.keys.toList();
+      keysList.remove("cells_data");
+      keysList.remove("column_data");
+      return keysList[0].toString();
+    }).toList();
     return PopupMenuItem(
       enabled: false,
       child: Column(crossAxisAlignment: CrossAxisAlignment.center, children: [
