@@ -26,7 +26,7 @@ class TableColumnHeaderPopMenuButtonWidget extends StatelessWidget {
 
   final Function()? onColumnmPinClick;
   final Function()? onColumnmHideClick;
-  final Function(int, Function(bool), Function(Map<String, dynamic>))?
+  final Function(String, Function(bool), Function(Map<String, dynamic>))?
       onColumnClick;
   final Function(int)? onColumnOrderingSet;
   final Function(List<String>)? onColumnmFilterClick;
@@ -113,8 +113,7 @@ class TableColumnHeaderPopMenuButtonWidget extends StatelessWidget {
                       onTap: () {
                         // _showPopUpMenu(context, tapDetails.globalPosition);
                         if (this.onColumnClick != null) {
-                          this.onColumnClick!(columnIndex,
-                              (shouldShowSortWidget) {
+                          this.onColumnClick!(this.id, (shouldShowSortWidget) {
                             this.shouldShowSortWidget = shouldShowSortWidget;
                           }, (metadata) {
                             this.metadata = metadata;
