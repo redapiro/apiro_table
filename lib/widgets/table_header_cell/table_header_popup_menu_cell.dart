@@ -11,6 +11,7 @@ import 'package:flutter/material.dart';
 class TableColumnHeaderPopMenuButtonWidget extends StatelessWidget {
   final String title;
   final String id;
+
   final String subtitle;
   final String tootipName;
 
@@ -85,8 +86,8 @@ class TableColumnHeaderPopMenuButtonWidget extends StatelessWidget {
         colNumber++;
         return tempString;
       }).toList();
-      selectedColumnOrderIndex.value =
-          _tableManager.columnNames.indexWhere((element) => element == title);
+      selectedColumnOrderIndex.value = _tableManager.columnNames
+          .indexWhere((element) => element == tootipName);
     }
 
     return Container(

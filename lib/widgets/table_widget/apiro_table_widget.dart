@@ -193,17 +193,16 @@ class ApiroTableWidget extends StatelessWidget {
                   children: [
                     if (this.showTableHeaderBar)
                       HiddenColumnDropDown(
-                        leftWidget: this.widgetInTableHeaderRow,
-                        clearAllPress: () {
-                          this.updateDataOnFilterColumn!([], "");
-                        },
-                        showAllPress: () {
-                          this.updateDataOnHideColumn!([]);
-                        },
-                        showColumnPress: () {
-                          sendUpdateCallback();
-                        }
-                      ),
+                          leftWidget: this.widgetInTableHeaderRow,
+                          clearAllPress: () {
+                            this.updateDataOnFilterColumn!([], "");
+                          },
+                          showAllPress: () {
+                            this.updateDataOnHideColumn!([]);
+                          },
+                          showColumnPress: () {
+                            sendUpdateCallback();
+                          }),
                     Row(
                       children: [
                         Expanded(child: _getSFDataTable()),
