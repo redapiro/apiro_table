@@ -374,8 +374,10 @@ class TableColumnHeaderPopMenuButtonWidget extends StatelessWidget {
                 children: [
                   Text(this.metadata.keys.toList()[index] + ": ",
                       style: _themeData!.textTheme.subtitle2!),
-                  Text(this.metadata.values.toList()[index],
-                      style: _themeData!.textTheme.subtitle2!),
+                  Expanded(
+                    child: Text(this.metadata.values.toList()[index],
+                        style: _themeData!.textTheme.subtitle2!),
+                  ),
                 ],
               );
             }),
