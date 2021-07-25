@@ -260,7 +260,7 @@ class ApiroTableWidget extends StatelessWidget {
                                     columnName:
                                         _tableManager.columnNames[index],
                                     label: TableColumnHeaderPopMenuButtonWidget(
-                                      title: _tableManager.columnNames[index],
+                                      title: _tableManager.columnIds[index],
                                       popUpButtonHeight: 50,
                                       isFilterOn: this.filtersOn,
                                       iscolumnOrderingOn: this.columnOrderingOn,
