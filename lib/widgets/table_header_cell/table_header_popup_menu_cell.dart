@@ -126,7 +126,7 @@ class TableColumnHeaderPopMenuButtonWidget extends StatelessWidget {
                           children: [
                             Expanded(
                               child: Tooltip(
-                                message: this.title,
+                                message: this.tootipName,
                                 child: (this.selectableText)
                                     ? SelectableText(this.title,
                                         textAlign: TextAlign.center,
