@@ -146,7 +146,7 @@ class ApiroTableWidget extends StatelessWidget {
   Function(int, int, int) onPageNumberDropDownSelect;
   Function(int, int) onPreviousClick;
   Function(int, int) onPageNumberTextFieldSubmit;
-  Function(int, Function(bool))? onColumnClick;
+  Function(int, Function(bool), Function(Map<String, dynamic>))? onColumnClick;
 
   //************* Call back methods to work after filter and hide columns */
   Function(List<Map<String, dynamic>>)? updateDataOnHideColumn;
@@ -271,11 +271,14 @@ class ApiroTableWidget extends StatelessWidget {
                                       id: _tableManager.columnIds[index],
                                       tableFilterList:
                                           _tableManager.tableColumnFilterList,
-                                      onColumnClick:
-                                          (index, shouldShowSortWidget) {
+                                      onColumnClick: (index,
+                                          shouldShowSortWidget,
+                                          updateMetaData) {
                                         if (this.onColumnClick != null) {
                                           this.onColumnClick!(
-                                              index, shouldShowSortWidget);
+                                              index,
+                                              shouldShowSortWidget,
+                                              updateMetaData);
                                         }
                                       },
                                       onColumnmPinClick: () {

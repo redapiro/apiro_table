@@ -15,7 +15,7 @@ class TableColumnHeaderPopMenuButtonWidget extends StatelessWidget {
   final String subtitle;
   final String tootipName;
 
-  final Map<String, dynamic> metadata;
+  Map<String, dynamic> metadata;
   final bool isPinned;
   final List<String>? tableFilterList;
 
@@ -26,7 +26,8 @@ class TableColumnHeaderPopMenuButtonWidget extends StatelessWidget {
 
   final Function()? onColumnmPinClick;
   final Function()? onColumnmHideClick;
-  final Function(int, Function(bool))? onColumnClick;
+  final Function(int, Function(bool), Function(Map<String, dynamic>))?
+      onColumnClick;
   final Function(int)? onColumnOrderingSet;
   final Function(List<String>)? onColumnmFilterClick;
   final double? popUpButtonHeight;
@@ -56,7 +57,7 @@ class TableColumnHeaderPopMenuButtonWidget extends StatelessWidget {
       this.popUpButtonHeight = 50.0,
       this.title = ""}) {
     _tableManager = TableManager.getInstance();
-    
+
     selectedColumnOrderIndex = ValueNotifier<int>(0);
   }
 
@@ -115,6 +116,8 @@ class TableColumnHeaderPopMenuButtonWidget extends StatelessWidget {
                           this.onColumnClick!(columnIndex,
                               (shouldShowSortWidget) {
                             this.shouldShowSortWidget = shouldShowSortWidget;
+                          }, (metadata) {
+                            this.metadata = metadata;
                           });
                         }
                         _showPopUpMenu(context);
