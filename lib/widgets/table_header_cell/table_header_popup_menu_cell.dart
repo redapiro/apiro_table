@@ -56,7 +56,7 @@ class TableColumnHeaderPopMenuButtonWidget extends StatelessWidget {
       this.popUpButtonHeight = 50.0,
       this.title = ""}) {
     _tableManager = TableManager.getInstance();
-
+    
     selectedColumnOrderIndex = ValueNotifier<int>(0);
   }
 

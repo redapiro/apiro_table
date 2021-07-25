@@ -310,13 +310,15 @@ class TableManager {
 
   //Single Column pinning working
   void singleColumnPinning(int colIndex, String columnId, bool isUnPin) {
+    // print("pinned col info --- ${this.pinnedColumnInfo}");
+    // print("pinned col info --- ${colIndex}");
+    // print("pinned col info --- ${columnId}");
     if (!isUnPin) {
       var tempRowData = List<Map<String, dynamic>>.from(this.rowData);
 
-      int insertIndex = this.pinnedColumnInfo.length > 0
-          ? this.pinnedColumnInfo.length - 1
-          : 0;
-
+      int insertIndex =
+          this.pinnedColumnInfo.length > 0 ? this.pinnedColumnInfo.length : 0;
+      print("insert index --- $insertIndex");
       int rowIndex = 0;
       for (var rowActData in tempRowData) {
         rowActData.remove(columnId);
@@ -340,6 +342,7 @@ class TableManager {
           columnName: this.columnNames[colIndex],
           currentPosition: insertIndex,
           lastPosition: colIndex);
+      print("col info to sve --- ${info.toJson()}");
       this.pinnedColumnInfo.add(info);
 
       //update frozen column count
@@ -353,7 +356,11 @@ class TableManager {
               }).lastPosition ??
               0
           : 0);
-
+      if (insertIndex <
+          (AppNotifiers.getInstance().frozenColumnCountNotifier.value - 1)) {
+        insertIndex =
+            (AppNotifiers.getInstance().frozenColumnCountNotifier.value - 1);
+      }
       int rowIndex = 0;
       for (var rowActData in tempRowData) {
         List<DataGridCell<dynamic>> dataGridCells =
