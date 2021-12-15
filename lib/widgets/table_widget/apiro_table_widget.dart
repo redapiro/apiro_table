@@ -152,7 +152,7 @@ class ApiroTableWidget extends StatelessWidget {
   //************* Call back methods to work after filter and hide columns */
   Function(List<Map<String, dynamic>>)? updateDataOnHideColumn;
   Function(List<String>, String)? updateDataOnFilterColumn;
-  Function(String)? updateDataOnColumnPinned;
+  Function(String, int)? updateDataOnColumnPinned;
 
   //***********Variables to manage hideen columns and filters if any */
   List<String> filterList = [];
@@ -365,6 +365,7 @@ class ApiroTableWidget extends StatelessWidget {
     } else {
       _tableManager.singleColumnPinning(currentPosition, columnId, isUnPin);
     }
+    this.updateDataOnColumnPinned!(columnId, currentPosition);
   }
 
   void _onColumnFiterClick(List<String> filterList, String columnId) {
@@ -373,7 +374,7 @@ class ApiroTableWidget extends StatelessWidget {
     if (updateDataOnFilterColumn != null)
       updateDataOnFilterColumn!(_tableManager.tableColumnFilterList,
           _tableManager.currentFilterColumnId);
-    this.updateDataOnColumnPinned!(columnId);
+    
   }
 
   void _onHideColumnClick(String columnId) {
