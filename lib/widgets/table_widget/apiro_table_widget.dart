@@ -161,7 +161,8 @@ class ApiroTableWidget extends StatelessWidget {
   Function(List<Map<String, dynamic>>)? updateDataOnHideColumn;
   Function(List<String>, String)? updateDataOnFilterColumn;
   Function(String, int)? updateDataOnColumnPinned;
-  Function(int rowIndex, int colIndex, bool rowUnPin)? updateDataOnRowPinned;
+  Function(int rowIndex, int colIndex, bool rowUnPin, dynamic rowData)?
+      updateDataOnRowPinned;
   Function(String columnName, int sendTo, int currentPosition)?
       updateDataOnColumnOrdering;
 
@@ -728,7 +729,8 @@ class ApiroTableWidget extends StatelessWidget {
       subtitle: TableManager.getInstance().columnIds[index],
     );
     if (this.updateDataOnRowPinned != null) {
-      this.updateDataOnRowPinned!(index, colIndex, isUnpin);
+      this.updateDataOnRowPinned!(
+          index, colIndex, isUnpin, TableManager.getInstance().rowData);
     }
   }
 
