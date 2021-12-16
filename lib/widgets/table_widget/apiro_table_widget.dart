@@ -67,6 +67,7 @@ class ApiroTableWidget extends StatelessWidget {
     _tableManager.hiddenColumnIds =
         List<Map<String, dynamic>>.from(this.hiddenColumnInfos);
     _tableManager.tableColumnFilterList = List<String>.from(this.filterList);
+    print("setting column pinning info");
     this.pinColumnsFromRemote();
 
     _tableManager.applyAnyFilterHiddenColumnRowAndColumnPinningIfExists();
@@ -373,17 +374,17 @@ class ApiroTableWidget extends StatelessWidget {
 
   //Pin Columns from firebase
   void pinColumnsFromRemote() {
-    this.pinnedColumnInfo.map((e) {
-      String key = e.keys.toList()[0];
+    for (var i = 0; i < this.pinnedColumnInfo.length; i++) {
+      String key = this.pinnedColumnInfo[i].keys.toList()[0];
       _tableManager.pinnedColumnInfo.add(ColumnPinningInfo.fromJson({
         "column_id": key,
         "column_name": key,
-        "last_position": e[key],
-        "current_position": e[key]
+        "last_position": this.pinnedColumnInfo[i][key],
+        "current_position": this.pinnedColumnInfo[i][key]
       }));
+      print("column pinning info added -- ${_tableManager.pinnedColumnInfo}");
+    }
 
-      // this._columnPinClick(key, e[key], false);
-    });
     this._reloadTableData();
   }
 

@@ -42,7 +42,7 @@ class MyApp extends StatelessWidget {
         columnIds: colIds,
         rowData: rowData,
         filtersOn: true,
-        updateDataOnColumnPinned: () {},
+        updateDataOnColumnPinned: (val1, val2) {},
         updateDataOnFilterColumn: (data, data1) {},
         selectableCellText: false,
         cellInlineEditing: false,
