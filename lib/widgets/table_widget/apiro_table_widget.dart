@@ -383,15 +383,15 @@ class ApiroTableWidget extends StatelessWidget {
     _tableManager.pinnedColumnInfo = [];
     for (var i = 0; i < this.pinnedColumnInfo.length; i++) {
       String key = this.pinnedColumnInfo[i].keys.toList()[0];
-      _tableManager.singleColumnPinning(
-          this.pinnedColumnInfo[i][key], key, false);
-      // _tableManager.pinnedColumnInfo.add(ColumnPinningInfo.fromJson({
-      //   "column_id": key,
-      //   "column_name": key,
-      //   "last_position": this.pinnedColumnInfo[i][key],
-      //   "current_position": this.pinnedColumnInfo[i][key]
-      // }));
-      // print("column pinning info added -- ${_tableManager.pinnedColumnInfo}");
+      // _tableManager.singleColumnPinning(
+      //     this.pinnedColumnInfo[i][key], key, false);
+      _tableManager.pinnedColumnInfo.add(ColumnPinningInfo.fromJson({
+        "column_id": key,
+        "column_name": key,
+        "last_position": this.pinnedColumnInfo[i][key],
+        "current_position": this.pinnedColumnInfo[i][key]
+      }));
+      print("column pinning info added -- ${this.pinnedColumnInfo}");
     }
 
     this._reloadTableData();
@@ -409,7 +409,7 @@ class ApiroTableWidget extends StatelessWidget {
       }
     }
 
-    this._reloadTableData();
+    // this._reloadTableData();
   }
 
   void _onColumnFiterClick(List<String> filterList, String columnId) {
