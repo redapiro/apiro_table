@@ -39,6 +39,7 @@ class ApiroTableWidget extends StatelessWidget {
     this.columnIdFilterAppliedOn = "",
     this.widgetInTableHeaderRow,
     this.updateDataOnColumnPinned,
+    this.updateDataOnRowPinned,
     this.updateDataOnFilterColumn,
     this.updateDataOnHideColumn,
     this.groupColumnPinning = false,
@@ -71,6 +72,7 @@ class ApiroTableWidget extends StatelessWidget {
     _tableManager.tableColumnFilterList = List<String>.from(this.filterList);
     print("setting column pinning info");
     this.pinColumnsFromRemote();
+    this.pinRowsFromRemote();
     this.orderColumnsFromRemoteData();
 
     _tableManager.applyAnyFilterHiddenColumnRowAndColumnPinningIfExists();
@@ -159,6 +161,7 @@ class ApiroTableWidget extends StatelessWidget {
   Function(List<Map<String, dynamic>>)? updateDataOnHideColumn;
   Function(List<String>, String)? updateDataOnFilterColumn;
   Function(String, int)? updateDataOnColumnPinned;
+  Function(int rowIndex, int colIndex)? updateDataOnRowPinned;
   Function(String columnName, int sendTo, int currentPosition)?
       updateDataOnColumnOrdering;
 
@@ -167,6 +170,7 @@ class ApiroTableWidget extends StatelessWidget {
   String columnIdFilterAppliedOn = "";
   List<Map<String, dynamic>> hiddenColumnInfos = [];
   List<Map<String, dynamic>> pinnedColumnInfo = [];
+  List<List<int>> pinnedRowInfo = [];
   List<Map<String, dynamic>> columnOrderingInfo = [];
 
   // /Pagination variables
@@ -412,6 +416,24 @@ class ApiroTableWidget extends StatelessWidget {
     // this._reloadTableData();
   }
 
+  ///
+  //*************************pinning rows from remote */
+  ///
+//Pin Rows from firebase
+  void pinRowsFromRemote() {
+    for (var i = 0; i < this.pinnedRowInfo.length; i++) {
+      int rowIndex = this.pinnedRowInfo[i][0];
+      int colIndex = this.pinnedRowInfo[i][1];
+      TableManager.getInstance().singleRowPinning(rowIndex, false);
+    }
+
+    // this._reloadTableData();
+  }
+
+  //***********************Setup pined rows from remote finished */
+  ///
+
+  ///
   void _onColumnFiterClick(List<String> filterList, String columnId) {
     _tableManager.tableColumnFilterList = filterList;
     _tableManager.addFilterToColumn(columnId);
@@ -705,6 +727,9 @@ class ApiroTableWidget extends StatelessWidget {
       title: TableManager.getInstance().columnNames[index],
       subtitle: TableManager.getInstance().columnIds[index],
     );
+    if (this.updateDataOnRowPinned != null) {
+      this.updateDataOnRowPinned!(index, colIndex);
+    }
   }
 
   void _onDataCellDoubleTap(
