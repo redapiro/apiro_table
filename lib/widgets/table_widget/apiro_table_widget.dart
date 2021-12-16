@@ -380,9 +380,11 @@ class ApiroTableWidget extends StatelessWidget {
 
   //Pin Columns from firebase
   void pinColumnsFromRemote() {
+    _tableManager.pinnedColumnInfo = [];
     for (var i = 0; i < this.pinnedColumnInfo.length; i++) {
       String key = this.pinnedColumnInfo[i].keys.toList()[0];
-      _tableManager.singleColumnPinning(this.pinnedColumnInfo[i][key], key, false);
+      _tableManager.singleColumnPinning(
+          this.pinnedColumnInfo[i][key], key, false);
       // _tableManager.pinnedColumnInfo.add(ColumnPinningInfo.fromJson({
       //   "column_id": key,
       //   "column_name": key,
