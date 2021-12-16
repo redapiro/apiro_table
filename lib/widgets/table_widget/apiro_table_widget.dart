@@ -54,7 +54,7 @@ class ApiroTableWidget extends StatelessWidget {
     this.columnHidingOn = true,
     this.filtersOn = true,
     this.pinnedColumnInfo = const [],
-    this.columnOrderingInfo =  const [],
+    this.columnOrderingInfo = const [],
     this.paginationPageSize = 50,
     this.updateDataOnColumnOrdering,
     this.paginationPageSizes = const [5, 10, 50, 100, 500],
@@ -159,7 +159,8 @@ class ApiroTableWidget extends StatelessWidget {
   Function(List<Map<String, dynamic>>)? updateDataOnHideColumn;
   Function(List<String>, String)? updateDataOnFilterColumn;
   Function(String, int)? updateDataOnColumnPinned;
-  Function(String, int, int)? updateDataOnColumnOrdering;
+  Function(String columnName, int sendTo, int currentPosition)?
+      updateDataOnColumnOrdering;
 
   //***********Variables to manage hideen columns and filters if any */
   List<String> filterList = [];
@@ -396,11 +397,13 @@ class ApiroTableWidget extends StatelessWidget {
   //OrderColumns from Firebase
   void orderColumnsFromRemoteData() {
     for (var i = 0; i < this.columnOrderingInfo.length; i++) {
-      String key = this.columnOrderingInfo[i].keys.toList()[0];
+      if (this.columnOrderingInfo[i].keys.toList().length > 0) {
+        String key = this.columnOrderingInfo[i].keys.toList()[0];
 
-      this._onColumnOrdering(key, this.columnOrderingInfo[i][key][0],
-          this.columnOrderingInfo[i][key][1]);
-      print("column ordering info added -- ${columnOrderingInfo}");
+        this._onColumnOrdering(key, this.columnOrderingInfo[i][key][0],
+            this.columnOrderingInfo[i][key][1]);
+        print("column ordering info added -- ${columnOrderingInfo}");
+      }
     }
 
     this._reloadTableData();
