@@ -53,6 +53,7 @@ class ApiroTableWidget extends StatelessWidget {
     this.columnOrderingOn = true,
     this.columnHidingOn = true,
     this.filtersOn = true,
+    this.pinnedColumnInfo = const [],
     this.paginationPageSize = 50,
     this.paginationPageSizes = const [5, 10, 50, 100, 500],
   }) : super(key: key) {
