@@ -292,9 +292,11 @@ class TableManager {
     for (var rowsData in this.rowData) {
       List<DataGridCell<dynamic>> dataGridCells =
           datagridRow[rowIndex].getCells();
-      var value = dataGridCells.removeAt(colIndex);
-      dataGridCells.insert(sendTo > 0 ? sendTo - 1 : 0, value);
-      datagridRow[rowIndex] = DataGridRow(cells: dataGridCells);
+      var value = colIndex != -1 ? dataGridCells.removeAt(colIndex) : null;
+      if (value != null) {
+        dataGridCells.insert(sendTo > 0 ? sendTo - 1 : 0, value);
+        datagridRow[rowIndex] = DataGridRow(cells: dataGridCells);
+      }
 
       rowIndex++;
     }
