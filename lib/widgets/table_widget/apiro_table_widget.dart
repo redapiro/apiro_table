@@ -55,6 +55,7 @@ class ApiroTableWidget extends StatelessWidget {
     this.filtersOn = true,
     this.pinnedColumnInfo = const [],
     this.paginationPageSize = 50,
+    this.updateDataOnColumnOrdering,
     this.paginationPageSizes = const [5, 10, 50, 100, 500],
   }) : super(key: key) {
     //Init table manager
@@ -156,6 +157,7 @@ class ApiroTableWidget extends StatelessWidget {
   Function(List<Map<String, dynamic>>)? updateDataOnHideColumn;
   Function(List<String>, String)? updateDataOnFilterColumn;
   Function(String, int)? updateDataOnColumnPinned;
+  Function(String, int, int)? updateDataOnColumnOrdering;
 
   //***********Variables to manage hideen columns and filters if any */
   List<String> filterList = [];
@@ -436,6 +438,9 @@ class ApiroTableWidget extends StatelessWidget {
 
   void _onColumnOrdering(String columnId, int sendTo, int currentPosition) {
     _tableManager.setColumnOrdering(sendTo, currentPosition, columnId);
+    if (this.updateDataOnColumnOrdering != null) {
+      this.updateDataOnColumnOrdering!(columnId, sendTo, currentPosition);
+    }
   }
 
   //Pagination Methods
