@@ -67,6 +67,7 @@ class ApiroTableWidget extends StatelessWidget {
     _tableManager.hiddenColumnIds =
         List<Map<String, dynamic>>.from(this.hiddenColumnInfos);
     _tableManager.tableColumnFilterList = List<String>.from(this.filterList);
+    this.pinColumnsFromRemote();
 
     _tableManager.applyAnyFilterHiddenColumnRowAndColumnPinningIfExists();
 
