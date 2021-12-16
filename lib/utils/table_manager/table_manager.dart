@@ -301,11 +301,12 @@ class TableManager {
       rowIndex++;
     }
 
-    var colValue = this.columnNames.removeAt(colIndex);
-    this.columnNames.insert(sendTo > 0 ? sendTo - 1 : 0, colValue);
-    colValue = this.columnIds.removeAt(colIndex);
-    this.columnIds.insert(sendTo > 0 ? sendTo - 1 : 0, colValue);
-
+    if (colIndex != -1) {
+      var colValue = this.columnNames.removeAt(colIndex);
+      this.columnNames.insert(sendTo > 0 ? sendTo - 1 : 0, colValue);
+      colValue = this.columnIds.removeAt(colIndex);
+      this.columnIds.insert(sendTo > 0 ? sendTo - 1 : 0, colValue);
+    }
     //refresh table
     this.refreshDataTable();
   }
