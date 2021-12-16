@@ -75,7 +75,7 @@ class ApiroTableWidget extends StatelessWidget {
         (element) => element == this.paginationPageSize, orElse: () {
       return 0;
     }).toString();
-    this.pinColumnsFromRemote();
+
     //Initialize app notifier
     _appNotifiers = AppNotifiers.getInstance();
   }
@@ -374,8 +374,16 @@ class ApiroTableWidget extends StatelessWidget {
   void pinColumnsFromRemote() {
     this.pinnedColumnInfo.map((e) {
       String key = e.keys.toList()[0];
-      this._columnPinClick(key, e[key], false);
+      _tableManager.pinnedColumnInfo.add(ColumnPinningInfo.fromJson({
+        "column_id": key,
+        "column_name": key,
+        "last_position": e[key],
+        "current_position": e[key]
+      }));
+
+      // this._columnPinClick(key, e[key], false);
     });
+    this._reloadTableData();
   }
 
   void _onColumnFiterClick(List<String> filterList, String columnId) {
