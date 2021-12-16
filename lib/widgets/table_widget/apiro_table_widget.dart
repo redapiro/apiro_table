@@ -54,6 +54,7 @@ class ApiroTableWidget extends StatelessWidget {
     this.columnHidingOn = true,
     this.filtersOn = true,
     this.pinnedColumnInfo = const [],
+    this.columnOrderingInfo =  const [],
     this.paginationPageSize = 50,
     this.updateDataOnColumnOrdering,
     this.paginationPageSizes = const [5, 10, 50, 100, 500],
@@ -70,6 +71,7 @@ class ApiroTableWidget extends StatelessWidget {
     _tableManager.tableColumnFilterList = List<String>.from(this.filterList);
     print("setting column pinning info");
     this.pinColumnsFromRemote();
+    this.orderColumnsFromRemoteData();
 
     _tableManager.applyAnyFilterHiddenColumnRowAndColumnPinningIfExists();
 
