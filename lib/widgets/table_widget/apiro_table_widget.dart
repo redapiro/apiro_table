@@ -74,7 +74,7 @@ class ApiroTableWidget extends StatelessWidget {
         (element) => element == this.paginationPageSize, orElse: () {
       return 0;
     }).toString();
-
+    this.pinColumnsFromRemote();
     //Initialize app notifier
     _appNotifiers = AppNotifiers.getInstance();
   }
@@ -158,6 +158,7 @@ class ApiroTableWidget extends StatelessWidget {
   List<String> filterList = [];
   String columnIdFilterAppliedOn = "";
   List<Map<String, dynamic>> hiddenColumnInfos = [];
+  List<Map<String, dynamic>> pinnedColumnInfo = [];
 
   // /Pagination variables
 
@@ -368,13 +369,20 @@ class ApiroTableWidget extends StatelessWidget {
     this.updateDataOnColumnPinned!(columnId, currentPosition);
   }
 
+  //Pin Columns from firebase
+  void pinColumnsFromRemote() {
+    this.pinnedColumnInfo.map((e) {
+      String key = e.keys.toList()[0];
+      this._columnPinClick(key, e[key], false);
+    });
+  }
+
   void _onColumnFiterClick(List<String> filterList, String columnId) {
     _tableManager.tableColumnFilterList = filterList;
     _tableManager.addFilterToColumn(columnId);
     if (updateDataOnFilterColumn != null)
       updateDataOnFilterColumn!(_tableManager.tableColumnFilterList,
           _tableManager.currentFilterColumnId);
-    
   }
 
   void _onHideColumnClick(String columnId) {
