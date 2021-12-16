@@ -162,6 +162,7 @@ class ApiroTableWidget extends StatelessWidget {
   String columnIdFilterAppliedOn = "";
   List<Map<String, dynamic>> hiddenColumnInfos = [];
   List<Map<String, dynamic>> pinnedColumnInfo = [];
+  List<Map<String, dynamic>> columnOrderingInfo = [];
 
   // /Pagination variables
 
@@ -383,6 +384,19 @@ class ApiroTableWidget extends StatelessWidget {
         "current_position": this.pinnedColumnInfo[i][key]
       }));
       print("column pinning info added -- ${_tableManager.pinnedColumnInfo}");
+    }
+
+    this._reloadTableData();
+  }
+
+  //OrderColumns from Firebase
+  void orderColumnsFromRemoteData() {
+    for (var i = 0; i < this.columnOrderingInfo.length; i++) {
+      String key = this.columnOrderingInfo[i].keys.toList()[0];
+
+      this._onColumnOrdering(key, this.columnOrderingInfo[i][key][0],
+          this.columnOrderingInfo[i][key][1]);
+      print("column ordering info added -- ${columnOrderingInfo}");
     }
 
     this._reloadTableData();
