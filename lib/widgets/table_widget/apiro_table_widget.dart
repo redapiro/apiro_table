@@ -721,6 +721,10 @@ class ApiroTableWidget extends StatelessWidget {
           AppNotifiers.getInstance().pinnedRowWidgetNotifier.value = null;
         } else {
           TableManager.getInstance().singleRowPinning(index, isUnpin);
+          if (this.updateDataOnRowPinned != null) {
+            this.updateDataOnRowPinned!(
+                index, colIndex, isUnpin, TableManager.getInstance().rowData);
+          }
           AppNotifiers.getInstance().pinnedRowWidgetNotifier.value = null;
         }
       },
@@ -728,10 +732,6 @@ class ApiroTableWidget extends StatelessWidget {
       title: TableManager.getInstance().columnNames[index],
       subtitle: TableManager.getInstance().columnIds[index],
     );
-    if (this.updateDataOnRowPinned != null) {
-      this.updateDataOnRowPinned!(
-          index, colIndex, isUnpin, TableManager.getInstance().rowData);
-    }
   }
 
   void _onDataCellDoubleTap(
