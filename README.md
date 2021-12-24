@@ -1,5 +1,3 @@
-
-
 # Apiro Table
 
 This plugin allows Flutter apps to create a customized table grid with a lot of available options and column and row pinning options, user will also be able to use pagination option with this plugin.
@@ -14,9 +12,11 @@ This plugin works Android, ios and web.
 
 Any updates and suggestions are most welcome.
 
-
 ## :sparkles: What's New
-#### Version 1.0.0 (30th Jun 2021)
+
+#### Version 1.0.1 (24th Dec 2021)
+
+--Added column pinning column ordering callbacks to save config on remote
 
 -- Changed pagination logic
 
@@ -25,7 +25,8 @@ Any updates and suggestions are most welcome.
 #### 1. Setup the config file
 
 Add your Apiro Table configuration to your `pubspec.yaml`.
-An example is shown below. 
+An example is shown below.
+
 ```yaml
 dependencies:
   apiro_table:
@@ -37,20 +38,20 @@ dependencies:
   flutter pub get
 ```
 
-
 ## Usage
 
-### Parameters 
+### Parameters
+
 1. columnData - takes List<String> to show column names
 2. columnIds - takes List<String> to keep track on column used as column unique Id
-3. rowData - Rows data in Map 
+3. rowData - Rows data in Map
 4. shouldResetTableConfigs - flag used to reset table configuration when a new table object is created (The plugin is using a singleton class to manage operations on table, that singleton class data is reset using this flag)
 5. paginationPageSizes - Pagination page sizes for table pagination
 6. paginationPageSize - No of rows per page
 7. widgetInTableHeaderRow - left side widget in table header
 8. columnHidingOn - column hiding functionality flag
 9. getPinnedRowStream - provides a callback to be called whenever a row is pinned and return pinned row data through stream back to its client
-10. gridRow - Row data grid that is generated using GridDataSource and fully customisable 
+10. gridRow - Row data grid that is generated using GridDataSource and fully customisable
 11. updateDataOnHideColumn - hidden columns data from plugin to client for saving into firebase or shared pref
 12. updateDataOnFilterColumn - column filter callback data from plugin to client for saving into firebase or shared pref
 13. tableHeight - Height of table
@@ -64,17 +65,14 @@ dependencies:
 
 ![Untitled](https://user-images.githubusercontent.com/70631810/124572079-fb0e1780-de65-11eb-9b21-b81d84c2e6df.png)
 
-
-
-
 ```dart
   import 'package:apiro_table/widgets/table_widget/apiro_table_widget.dart';
   import 'package:syncfusion_flutter_datagrid/datagrid.dart';
-  
+
   List<String> columnName = [];
   List<String> columnIds = [];
   List<Map<String, dynamic>> rowData = [];
-  
+
    ApiroTableWidget(
             columnData: columnName,
             columnIds: columnIds,
@@ -84,7 +82,7 @@ dependencies:
             paginationPageSizes: [2,5,10,100,200,500],
             paginationPageSize:
                 5,
-                //Header widget for table if needed 
+                //Header widget for table if needed
             widgetInTableHeaderRow: DashboardTableHeaderWidget(),
             //Flag to turn column hiding on
             columnHidingOn: true,
@@ -99,10 +97,10 @@ dependencies:
             },
             //grid source to provide most of the customization to table cell
             gridRow: _orderDataGridSource(),
-            
+
             //call back on column pinning
             updateDataOnColumnPinned: () {},
-            
+
             //callback on filter on column
             updateDataOnFilterColumn: (filterList, columnName) {
               tableNotifier.saveConfigFilterDataFromCallbacksToFirebase(
@@ -110,27 +108,27 @@ dependencies:
             },
             //callback on hide columns
             updateDataOnHideColumn: (hiddenColumnsData) {
-            
+
             },
             tableHeight: (screenHeight ?? 100) - 150,
             //pagination methods
             onItemPerPageChange: (currentPage, numberOfPages, perPageCount) {
-              
-              
+
+
             },
             onNextClick: (currentPage, numberOfPages) {
-              
+
             },
             onPageNumberClick: (currentPage, numberOfPages) {
-              
+
             },
             onPageNumberDropDownSelect:
                 (currentPage, numberOfPages, perPageRowCount) {},
             onPageNumberTextFieldSubmit: (currentPage, numberOfPages) {
-              
+
             },
             onPreviousClick: (currentPage, numberOfPages) {
-              
+
             },
             totalNumberOfPages: totalNumberOfPages,
           )
@@ -151,7 +149,7 @@ List<DataGridRow> _orderDataGridSource() {
 
 
 
-  
+
   class TableGridSource {
   /// Creates the employee data source class with required details.
   ///
@@ -171,21 +169,20 @@ List<DataGridRow> _orderDataGridSource() {
             columnName: columnNames[index].id!.toString(), value: valueWidget);
             });
             }
-  
+
 
 ```
-
 
 ![Untitled](https://user-images.githubusercontent.com/70631810/124572471-4d4f3880-de66-11eb-837f-f17850efce46.png)
 
 ```dart
   import 'package:apiro_table/widgets/table_widget/apiro_table_widget.dart';
   import 'package:syncfusion_flutter_datagrid/datagrid.dart';
-  
+
   List<String> columnName = [];
   List<String> columnIds = [];
   List<Map<String, dynamic>> rowData = [];
-  
+
    ApiroTableWidget(
             columnData: columnName,
             columnIds: columnIds,
@@ -193,10 +190,10 @@ List<DataGridRow> _orderDataGridSource() {
             //Used to reset the table configuration whenever we are using multiple tables in single project
             shouldResetTableConfigs: this.shouldResetTableManagerConfig,
             paginationPageSizes: [2,5,10,100,200,500],
-            
+
             paginationPageSize:
                 5,
-                //Header widget for table if needed 
+                //Header widget for table if needed
             widgetInTableHeaderRow: DashboardTableHeaderWidget(),
             //Flag to turn column hiding on
             columnHidingOn: true,
@@ -211,10 +208,10 @@ List<DataGridRow> _orderDataGridSource() {
             },
             //grid source to provide most of the customization to table cell
             gridRow: _orderDataGridSource(),
-            
+
             //call back on column pinning
             updateDataOnColumnPinned: () {},
-            
+
             //callback on filter on column
             updateDataOnFilterColumn: (filterList, columnName) {
               tableNotifier.saveConfigFilterDataFromCallbacksToFirebase(
@@ -222,27 +219,27 @@ List<DataGridRow> _orderDataGridSource() {
             },
             //callback on hide columns
             updateDataOnHideColumn: (hiddenColumnsData) {
-            
+
             },
             tableHeight: (screenHeight ?? 100) - 150,
             //pagination methods
             onItemPerPageChange: (currentPage, numberOfPages, perPageCount) {
-              
-              
+
+
             },
             onNextClick: (currentPage, numberOfPages) {
-              
+
             },
             onPageNumberClick: (currentPage, numberOfPages) {
-              
+
             },
             onPageNumberDropDownSelect:
                 (currentPage, numberOfPages, perPageRowCount) {},
             onPageNumberTextFieldSubmit: (currentPage, numberOfPages) {
-              
+
             },
             onPreviousClick: (currentPage, numberOfPages) {
-              
+
             },
             totalNumberOfPages: totalNumberOfPages,
           )
@@ -263,7 +260,7 @@ List<DataGridRow> _orderDataGridSource() {
 
 
 
-  
+
 
 class AuditTaskDataTableGridSource extends DataGridSource {
   /// Creates the employee data source class with required details.
@@ -290,7 +287,7 @@ class AuditTaskDataTableGridSource extends DataGridSource {
     }).toList();
   }
 
- 
+
 
   List<DataGridRow> _userData = [];
 
@@ -323,7 +320,6 @@ class AuditTaskDataTableGridSource extends DataGridSource {
 
 ```
 
-
-For help getting started with Flutter, view our 
-[online documentation](https://flutter.dev/docs), which offers tutorials, 
+For help getting started with Flutter, view our
+[online documentation](https://flutter.dev/docs), which offers tutorials,
 samples, guidance on mobile development, and a full API reference.
