@@ -184,7 +184,7 @@ class TableColumnHeaderPopMenuButtonWidget extends StatelessWidget {
           builder: (context, value, child) {
             if (value) {
               return Container(
-                padding: EdgeInsets.only(left: 15, right: 15),
+                padding: EdgeInsets.only(left: 8, right: 8),
                 color: Colors.white,
                 child: AddFilterWidget(
                   onApplyFilterClick: _applyFilterCallback,
@@ -195,7 +195,7 @@ class TableColumnHeaderPopMenuButtonWidget extends StatelessWidget {
               );
             }
             return Container(
-              padding: EdgeInsets.only(left: 15, right: 15),
+              padding: EdgeInsets.only(left: 8, right: 8),
               color: Colors.white,
               child: Column(children: [
                 _getTitleAndPopUpCloseRow(context),
@@ -282,12 +282,12 @@ class TableColumnHeaderPopMenuButtonWidget extends StatelessWidget {
                 Icons.push_pin_outlined, AppColors.dividerColor,
                 textColor: Theme.of(context).scaffoldBackgroundColor,
                 onClick: _onColumnPinClick),
-            SizedBox(width: 10),
+            SizedBox(width: 5),
             if (this.isFilterOn)
               _getButtonWithTitle("Filter", Icons.filter_alt_rounded,
                   Theme.of(context).scaffoldBackgroundColor,
                   addBorder: true, onClick: _onColumnFilterClick),
-            SizedBox(width: 10),
+            SizedBox(width: 5),
             if (this.shouldShowSortWidget) this.tableSortWidget ?? Container()
           ],
         ),
@@ -298,7 +298,7 @@ class TableColumnHeaderPopMenuButtonWidget extends StatelessWidget {
               _getButtonWithTitle("Hide", Icons.remove_red_eye_outlined,
                   Theme.of(context).scaffoldBackgroundColor,
                   onClick: _onColumnHideClick),
-            SizedBox(width: 10),
+            SizedBox(width: 5),
             if (this.iscolumnOrderingOn) _getColumnOrderTextField(),
           ],
         ),
@@ -328,7 +328,7 @@ class TableColumnHeaderPopMenuButtonWidget extends StatelessWidget {
     return Container(
         child: AdaptiveElevatedButton(
             buttonBackgroundColor: backgroundColor,
-            width: 80,
+            width: 93,
             height: 45,
             decoration: addBorder
                 ? BoxDecoration(
