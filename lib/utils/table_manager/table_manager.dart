@@ -394,38 +394,38 @@ class TableManager {
   //Single Row pining working
   void singleRowPinning(int currentPosition, bool isUnPin) {
     if (!isUnPin) {
-      int insertIndex = this.pinnedRowInfo.length > 0
-          ? this.pinnedRowInfo.length == datagridRow.length
-              ? this.pinnedRowInfo.length - 1
-              : this.pinnedRowInfo.length
-          : 0;
+      // int insertIndex = this.pinnedRowInfo.length > 0
+      //     ? this.pinnedRowInfo.length == datagridRow.length
+      //         ? this.pinnedRowInfo.length - 1
+      //         : this.pinnedRowInfo.length
+      //     : 0;
 
-      var value = datagridRow.removeAt(currentPosition);
-      datagridRow.insert(insertIndex, value);
-      RowPinningInfo info = RowPinningInfo();
-      info.currentPosition = insertIndex;
-      info.lastPosition = currentPosition;
+      // var value = datagridRow.removeAt(currentPosition);
+      // datagridRow.insert(insertIndex, value);
+      // RowPinningInfo info = RowPinningInfo();
+      // info.currentPosition = insertIndex;
+      // info.lastPosition = currentPosition;
 
-      this.pinnedRowInfo.add(info);
+      // this.pinnedRowInfo.add(info);
       //Notify client about pinned or unpinned row
 
       AppNotifiers.getInstance().frozenRowCountNotifier.value += 1;
     } else {
-      int insertIndex = this.pinnedRowInfo.length > 0
-          ? (this
-                      .pinnedRowInfo
-                      .firstWhere((element) =>
-                          element.currentPosition == currentPosition)
-                      .lastPosition ??
-                  0) +
-              (this.pinnedRowInfo.length > 1 ? this.pinnedRowInfo.length : 0)
-          : 0;
+      // int insertIndex = this.pinnedRowInfo.length > 0
+      //     ? (this
+      //                 .pinnedRowInfo
+      //                 .firstWhere((element) =>
+      //                     element.currentPosition == currentPosition)
+      //                 .lastPosition ??
+      //             0) +
+      //         (this.pinnedRowInfo.length > 1 ? this.pinnedRowInfo.length : 0)
+      //     : 0;
 
-      var value = datagridRow.removeAt(currentPosition);
-      datagridRow.insert(insertIndex, value);
-      this
-          .pinnedRowInfo
-          .removeWhere((element) => element.currentPosition == currentPosition);
+      // var value = datagridRow.removeAt(currentPosition);
+      // datagridRow.insert(insertIndex, value);
+      // this
+      //     .pinnedRowInfo
+      //     .removeWhere((element) => element.currentPosition == currentPosition);
       //Notify client about pinned or unpinned row
 
       AppNotifiers.getInstance().frozenRowCountNotifier.value -= 1;
