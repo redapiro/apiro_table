@@ -81,7 +81,8 @@ class TableColumnHeaderPopMenuButtonWidget extends StatelessWidget {
 
     int colNumber = 1;
     if (columnNameList.length == 0) {
-      columnNameList = _tableManager.columnNames.map<String>((element) {
+      
+      columnNameList = _tableManager.columnIds.map<String>((element) {
         String tempString = "Column Order " + "- " + colNumber.toString();
 
         colNumber++;
