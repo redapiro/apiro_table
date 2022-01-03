@@ -545,8 +545,8 @@ class ApiroTableWidget extends StatelessWidget {
       //Setting up table data when it is coming from constructor
       _tableManager.columnNames = List<String>.from(this.columnData);
       _tableManager.columnIds = List<String>.from(this.columnIds);
-      _tableManager.staticColumnIds = List<String>.from(this.columnData);
-      _tableManager.staticColumnsData = List<String>.from(this.columnIds);
+      _tableManager.staticColumnIds = List<String>.from(this.columnIds);
+      _tableManager.staticColumnsData = List<String>.from(this.columnData);
 
       _tableManager.staticRowData =
           List<Map<String, dynamic>>.from(this.rowData);
