@@ -26,6 +26,7 @@ class TableColumnHeaderPopMenuButtonWidget extends StatelessWidget {
 
   final Function()? onColumnmPinClick;
   final Function()? onColumnmHideClick;
+  final Function()? clearAllCallback;
   final Function(String, Function(bool), Function(Map<String, dynamic>))?
       onColumnClick;
   final Function(int)? onColumnOrderingSet;
@@ -41,6 +42,7 @@ class TableColumnHeaderPopMenuButtonWidget extends StatelessWidget {
       required this.columnIndex,
       this.onColumnmFilterClick,
       this.onColumnmHideClick,
+      this.clearAllCallback,
       this.tableFilterList,
       this.isFilterOn = true,
       this.iscolumnHidingOn = true,
@@ -81,7 +83,6 @@ class TableColumnHeaderPopMenuButtonWidget extends StatelessWidget {
 
     int colNumber = 1;
     if (columnNameList.length == 0) {
-      
       columnNameList = _tableManager.columnIds.map<String>((element) {
         String tempString = "Column Order " + "- " + colNumber.toString();
 
@@ -191,6 +192,7 @@ class TableColumnHeaderPopMenuButtonWidget extends StatelessWidget {
                   onApplyFilterClick: _applyFilterCallback,
                   removeFilterUI: _hideFilterUI,
                   columnName: this.title,
+                  clearAllCallback: this.clearAllCallback ?? () {},
                   filterList: this.tableFilterList ?? [],
                 ),
               );

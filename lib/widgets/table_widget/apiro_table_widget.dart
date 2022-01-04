@@ -293,6 +293,9 @@ class ApiroTableWidget extends StatelessWidget {
                                               updateMetaData);
                                         }
                                       },
+                                      clearAllCallback: () {
+                                        this.updateDataOnFilterColumn!([], "");
+                                      },
                                       onColumnmPinClick: () {
                                         _columnPinClick(
                                             _tableManager.columnIds[index],

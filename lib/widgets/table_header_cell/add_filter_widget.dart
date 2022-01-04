@@ -9,8 +9,10 @@ class AddFilterWidget extends StatefulWidget {
   final Function()? removeFilterUI;
   final String columnName;
   final List<String> filterList;
+  final Function clearAllCallback;
   AddFilterWidget(
       {required this.columnName,
+      required this.clearAllCallback,
       this.onApplyFilterClick,
       this.removeFilterUI,
       this.filterList = const []});
@@ -242,6 +244,7 @@ class _AddFilterWidget extends State<AddFilterWidget> {
     this.filterListViewNotifier.value = !this.filterListViewNotifier.value;
     Navigator.pop(context);
     TableManager.getInstance().removeAllFilter();
+    widget.clearAllCallback();
   }
 
   void _onApplyClick() {
