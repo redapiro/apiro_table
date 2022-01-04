@@ -72,6 +72,9 @@ class TableManager {
       filterableList = tableColumnFilterList.sublist(1);
     }
 
+    this.rowData = List<Map<String, dynamic>>.from(this.staticRowData);
+    this.datagridRow = this.decoupleCellObjects();
+
     for (var data in rowData) {
       if (filterableList.any((element) {
         return data[columnId]
