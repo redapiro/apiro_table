@@ -42,7 +42,7 @@ class TableDataGrid extends DataGridSource {
           return Container(
             key: UniqueKey(),
             alignment: Alignment.center,
-            padding: EdgeInsets.all(3.0),
+            // padding: EdgeInsets.all(3.0),
             child: e.value,
           );
         }).toList());
