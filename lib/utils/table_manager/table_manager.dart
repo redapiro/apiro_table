@@ -498,7 +498,10 @@ class TableManager {
   }
 
   void applyHideColumnRowAndColumnPinningIfExists() {
-    resetTableManagerConfiguration(excepFilters: true);
+    // resetTableManagerConfiguration(excepFilters: true);
+    this.columnIds = List<String>.from(this.staticColumnIds);
+    this.columnNames = List<String>.from(this.staticColumnsData);
+
     // hide columns if here are any
     if (this.hiddenColumnIds.length > 0) {
       for (var columnData in this.hiddenColumnIds) {
