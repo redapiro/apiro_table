@@ -501,6 +501,9 @@ class TableManager {
     // resetTableManagerConfiguration(excepFilters: true);
     this.columnIds = List<String>.from(this.staticColumnIds);
     this.columnNames = List<String>.from(this.staticColumnsData);
+    AppNotifiers.getInstance().frozenColumnCountNotifier.value = 0;
+    AppNotifiers.getInstance().frozenRowCountNotifier.value = 0;
+    AppNotifiers.getInstance().paginationPageNumberNotifier.value = 1;
 
     // hide columns if here are any
     if (this.hiddenColumnIds.length > 0) {
