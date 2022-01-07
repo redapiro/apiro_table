@@ -331,7 +331,7 @@ class TableColumnHeaderPopMenuButtonWidget extends StatelessWidget {
     return Container(
         child: AdaptiveElevatedButton(
             buttonBackgroundColor: backgroundColor,
-            width: 93,
+            width: 96,
             height: 45,
             decoration: addBorder
                 ? BoxDecoration(
