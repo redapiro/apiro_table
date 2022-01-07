@@ -186,7 +186,7 @@ class TableColumnHeaderPopMenuButtonWidget extends StatelessWidget {
           builder: (context, value, child) {
             if (value) {
               return Container(
-                padding: EdgeInsets.only(left: 8, right: 8),
+                padding: EdgeInsets.only(left: 5, right: 5),
                 color: Colors.white,
                 child: AddFilterWidget(
                   onApplyFilterClick: _applyFilterCallback,
@@ -198,7 +198,7 @@ class TableColumnHeaderPopMenuButtonWidget extends StatelessWidget {
               );
             }
             return Container(
-              padding: EdgeInsets.only(left: 8, right: 8),
+              padding: EdgeInsets.only(left: 5, right: 5),
               color: Colors.white,
               child: Column(children: [
                 _getTitleAndPopUpCloseRow(context),
