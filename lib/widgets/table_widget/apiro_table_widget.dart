@@ -36,6 +36,7 @@ class ApiroTableWidget extends StatelessWidget {
     this.hiddenColumnInfos = const [],
     this.filterList = const [],
     this.onColumnClick,
+    this.onPinRow,
     this.columnIdFilterAppliedOn = "",
     this.widgetInTableHeaderRow,
     this.updateDataOnColumnPinned,
@@ -68,10 +69,11 @@ class ApiroTableWidget extends StatelessWidget {
 
     _tableManager.hiddenColumnIds =
         List<Map<String, dynamic>>.from(this.hiddenColumnInfos);
+        _tableManager.onRowpinning = this.onPinRow;
     _tableManager.tableColumnFilterList = List<String>.from(this.filterList);
     print("setting column pinning info");
-    this.pinColumnsFromRemote();
     this.orderColumnsFromRemoteData();
+    this.pinColumnsFromRemote();
 
     _tableManager.applyAnyFilterHiddenColumnRowAndColumnPinningIfExists();
 
@@ -174,6 +176,8 @@ class ApiroTableWidget extends StatelessWidget {
 
   TextEditingController _jumpToPageController = TextEditingController();
   FocusNode _jumpToPageTextFiledFocusNode = FocusNode();
+  //****** Will be called from here when fliter reset all data */
+  Function()? onPinRow;
 
   ValueNotifier<String> perPageRowCountNotifier = ValueNotifier<String>("5");
   List<String> perPageRowCountList = ["5", "10", "30", "40", "50", "100"];

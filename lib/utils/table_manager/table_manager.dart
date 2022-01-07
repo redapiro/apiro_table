@@ -33,6 +33,7 @@ class TableManager {
 
   //Pinned Row data
   List<RowPinningInfo> pinnedRowInfo = [];
+  Function()? onRowpinning;
 
   //Filters working
   void removeAllFilter() {
@@ -490,11 +491,14 @@ class TableManager {
     //Pin rows if there are any
     var tempRowInfos = this.pinnedRowInfo.map((e) => e.copyFrom()).toList();
     this.pinnedRowInfo = [];
-    if (tempRowInfos.length > 0) {
-      for (var pinnedROwInfos in tempRowInfos) {
-        this.singleRowPinning(pinnedROwInfos.lastPosition ?? 0, false);
-      }
+    if (this.onRowpinning != null) {
+      this.onRowpinning!();
     }
+    // if (tempRowInfos.length > 0) {
+    //   for (var pinnedROwInfos in tempRowInfos) {
+    //     this.singleRowPinning(pinnedROwInfos.lastPosition ?? 0, false);
+    //   }
+    // }
   }
 
   void applyHideColumnRowAndColumnPinningIfExists() {
@@ -532,11 +536,15 @@ class TableManager {
     //Pin rows if there are any
     var tempRowInfos = this.pinnedRowInfo.map((e) => e.copyFrom()).toList();
     this.pinnedRowInfo = [];
-    if (tempRowInfos.length > 0) {
-      for (var pinnedROwInfos in tempRowInfos) {
-        this.singleRowPinning(pinnedROwInfos.lastPosition ?? 0, false);
-      }
+    if (this.onRowpinning != null) {
+      this.onRowpinning!();
     }
+
+    // if (tempRowInfos.length > 0) {
+    //   for (var pinnedROwInfos in tempRowInfos) {
+    //     this.singleRowPinning(pinnedROwInfos.lastPosition ?? 0, false);
+    //   }
+    // }
   }
 
   void updateCellValue(
