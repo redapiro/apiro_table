@@ -96,6 +96,9 @@ class TableManager {
     this.currentFilterColumnId = columnId;
 
     //refreshTable
+    //remove all pinning and hidden column and apply them again
+    applyHideColumnRowAndColumnPinningIfExists();
+    this.applyAnyFilterHiddenColumnRowAndColumnPinningIfExists();
     this.refreshDataTable();
 
     //Updatetable filters
@@ -495,6 +498,42 @@ class TableManager {
     }
   }
 
+  void applyHideColumnRowAndColumnPinningIfExists() {
+    resetTableManagerConfiguration(excepFilters: true);
+    // hide columns if here are any
+    if (this.hiddenColumnIds.length > 0) {
+      for (var columnData in this.hiddenColumnIds) {
+        String columnId = columnData["column_name"];
+        // if (!columnData.containsKey("cells_data")) {
+        //   this.showAllColumn();
+        //   return;
+        // }
+        print("column id to hide -- $columnId");
+        this.hideColumn(columnId);
+      }
+    }
+
+    //Pin columns if there are any
+    var tempColInfos = this.pinnedColumnInfo.map((e) => e.copyFrom()).toList();
+
+    this.pinnedColumnInfo = [];
+    if (tempColInfos.length > 0) {
+      for (var pinnedColInfos in tempColInfos) {
+        this.singleColumnPinning(pinnedColInfos.lastPosition ?? 0,
+            pinnedColInfos.columnId ?? "", false);
+      }
+    }
+
+    //Pin rows if there are any
+    var tempRowInfos = this.pinnedRowInfo.map((e) => e.copyFrom()).toList();
+    this.pinnedRowInfo = [];
+    if (tempRowInfos.length > 0) {
+      for (var pinnedROwInfos in tempRowInfos) {
+        this.singleRowPinning(pinnedROwInfos.lastPosition ?? 0, false);
+      }
+    }
+  }
+
   void updateCellValue(
       int rowIndex, int colIndex, String value, Function() onCellDoubleClick) {
     this.rowData[rowIndex][this.columnIds[colIndex]] = value;
@@ -512,12 +551,12 @@ class TableManager {
     this.refreshDataTable();
   }
 
-  void resetTableManagerConfiguration() {
+  void resetTableManagerConfiguration({bool excepFilters = false}) {
     //reset all  values from table manager
     AppNotifiers.getInstance().frozenColumnCountNotifier.value = 0;
     AppNotifiers.getInstance().frozenRowCountNotifier.value = 0;
     AppNotifiers.getInstance().paginationPageNumberNotifier.value = 1;
-    this.tableColumnFilterList = [];
+    if (!excepFilters) this.tableColumnFilterList = [];
     this.hiddenColumnIds = [];
     this.pinnedColumnInfo = [];
     this.pinnedRowInfo = [];
