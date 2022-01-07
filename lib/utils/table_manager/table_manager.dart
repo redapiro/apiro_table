@@ -98,7 +98,6 @@ class TableManager {
     //refreshTable
     //remove all pinning and hidden column and apply them again
     applyHideColumnRowAndColumnPinningIfExists();
-    this.applyAnyFilterHiddenColumnRowAndColumnPinningIfExists();
     this.refreshDataTable();
 
     //Updatetable filters
