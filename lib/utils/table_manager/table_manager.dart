@@ -518,8 +518,8 @@ class TableManager {
 
     for (var columnOrderData in this.columnOrderingDataInfo) {
       String columnId = columnOrderData.keys.toList()[0];
-      this.setColumnOrdering(columnOrderData[columnOrderData][0],
-          columnOrderData[columnOrderData][1], columnId);
+      this.setColumnOrdering(columnOrderData[columnId][0],
+          columnOrderData[columnId][1], columnId);
     }
   }
 
@@ -572,8 +572,8 @@ class TableManager {
 
     for (var columnOrderData in this.columnOrderingDataInfo) {
       String columnId = columnOrderData.keys.toList()[0];
-      this.setColumnOrdering(columnOrderData[columnOrderData][0],
-          columnOrderData[columnOrderData][1], columnId);
+      this.setColumnOrdering(columnOrderData[columnId][0],
+          columnOrderData[columnId][1], columnId);
     }
   }
 
