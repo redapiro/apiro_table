@@ -567,6 +567,14 @@ class TableManager {
     //     this.singleRowPinning(pinnedROwInfos.lastPosition ?? 0, false);
     //   }
     // }
+
+    //Apply column ordering if any
+
+    for (var columnOrderData in this.columnOrderingDataInfo) {
+      String columnId = columnOrderData.keys.toList()[0];
+      this.setColumnOrdering(columnOrderData[columnOrderData][0],
+          columnOrderData[columnOrderData][1], columnId);
+    }
   }
 
   void updateCellValue(
