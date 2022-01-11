@@ -69,7 +69,7 @@ class ApiroTableWidget extends StatelessWidget {
 
     _tableManager.hiddenColumnIds =
         List<Map<String, dynamic>>.from(this.hiddenColumnInfos);
-        _tableManager.onRowpinning = this.onPinRow;
+    _tableManager.onRowpinning = this.onPinRow;
     _tableManager.tableColumnFilterList = List<String>.from(this.filterList);
     print("setting column pinning info");
     this.orderColumnsFromRemoteData();

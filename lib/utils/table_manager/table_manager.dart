@@ -33,6 +33,7 @@ class TableManager {
 
   //Pinned Row data
   List<RowPinningInfo> pinnedRowInfo = [];
+  List<Map<String, dynamic>> columnOrderingDataInfo = [];
   Function()? onRowpinning;
 
   //Filters working
@@ -313,6 +314,19 @@ class TableManager {
       colValue = this.columnIds.removeAt(colIndex);
       this.columnIds.insert(sendTo > 0 ? sendTo - 1 : 0, colValue);
     }
+    int indexOfExistingColumnOrder = this
+        .columnOrderingDataInfo
+        .indexWhere((element) => element[columnId] != null);
+    if (indexOfExistingColumnOrder != -1) {
+      this.columnOrderingDataInfo[indexOfExistingColumnOrder] = {
+        columnId: [sendTo, currentPosition]
+      };
+    } else {
+      this.columnOrderingDataInfo.add({
+        columnId: [sendTo, currentPosition]
+      });
+    }
+
     //refresh table
     this.refreshDataTable();
   }
@@ -499,6 +513,14 @@ class TableManager {
     //     this.singleRowPinning(pinnedROwInfos.lastPosition ?? 0, false);
     //   }
     // }
+
+    //Apply column ordering if any
+
+    for (var columnOrderData in this.columnOrderingDataInfo) {
+      String columnId = columnOrderData.keys.toList()[0];
+      this.setColumnOrdering(columnOrderData[columnOrderData][0],
+          columnOrderData[columnOrderData][1], columnId);
+    }
   }
 
   void applyHideColumnRowAndColumnPinningIfExists() {
