@@ -6,6 +6,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
 // ignore: must_be_immutable
+
+///
+  //
+  bool isListAlreadyScrolled = false;
 class CustomPaginationWidget extends StatelessWidget {
   final Function() onPreviousClick;
   final Function() onNextClick;
@@ -17,6 +21,8 @@ class CustomPaginationWidget extends StatelessWidget {
   final int totalNumberOfPages;
   // final ValueNotiAppNotifiers.getInstance().paginationPageNumberNotifier;
   final ValueNotifier perPageRowCountNotifier;
+
+  
 
   CustomPaginationWidget({
     Key? key,
@@ -37,11 +43,23 @@ class CustomPaginationWidget extends StatelessWidget {
         .paginationPageNumberNotifier
         .value
         .toString();
+        
     rowCountPerPageList = this.pageNumbers;
+    Future.delayed(Duration(milliseconds: 300), () {
+      
+      if(!isListAlreadyScrolled){
+      _scrollToIndex(AppNotifiers.getInstance()
+        .paginationPageNumberNotifier
+        .value);
+      }
+    });
   }
 
   BuildContext? context;
   ThemeData? _themeData;
+
+  //To control the page number scrolling
+  final _scrollController = ScrollController();
 
   List<String> rowCountPerPageList = [];
   final FocusNode jumpToPageTextFieldFocusNode;
@@ -73,19 +91,16 @@ class CustomPaginationWidget extends StatelessWidget {
                         child: Row(children: [
                           Expanded(
                             child: Container(
-                              child: SingleChildScrollView(
-                                child: Row(
+                              child:  Row(
                                   children: [
-                                    Row(
-                                        children: List.generate(
-                                            this.totalNumberOfPages, (index) {
-                                      return _getPaginationPagesWidget(index);
-                                    })),
+                                    Expanded(child:   _getPaginationPagesWidget()
+                                    ),
                                     _getJumpToPageNumberWidget(),
                                     Container(child: _getPageNumberDropDown()),
+                                    Expanded(child:Container()),
                                   ],
                                 ),
-                              ),
+                              
                             ),
                           ),
                         ])),
@@ -149,17 +164,9 @@ class CustomPaginationWidget extends StatelessWidget {
     ));
   }
 
-  Widget _getPaginationPagesWidget(int index) {
-    Color pageNumberBckColor =
-        ((AppNotifiers.getInstance().paginationPageNumberNotifier.value - 1) ==
-                index)
-            ? AppColors.appBlueColor
-            : Colors.transparent;
-    return Container(
-      margin: EdgeInsets.only(left: 10, right: 10),
-      child: Row(children: [
-        if (index == 0)
-          Row(
+  Widget _getPaginationPagesWidget() {
+    return Row(children: [
+      Row(
             children: [
               Text("Page",
                   style: _themeData!.textTheme.bodyText1!
@@ -172,32 +179,91 @@ class CustomPaginationWidget extends StatelessWidget {
                   onPress: this.onPreviousClick),
             ],
           ),
-        InkWell(
+      Expanded(child:Container(height: 30, child: ListView.builder(
+        controller: _scrollController,
+        scrollDirection: Axis.horizontal,
+                                           itemCount: this.totalNumberOfPages,itemBuilder: (context, index) {
+                                             Color pageNumberBckColor =
+        ((AppNotifiers.getInstance().paginationPageNumberNotifier.value - 1) ==
+                index)
+            ? AppColors.appBlueColor
+            : Colors.transparent;
+                                      return InkWell(
           onTap: () {
             AppNotifiers.getInstance().paginationPageNumberNotifier.value =
                 index + 1;
             this.onPageNumberClick(index + 1);
           },
           child: Container(
+            height: 28,
+            width: 40,
               padding: EdgeInsets.all(8),
               decoration: BoxDecoration(
                   color: pageNumberBckColor,
                   border: Border.all(color: pageNumberBckColor, width: 0.5),
                   // boxShadow: AppColors.boxShadow,
                   shape: BoxShape.circle),
-              child: Text("${index + 1}",
-                  style: _getSelectedPageTextStyle(index))),
-        ),
-        if (index == (totalNumberOfPages - 1))
-          _getPagingContainerWith(">",
+                  
+              child: Center(child:Text("${index + 1}",
+                  style: _getSelectedPageTextStyle(index))),),
+        );}),)),
+        _getPagingContainerWith(">",
               clickable: ((this.totalNumberOfPages > 1) &&
                   AppNotifiers.getInstance()
                           .paginationPageNumberNotifier
                           .value <
                       this.totalNumberOfPages),
               onPress: onNextClick),
-      ]),
-    );
+              
+        ]);
+    // Color pageNumberBckColor =
+    //     ((AppNotifiers.getInstance().paginationPageNumberNotifier.value - 1) ==
+    //             index)
+    //         ? AppColors.appBlueColor
+    //         : Colors.transparent;
+    // return Container(
+    //   margin: EdgeInsets.only(left: 10, right: 10),
+    //   child: Row(children: [
+    //     if (index == 0)
+    //       Row(
+    //         children: [
+    //           Text("Page",
+    //               style: _themeData!.textTheme.bodyText1!
+    //                   .copyWith(color: AppColors.disabledColor)),
+    //           _getPagingContainerWith("<",
+    //               clickable: AppNotifiers.getInstance()
+    //                       .paginationPageNumberNotifier
+    //                       .value >
+    //                   1,
+    //               onPress: this.onPreviousClick),
+    //         ],
+    //       ),
+    //     InkWell(
+    //       onTap: () {
+    //         AppNotifiers.getInstance().paginationPageNumberNotifier.value =
+    //             index + 1;
+    //         this.onPageNumberClick(index + 1);
+    //       },
+    //       child: Container(
+    //           padding: EdgeInsets.all(8),
+    //           decoration: BoxDecoration(
+    //               color: pageNumberBckColor,
+    //               border: Border.all(color: pageNumberBckColor, width: 0.5),
+    //               // boxShadow: AppColors.boxShadow,
+    //               shape: BoxShape.circle),
+    //           child: Text("${index + 1}",
+    //               style: _getSelectedPageTextStyle(index))),
+    //     ),
+    //     if (index == (totalNumberOfPages - 1))
+    //       _getPagingContainerWith(">",
+    //           clickable: ((this.totalNumberOfPages > 1) &&
+    //               AppNotifiers.getInstance()
+    //                       .paginationPageNumberNotifier
+    //                       .value <
+    //                   this.totalNumberOfPages),
+    //           onPress: onNextClick),
+    //   ]),
+    // );
   }
 
   TextStyle _getSelectedPageTextStyle(int index) {
@@ -236,5 +302,16 @@ class CustomPaginationWidget extends StatelessWidget {
 
   void _ontextFieldSubmit() {
     this.onTextFieldSubmit(jumpToPageNumberController.text.trim());
+    isListAlreadyScrolled = false;
+    
+  }
+
+  // Define the function that scroll to an item
+  void _scrollToIndex(index) {
+    _scrollController.animateTo((40 * (index -1)).toDouble(),
+        duration: const Duration(milliseconds: 300), curve: Curves.bounceIn).then((value) {
+          isListAlreadyScrolled = true;
+        });
+        
   }
 }
