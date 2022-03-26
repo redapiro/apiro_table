@@ -192,6 +192,7 @@ class CustomPaginationWidget extends StatelessWidget {
           onTap: () {
             AppNotifiers.getInstance().paginationPageNumberNotifier.value =
                 index + 1;
+            isListAlreadyScrolled = false;
             this.onPageNumberClick(index + 1);
           },
           child: Container(
