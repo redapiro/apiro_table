@@ -336,12 +336,14 @@ class TableManager {
     // print("pinned col info --- ${this.pinnedColumnInfo}");
     // print("pinned col info --- ${colIndex}");
     // print("pinned col info --- ${columnId}");
+    
     if (!isUnPin) {
+      AppNotifiers.getInstance().isRefreshingTable = true;
       var tempRowData = List<Map<String, dynamic>>.from(this.rowData);
 
       int insertIndex =
           this.pinnedColumnInfo.length > 0 ? this.pinnedColumnInfo.length : 0;
-      print("insert index --- $insertIndex");
+      
       int rowIndex = 0;
       for (var rowActData in tempRowData) {
         rowActData.remove(columnId);
@@ -355,21 +357,28 @@ class TableManager {
         rowIndex++;
       }
 
-      var value = this.columnNames.removeAt(colIndex);
-      this.columnNames.insert(insertIndex, value);
-      value = this.columnIds.removeAt(colIndex);
+      var columnRemovedName = this.columnNames.removeAt(colIndex);
+      this.columnNames.insert(insertIndex, columnRemovedName);
+      var value = this.columnIds.removeAt(colIndex);
       this.columnIds.insert(insertIndex, value);
-
+      
+   ColumnPinningInfo existingDataWithId =   this.pinnedColumnInfo.firstWhere((element) => element.columnId == columnId, orElse: (){
+        return ColumnPinningInfo();
+      });
+      
       ColumnPinningInfo info = ColumnPinningInfo(
           columnId: columnId,
-          columnName: this.columnNames[colIndex],
+          columnName: columnRemovedName,
           currentPosition: insertIndex,
           lastPosition: colIndex);
-      print("col info to sve --- ${info.toJson()}");
+      
       this.pinnedColumnInfo.add(info);
 
       //update frozen column count
-      AppNotifiers.getInstance().frozenColumnCountNotifier.value += 1;
+      if(existingDataWithId.columnId == null) {
+        AppNotifiers.getInstance().frozenColumnCountNotifier.value += 1;
+      }
+      
     } else {
       var tempRowData = List<Map<String, dynamic>>.from(this.rowData);
       int insertIndex = (this.pinnedColumnInfo.length > 0
@@ -405,7 +414,10 @@ class TableManager {
           .removeWhere((element) => element.columnId == columnId);
 
       //update frozen column count
-      AppNotifiers.getInstance().frozenColumnCountNotifier.value -= 1;
+      if(AppNotifiers.getInstance().frozenColumnCountNotifier.value > 0) {
+          AppNotifiers.getInstance().frozenColumnCountNotifier.value -= 1;
+      }
+      
     }
     //refresh data table with new data
     this.refreshDataTable();

@@ -243,7 +243,7 @@ class ApiroTableWidget extends StatelessWidget {
                     return ValueListenableBuilder<int>(
                         valueListenable: _appNotifiers.frozenRowCountNotifier,
                         builder: (context, value, child) {
-                          return Container(
+                          Widget apiroTable =  Container(
                             height: tableHeight - 120,
                             width: double.maxFinite,
                             child: SfDataGrid(
@@ -262,7 +262,17 @@ class ApiroTableWidget extends StatelessWidget {
                                 columns: List.generate(
                                     _tableManager.columnNames.length, (index) {
                                   //Getting column info to decide whether we need to pin or unpin the column
-                                  ColumnPinningInfo colInfo =
+                                  ColumnPinningInfo colInfo;
+                                  // if(_appNotifiers.frozenColumnCountNotifier.value == _tableManager.pinnedColumnInfo.length) {
+                                    
+                                  //   if(!AppNotifiers.getInstance().isRefreshingTable) {
+                                  //   print("refreshing table --- ${AppNotifiers.getInstance().isRefreshingTable}");  
+                                  //   _appNotifiers.frozenColumnCountNotifier.value = 0;
+                                    
+                                  //   } 
+                                  // }
+                                  // if(_appNotifiers.frozenColumnCountNotifier.value != _tableManager.pinnedColumnInfo.length || AppNotifiers.getInstance().isRefreshingTable) {
+                                   colInfo =
                                       _tableManager.pinnedColumnInfo.firstWhere(
                                           (element) =>
                                               element.columnId ==
@@ -270,6 +280,9 @@ class ApiroTableWidget extends StatelessWidget {
                                           orElse: () {
                                     return ColumnPinningInfo();
                                   });
+                                    // } else {
+                                    //   colInfo = ColumnPinningInfo();
+                                    // }
                                   return GridTextColumn(
                                     minimumWidth: 150,
                                     columnName:
@@ -327,6 +340,8 @@ class ApiroTableWidget extends StatelessWidget {
                                   );
                                 })),
                           );
+                          AppNotifiers.getInstance().isRefreshingTable = false;
+                          return apiroTable;
                         });
                   }),
               Row(
@@ -388,6 +403,7 @@ class ApiroTableWidget extends StatelessWidget {
 
   //Pin Columns from firebase
   void pinColumnsFromRemote() {
+    AppNotifiers.getInstance().isRefreshingTable = false;
     _tableManager.pinnedColumnInfo = [];
     for (var i = 0; i < this.pinnedColumnInfo.length; i++) {
       String key = this.pinnedColumnInfo[i].keys.toList()[0];
@@ -401,8 +417,13 @@ class ApiroTableWidget extends StatelessWidget {
       }));
       print("column pinning info added -- ${this.pinnedColumnInfo}");
     }
-
-    this._reloadTableData();
+    print("value to compare here -- ${AppNotifiers.getInstance().frozenColumnCountNotifier.value} and ${_tableManager.pinnedColumnInfo.length}");
+    if(AppNotifiers.getInstance().frozenColumnCountNotifier.value < _tableManager.pinnedColumnInfo.length && AppNotifiers.getInstance().frozenColumnCountNotifier.value != _tableManager.pinnedColumnInfo.length) {
+        this._reloadTableData();
+    } else {
+      AppNotifiers.getInstance().frozenColumnCountNotifier.value =0;
+    }
+    
   }
 
   //OrderColumns from Firebase
