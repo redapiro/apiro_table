@@ -25,6 +25,7 @@ class AppTextField extends StatefulWidget {
   final TextStyle? textStyle;
   final bool autoFocus;
   final List<TextInputFormatter>? inputFormatters;
+  final Widget? prefixWidget;
 
   AppTextField({
     this.label,
@@ -50,7 +51,9 @@ class AppTextField extends StatefulWidget {
     this.textInputType,
     this.textCapitalization = TextCapitalization.none,
     this.autoFocus = false,
+    this.prefixWidget,
   });
+
   @override
   _AppTextFieldState createState() {
     return _AppTextFieldState();
@@ -96,6 +99,7 @@ class _AppTextFieldState extends State<AppTextField> {
                   (widget.isPasswordField ?? false) ? obscureTextFlag : false,
               controller: widget.controller,
               decoration: InputDecoration(
+                  prefix: widget.prefixWidget,
                   enabledBorder: widget.border ?? border,
                   focusedBorder: widget.border ?? border,
                   border: widget.border ?? border,
