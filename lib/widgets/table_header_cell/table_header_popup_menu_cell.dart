@@ -34,6 +34,8 @@ class TableColumnHeaderPopMenuButtonWidget extends StatelessWidget {
   final double? popUpButtonHeight;
   int columnIndex;
   bool shouldShowSortWidget = false;
+  final Key? filtersPopUpKey;
+  final Key? columnOrderKey;
 
   Widget? tableSortWidget;
 
@@ -57,7 +59,9 @@ class TableColumnHeaderPopMenuButtonWidget extends StatelessWidget {
       this.isPinned = false,
       this.subtitle = "",
       this.popUpButtonHeight = 50.0,
-      this.title = ""}) {
+      this.title = "",
+      this.filtersPopUpKey,
+      this.columnOrderKey}) {
     _tableManager = TableManager.getInstance();
 
     selectedColumnOrderIndex = ValueNotifier<int>(0);
@@ -111,6 +115,7 @@ class TableColumnHeaderPopMenuButtonWidget extends StatelessWidget {
                       AppNotifiers.getInstance().filterListUpdateNotifier,
                   builder: (context, value, child) {
                     return GestureDetector(
+                      key: filtersPopUpKey,
                       behavior: HitTestBehavior.opaque,
                       onTap: () {
                         // _showPopUpMenu(context, tapDetails.globalPosition);
@@ -312,6 +317,7 @@ class TableColumnHeaderPopMenuButtonWidget extends StatelessWidget {
 
   Widget _getColumnOrderTextField() {
     return Container(
+      key: columnOrderKey,
       child: CustomDropDownWidget(
           items: columnNameList,
           textColor: AppColors.dividerColor,

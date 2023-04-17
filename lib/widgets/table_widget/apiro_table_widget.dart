@@ -58,7 +58,7 @@ class ApiroTableWidget extends StatelessWidget {
     this.columnOrderingInfo = const [],
     this.paginationPageSize = 50,
     this.updateDataOnColumnOrdering,
-    this.paginationPageSizes = const [5, 10, 50, 100, 500],
+    this.paginationPageSizes = const [5, 10, 50, 100, 500], this.filtersPopUpKey, this.columnOrderKey,
   }) : super(key: key) {
     //Init table manager
     if (shouldResetTableConfigs)
@@ -88,6 +88,8 @@ class ApiroTableWidget extends StatelessWidget {
   }
 
   List<String> columnData = [];
+  final Key? filtersPopUpKey;
+  final Key? columnOrderKey;
   List<String> columnIds = [];
   List<Map<String, dynamic>> rowData = [];
   List<DataGridRow> gridRow = [];
@@ -142,6 +144,8 @@ class ApiroTableWidget extends StatelessWidget {
 
   //number of pages
   int totalNumberOfPages;
+
+
 
   //Callback for row pinning
   Function(Stream<List<Map<String, dynamic>>>, Function(int, bool))?
@@ -290,6 +294,7 @@ class ApiroTableWidget extends StatelessWidget {
                                     label: TableColumnHeaderPopMenuButtonWidget(
                                       title: _tableManager.columnIds[index],
                                       popUpButtonHeight: 50,
+                                      columnOrderKey: columnOrderKey,filtersPopUpKey: filtersPopUpKey,
                                       isFilterOn: this.filtersOn,
                                       iscolumnOrderingOn: this.columnOrderingOn,
                                       iscolumnHidingOn: this.columnHidingOn,
