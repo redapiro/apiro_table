@@ -202,7 +202,7 @@ class ApiroTableWidget extends StatelessWidget {
     screenHeight = MediaQuery.of(context).size.height;
     screenWidth = MediaQuery.of(context).size.width;
 
-    return Scaffold(
+    return Scaffold(key: key,
       body: ValueListenableBuilder<Widget?>(
           valueListenable: _appNotifiers.pinnedRowWidgetNotifier,
           builder: (context, value, child) {
