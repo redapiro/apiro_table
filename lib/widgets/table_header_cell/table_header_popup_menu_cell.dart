@@ -37,6 +37,7 @@ class TableColumnHeaderPopMenuButtonWidget extends StatelessWidget {
   final Key? filtersPopUpKey;
   final Key? columnOrderKey;
   final Key? columnPinKey;
+  final Key? hideKey;
 
   Widget? tableSortWidget;
 
@@ -63,7 +64,8 @@ class TableColumnHeaderPopMenuButtonWidget extends StatelessWidget {
       this.title = "",
       this.filtersPopUpKey,
       this.columnOrderKey,
-      this.columnPinKey}) {
+      this.columnPinKey,
+      this.hideKey}) {
     _tableManager = TableManager.getInstance();
 
     selectedColumnOrderIndex = ValueNotifier<int>(0);
@@ -307,7 +309,7 @@ class TableColumnHeaderPopMenuButtonWidget extends StatelessWidget {
             if (this.iscolumnHidingOn)
               _getButtonWithTitle("Hide", Icons.remove_red_eye_outlined,
                   Theme.of(context).scaffoldBackgroundColor,
-                  onClick: _onColumnHideClick),
+                  onClick: _onColumnHideClick, columnKey: hideKey),
             SizedBox(width: 5),
             if (this.iscolumnOrderingOn) _getColumnOrderTextField(),
           ],

@@ -296,6 +296,9 @@ class ApiroTableWidget extends StatelessWidget {
                                       columnOrderKey: Key('columnOrderKey_' +
                                           _tableManager.columnNames[index]
                                               .toLowerCase()),
+                                      hideKey: Key('hideKey_' +
+                                          _tableManager.columnNames[index]
+                                              .toLowerCase()),
                                       columnPinKey: Key('columnPinKey_' +
                                           _tableManager.columnNames[index]
                                               .toLowerCase()),
