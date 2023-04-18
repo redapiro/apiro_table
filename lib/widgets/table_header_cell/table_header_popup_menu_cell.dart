@@ -291,7 +291,7 @@ class TableColumnHeaderPopMenuButtonWidget extends StatelessWidget {
             _getButtonWithTitle(this.isPinned ? "UnPin" : "Pin",
                 Icons.push_pin_outlined, AppColors.dividerColor,
                 textColor: Theme.of(context).scaffoldBackgroundColor,
-                onClick: _onColumnPinClick),
+                onClick: _onColumnPinClick,columnKey: columnPinKey),
             SizedBox(width: 5),
             if (this.isFilterOn)
               _getButtonWithTitle("Filter", Icons.filter_alt_rounded,
@@ -335,10 +335,10 @@ class TableColumnHeaderPopMenuButtonWidget extends StatelessWidget {
       String title, IconData icon, Color? backgroundColor,
       {bool addBorder = false,
       Color textColor = Colors.black,
-      Function? onClick}) {
+      Function? onClick,Key ? columnKey}) {
     return Container(
         child: AdaptiveElevatedButton(
-            key: columnPinKey,
+            key: columnKey,
             buttonBackgroundColor: backgroundColor,
             width: 96,
             height: 45,
