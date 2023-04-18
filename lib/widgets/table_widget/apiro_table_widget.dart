@@ -294,9 +294,14 @@ class ApiroTableWidget extends StatelessWidget {
                                       title: _tableManager.columnIds[index],
                                       popUpButtonHeight: 50,
                                       columnOrderKey: Key('columnOrderKey_' +
-                                          _tableManager.columnNames[index].toLowerCase()),
+                                          _tableManager.columnNames[index]
+                                              .toLowerCase()),
+                                      columnPinKey: Key('columnPinKey_' +
+                                          _tableManager.columnNames[index]
+                                              .toLowerCase()),
                                       filtersPopUpKey: Key('filtersPopUpKey_' +
-                                          _tableManager.columnNames[index].toLowerCase()),
+                                          _tableManager.columnNames[index]
+                                              .toLowerCase()),
                                       isFilterOn: this.filtersOn,
                                       iscolumnOrderingOn: this.columnOrderingOn,
                                       iscolumnHidingOn: this.columnHidingOn,

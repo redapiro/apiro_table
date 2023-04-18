@@ -36,6 +36,7 @@ class TableColumnHeaderPopMenuButtonWidget extends StatelessWidget {
   bool shouldShowSortWidget = false;
   final Key? filtersPopUpKey;
   final Key? columnOrderKey;
+  final Key? columnPinKey;
 
   Widget? tableSortWidget;
 
@@ -61,7 +62,8 @@ class TableColumnHeaderPopMenuButtonWidget extends StatelessWidget {
       this.popUpButtonHeight = 50.0,
       this.title = "",
       this.filtersPopUpKey,
-      this.columnOrderKey}) {
+      this.columnOrderKey,
+      this.columnPinKey}) {
     _tableManager = TableManager.getInstance();
 
     selectedColumnOrderIndex = ValueNotifier<int>(0);
@@ -335,6 +337,7 @@ class TableColumnHeaderPopMenuButtonWidget extends StatelessWidget {
       Color textColor = Colors.black,
       Function? onClick}) {
     return Container(
+        key: columnPinKey,
         child: AdaptiveElevatedButton(
             buttonBackgroundColor: backgroundColor,
             width: 96,
