@@ -337,8 +337,8 @@ class TableColumnHeaderPopMenuButtonWidget extends StatelessWidget {
       Color textColor = Colors.black,
       Function? onClick}) {
     return Container(
-        key: columnPinKey,
         child: AdaptiveElevatedButton(
+            key: columnPinKey,
             buttonBackgroundColor: backgroundColor,
             width: 96,
             height: 45,

@@ -1,8 +1,8 @@
 import 'dart:io';
 
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/cupertino.dart';
 
 class AdaptiveElevatedButton extends StatelessWidget {
   final String? text;
@@ -14,16 +14,17 @@ class AdaptiveElevatedButton extends StatelessWidget {
   final BoxDecoration? decoration;
   final Color? buttonBackgroundColor;
 
-  AdaptiveElevatedButton({
-    this.onPressed,
-    this.style,
-    this.width,
-    this.height,
-    this.child,
-    this.text,
-    this.decoration,
-    this.buttonBackgroundColor,
-  });
+  const AdaptiveElevatedButton(
+      {Key? key,
+      this.text,
+      this.onPressed,
+      this.style,
+      this.width,
+      this.height,
+      this.decoration,
+      this.buttonBackgroundColor,
+      this.child})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
