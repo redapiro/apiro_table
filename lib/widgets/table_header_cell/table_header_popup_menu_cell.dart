@@ -85,7 +85,7 @@ class _TableColumnHeaderPopMenuButtonWidgetState
 
   ThemeData? _themeData;
 
-  late BuildContext context;
+
 
   GlobalKey _key = GlobalKey();
 
@@ -102,7 +102,7 @@ class _TableColumnHeaderPopMenuButtonWidgetState
   @override
   Widget build(BuildContext context) {
     _themeData = Theme.of(context);
-    this.context = context;
+
     this.screenWidth = MediaQuery.of(context).size.width;
 
     int colNumber = 1;
