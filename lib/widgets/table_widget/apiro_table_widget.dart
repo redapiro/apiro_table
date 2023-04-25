@@ -286,12 +286,12 @@ class ApiroTableWidget extends StatelessWidget {
                                     // } else {
                                     //   colInfo = ColumnPinningInfo();
                                     // }
-                                  return GridTextColumn(
+                                  return GridColumn(
                                     minimumWidth: 150,
                                     columnName:
                                         _tableManager.columnNames[index],
                                     label: TableColumnHeaderPopMenuButtonWidget(
-                                      title: _tableManager.columnIds[index],
+                                      title: _tableManager.columnIds[index],pinnedColumnInfo: _tableManager.pinnedColumnInfo,
                                       popUpButtonHeight: 50,
                                       columnOrderKey: Key('columnOrderKey_' +
                                           _tableManager.columnNames[index]

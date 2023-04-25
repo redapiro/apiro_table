@@ -1,3 +1,4 @@
+import 'package:apiro_table/model/column_pinning_info.dart';
 import 'package:apiro_table/utils/app_colors.dart';
 import 'package:apiro_table/utils/app_notifiers.dart';
 import 'package:apiro_table/utils/table_manager/table_manager.dart';
@@ -38,12 +39,14 @@ class TableColumnHeaderPopMenuButtonWidget extends StatelessWidget {
   final Key? columnOrderKey;
   final Key? columnPinKey;
   final Key? hideKey;
+  final List<ColumnPinningInfo>? pinnedColumnInfo;
 
   Widget? tableSortWidget;
 
   TableColumnHeaderPopMenuButtonWidget(
       {required this.metadata,
       required this.columnIndex,
+      this.pinnedColumnInfo,
       this.onColumnmFilterClick,
       this.onColumnmHideClick,
       this.clearAllCallback,
@@ -69,6 +72,7 @@ class TableColumnHeaderPopMenuButtonWidget extends StatelessWidget {
     _tableManager = TableManager.getInstance();
 
     selectedColumnOrderIndex = ValueNotifier<int>(0);
+    selectedPinnedColumnOrderIndex = ValueNotifier<int>(0);
   }
 
   ThemeData? _themeData;
@@ -77,6 +81,7 @@ class TableColumnHeaderPopMenuButtonWidget extends StatelessWidget {
   ValueNotifier<bool> shouldShowFilterUI = ValueNotifier<bool>(false);
   ValueNotifier<bool> isPopUpButtonPressed = ValueNotifier<bool>(false);
   late ValueNotifier<int> selectedColumnOrderIndex;
+  late ValueNotifier<int> selectedPinnedColumnOrderIndex;
   double? screenWidth;
 
   TextEditingController _columnOrderingController = TextEditingController();
@@ -99,6 +104,8 @@ class TableColumnHeaderPopMenuButtonWidget extends StatelessWidget {
       }).toList();
       selectedColumnOrderIndex.value = _tableManager.columnNames
           .indexWhere((element) => element == tootipName);
+      selectedPinnedColumnOrderIndex.value = _tableManager.pinnedColumnInfo
+          .indexWhere((element) => element.columnName == tootipName);
     }
 
     return Container(
@@ -293,7 +300,8 @@ class TableColumnHeaderPopMenuButtonWidget extends StatelessWidget {
             _getButtonWithTitle(this.isPinned ? "UnPin" : "Pin",
                 Icons.push_pin_outlined, AppColors.dividerColor,
                 textColor: Theme.of(context).scaffoldBackgroundColor,
-                onClick: _onColumnPinClick,columnKey: columnPinKey),
+                onClick: _onColumnPinClick,
+                columnKey: columnPinKey),
             SizedBox(width: 5),
             if (this.isFilterOn)
               _getButtonWithTitle("Filter", Icons.filter_alt_rounded,
@@ -329,7 +337,9 @@ class TableColumnHeaderPopMenuButtonWidget extends StatelessWidget {
           onChange: (value) {
             _onColumnOrderingSubmit(value.split("-").toList()[1].trim());
           },
-          selectedItemIndex: selectedColumnOrderIndex.value),
+          selectedItemIndex: isPinned
+              ? selectedPinnedColumnOrderIndex.value
+              : selectedColumnOrderIndex.value),
     );
   }
 
@@ -337,7 +347,8 @@ class TableColumnHeaderPopMenuButtonWidget extends StatelessWidget {
       String title, IconData icon, Color? backgroundColor,
       {bool addBorder = false,
       Color textColor = Colors.black,
-      Function? onClick,Key ? columnKey}) {
+      Function? onClick,
+      Key? columnKey}) {
     return Container(
         child: AdaptiveElevatedButton(
             key: columnKey,
