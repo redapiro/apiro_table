@@ -301,13 +301,7 @@ class TableManager {
           datagridRow[rowIndex].getCells();
       var value = colIndex != -1 ? dataGridCells.removeAt(colIndex) : null;
       if (value != null) {
-        dataGridCells.insert(
-            sendTo > 0
-                ? sendTo > pinnedColumnInfo.length
-                    ? sendTo - 1
-                    : pinnedColumnInfo.length
-                : 0,
-            value);
+        dataGridCells.insert(sendTo > 0 ? sendTo - 1 : 0, value);
         datagridRow[rowIndex] = DataGridRow(cells: dataGridCells);
       }
 
