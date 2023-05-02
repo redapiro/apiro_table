@@ -115,9 +115,9 @@ class TableManager {
     // this.refreshDataTable(context);
     //
     // //Updatetable filters
-    // context
-    //     .riverPodReadStateNotifier(filterListUpdateNotifier.notifier)
-    //     .toggleValue();
+    context
+        .riverPodReadStateNotifier(filterListUpdateNotifier.notifier)
+        .toggleValue();
   }
 
   //Hidden ColumnsWorking
