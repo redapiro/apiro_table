@@ -25,6 +25,7 @@ class ApiroTableWidget extends StatelessWidget {
     Key? key,
     this.gridRow = const [],
     required this.columnData,
+    required this.context,
     required this.columnIds,
     required this.rowData,
     this.getPinnedRowStream,
@@ -89,10 +90,10 @@ class ApiroTableWidget extends StatelessWidget {
     }).toString();
 
     //Initialize app notifier
-    _appNotifiers = AppNotifiers.getInstance();
   }
 
   List<String> columnData = [];
+  final BuildContext context;
 
   List<String> columnIds = [];
   List<Map<String, dynamic>> rowData = [];
@@ -190,11 +191,9 @@ class ApiroTableWidget extends StatelessWidget {
   ValueNotifier<String> perPageRowCountNotifier = ValueNotifier<String>("5");
   List<String> perPageRowCountList = ["5", "10", "30", "40", "50", "100"];
 
-  late BuildContext context;
   late double screenHeight;
   late double screenWidth;
   late TableManager _tableManager;
-  late AppNotifiers _appNotifiers;
 
   List<String> colData = [];
   List<String> colIds = [];
@@ -202,7 +201,7 @@ class ApiroTableWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    this.context = context;
+    context = context;
     screenHeight = MediaQuery.of(context).size.height;
     screenWidth = MediaQuery.of(context).size.width;
 

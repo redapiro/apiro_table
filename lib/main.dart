@@ -4,9 +4,10 @@ import 'package:apiro_table/utils/app_notifiers.dart';
 import 'package:apiro_table/widgets/table_widget/apiro_table_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 void main() {
-  runApp(MyApp());
+  runApp(ProviderScope(child: MyApp()));
 }
 
 class MyApp extends StatelessWidget {
@@ -39,7 +40,7 @@ class MyApp extends StatelessWidget {
       ],
       home: ApiroTableWidget(
         columnData: [],
-        columnIds: colIds,
+        columnIds: colIds,context: context,
         rowData: rowData,
         filtersOn: true,
         updateDataOnColumnPinned: (val1, val2) {},

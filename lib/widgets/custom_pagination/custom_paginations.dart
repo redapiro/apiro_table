@@ -43,9 +43,7 @@ class CustomPaginationWidget extends StatelessWidget {
     required this.jumpToPageTextFieldFocusNode,
     required this.perPageRowCountNotifier,
   }) : super(key: key) {
-    jumpToPageNumberController.text = context!
-        .riverPodReadStateNotifier(paginationPageNumberNotifier)
-        .toString();
+    jumpToPageNumberController.text = context?.riverPodReadStateNotifier(paginationPageNumberNotifier).toString() ?? '';
 
     rowCountPerPageList = this.pageNumbers;
     Future.delayed(Duration(milliseconds: 300), () {
