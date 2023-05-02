@@ -64,7 +64,6 @@ class _AddFilterWidget extends State<AddFilterWidget> {
     _themeData = Theme.of(context);
     return Consumer(builder: (context, ref, child) {
      ref.watch(filterListViewNotifier);
-    
       return Column(
         children: [
           _getTitleAndPopUpCloseRow(context),

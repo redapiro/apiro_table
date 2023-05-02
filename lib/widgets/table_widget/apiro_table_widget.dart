@@ -419,9 +419,9 @@ class ApiroTableWidget extends StatelessWidget {
             _tableManager.pinnedColumnInfo.length) {
       this._reloadTableData();
     } else {
-      context
-          .riverPodReadStateNotifier(frozenColumnCountNotifier.notifier)
-          .updateValue(0);
+     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {  context
+         .riverPodReadStateNotifier(frozenColumnCountNotifier.notifier)
+         .updateValue(0);});
       // AppNotifiers.getInstance().frozenColumnCountNotifier.value =0;
     }
   }
