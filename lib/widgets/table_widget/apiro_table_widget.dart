@@ -397,7 +397,7 @@ class ApiroTableWidget extends StatelessWidget {
 
   //Pin Columns from firebase
   void pinColumnsFromRemote() {
-    context.riverPodReadStateNotifier(isRefreshingTable.notifier).updateValue(false);
+   WidgetsBinding.instance.addPostFrameCallback((timeStamp) {  context.riverPodReadStateNotifier(isRefreshingTable.notifier).updateValue(false);});
     _tableManager.pinnedColumnInfo = [];
     for (var i = 0; i < this.pinnedColumnInfo.length; i++) {
       String key = this.pinnedColumnInfo[i].keys.toList()[0];
