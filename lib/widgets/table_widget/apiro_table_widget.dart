@@ -240,6 +240,8 @@ class ApiroTableWidget extends StatelessWidget {
 
   Widget _getSFDataTable() {
     return Consumer(builder: (context, ref, child) {
+      var item = ref.watch(refreshDataTableNotifier);
+      print(item);
       return Column(
         children: [
           Container(
@@ -303,6 +305,7 @@ class ApiroTableWidget extends StatelessWidget {
                       tableFilterList: _tableManager.tableColumnFilterList,
                       onColumnClick:
                           (columnId, shouldShowSortWidget, updateMetaData) {
+                        print('savi');
                         if (this.onColumnClick != null) {
                           this.onColumnClick!(
                               columnId, shouldShowSortWidget, updateMetaData);
@@ -381,6 +384,7 @@ class ApiroTableWidget extends StatelessWidget {
 
   //On click methods
   void _columnPinClick(String columnId, int currentPosition, bool isUnPin) {
+    print('obj');
     if (this.groupColumnPinning) {
       context
           .riverPodReadStateNotifier(frozenColumnCountNotifier.notifier)
@@ -394,7 +398,7 @@ class ApiroTableWidget extends StatelessWidget {
 
   //Pin Columns from firebase
   void pinColumnsFromRemote() {
-    AppNotifiers.getInstance().isRefreshingTable = false;
+    context.riverPodReadStateNotifier(isRefreshingTable.notifier).updateValue(false);
     _tableManager.pinnedColumnInfo = [];
     for (var i = 0; i < this.pinnedColumnInfo.length; i++) {
       String key = this.pinnedColumnInfo[i].keys.toList()[0];

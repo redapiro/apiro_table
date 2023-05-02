@@ -86,3 +86,15 @@ class PaginationPageNumberNotifier extends StateNotifier<int> {
   void increment ()=> state +=1;
   void decrement ()=> state -=1;
 }
+final isRefreshingTable =
+StateNotifierProvider<IsRefreshingTable, bool>((ref) {
+  return IsRefreshingTable();
+});
+
+class IsRefreshingTable extends StateNotifier<bool> {
+  IsRefreshingTable() : super(false);
+
+  void updateValue(bool val) => state = val;
+
+  void toggleValue() => state = !state;
+}

@@ -361,7 +361,7 @@ class TableManager {
     // print("pinned col info --- ${columnId}");
 
     if (!isUnPin) {
-      AppNotifiers.getInstance().isRefreshingTable = true;
+     context.riverPodReadStateNotifier(isRefreshingTable.notifier).updateValue(true);
       var tempRowData = List<Map<String, dynamic>>.from(this.rowData);
 
       int insertIndex =
