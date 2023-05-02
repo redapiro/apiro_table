@@ -314,8 +314,7 @@ class TableManager {
   }
 
   //Column Ordering Working
-  void setColumnOrdering(
-      int sendTo, int currentPosition, String columnId, BuildContext context) {
+  void setColumnOrdering(int sendTo, int currentPosition, String columnId, BuildContext context) {
     int rowIndex = 0;
     int colIndex = this.columnIds.indexOf(columnId);
     for (var rowsData in this.rowData) {

@@ -86,6 +86,7 @@ class TableColumnHeaderPopMenuButtonWidget extends StatelessWidget {
 
   TextEditingController _columnOrderingController = TextEditingController();
   List<String> columnNameList = [];
+  List<String> pinnedColumnNameList = [];
   late TableManager _tableManager;
 
   @override
@@ -97,15 +98,27 @@ class TableColumnHeaderPopMenuButtonWidget extends StatelessWidget {
     int colNumber = 1;
     if (columnNameList.length == 0) {
       columnNameList = _tableManager.columnIds.map<String>((element) {
-        String tempString = "Column Order " + "- " + colNumber.toString();
+        String tempString = "Column Order " + "- " + (colNumber).toString();
 
         colNumber++;
         return tempString;
       }).toList();
       selectedColumnOrderIndex.value = _tableManager.columnNames
+              .indexWhere((element) => element == tootipName) -
+          _tableManager.pinnedColumnInfo.length;
+      selectedPinnedColumnOrderIndex.value = _tableManager.columnNames
           .indexWhere((element) => element == tootipName);
-      selectedPinnedColumnOrderIndex.value = _tableManager.pinnedColumnInfo
-          .indexWhere((element) => element.columnName == tootipName);
+    }
+    int pinnedColNumber = 1;
+    if (pinnedColumnNameList.length == 0) {
+      pinnedColumnNameList =
+          _tableManager.pinnedColumnInfo.map<String>((element) {
+        String tempString =
+            "Column Order " + "- " + (pinnedColNumber).toString();
+
+        pinnedColNumber++;
+        return tempString;
+      }).toList();
     }
 
     return Container(
@@ -148,7 +161,7 @@ class TableColumnHeaderPopMenuButtonWidget extends StatelessWidget {
                                 child: (this.selectableText)
                                     ? SelectableText(this.title,
                                         textAlign: TextAlign.center,
-                                        style: _themeData!.textTheme.subtitle2!
+                                        style: _themeData!.textTheme.titleSmall!
                                             .copyWith(
                                                 color: isPopUpButtonPressed
                                                         .value
@@ -156,7 +169,7 @@ class TableColumnHeaderPopMenuButtonWidget extends StatelessWidget {
                                                     : AppColors.dividerColor))
                                     : Text(this.title,
                                         textAlign: TextAlign.center,
-                                        style: _themeData!.textTheme.subtitle2!
+                                        style: _themeData!.textTheme.titleSmall!
                                             .copyWith(
                                                 color: isPopUpButtonPressed
                                                         .value
@@ -267,7 +280,7 @@ class TableColumnHeaderPopMenuButtonWidget extends StatelessWidget {
         Expanded(
             child: Text(
           this.title,
-          style: _themeData!.textTheme.subtitle1,
+          style: _themeData!.textTheme.titleMedium,
         )),
         SizedBox(width: 10),
         InkWell(
@@ -283,13 +296,12 @@ class TableColumnHeaderPopMenuButtonWidget extends StatelessWidget {
   Widget _getSubtitleRow() {
     return Container(
         child: Text(this.subtitle,
-            style: _themeData!.textTheme.subtitle2!
+            style: _themeData!.textTheme.titleSmall!
                 .copyWith(color: AppColors.disabledColor)));
   }
 
   Widget _getPinFilterHideRow() {
-    return Container(
-        child: Column(
+    return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Row(
@@ -321,14 +333,14 @@ class TableColumnHeaderPopMenuButtonWidget extends StatelessWidget {
         ),
         SizedBox(height: 5),
       ],
-    ));
+    );
   }
 
   Widget _getColumnOrderTextField() {
     return Container(
       key: columnOrderKey,
       child: CustomDropDownWidget(
-          items: columnNameList,
+          items: isPinned ? pinnedColumnNameList : columnNameList,
           textColor: AppColors.dividerColor,
           height: 45,
           onChange: (value) {
@@ -367,7 +379,7 @@ class TableColumnHeaderPopMenuButtonWidget extends StatelessWidget {
                 SizedBox(width: 5),
                 Text(
                   title,
-                  style: _themeData!.textTheme.subtitle2!
+                  style: _themeData!.textTheme.titleSmall!
                       .copyWith(color: textColor),
                 ),
               ],
@@ -388,17 +400,17 @@ class TableColumnHeaderPopMenuButtonWidget extends StatelessWidget {
         children: [
           Text(
             "Meta Data",
-            style: _themeData!.textTheme.subtitle1!,
+            style: _themeData!.textTheme.titleMedium!,
           ),
           Column(
             children: List.generate(this.metadata.length, (index) {
               return Row(
                 children: [
                   Text(this.metadata.keys.toList()[index] + ": ",
-                      style: _themeData!.textTheme.subtitle2!),
+                      style: _themeData!.textTheme.titleSmall!),
                   Expanded(
                     child: Text(this.metadata.values.toList()[index],
-                        style: _themeData!.textTheme.subtitle2!),
+                        style: _themeData!.textTheme.titleSmall!),
                   ),
                 ],
               );
@@ -434,7 +446,9 @@ class TableColumnHeaderPopMenuButtonWidget extends StatelessWidget {
   void _onColumnOrderingSubmit(String orderPosition) {
     int columnOrderingIndex;
     try {
-      columnOrderingIndex = int.parse(orderPosition);
+      columnOrderingIndex = isPinned
+          ? int.parse(orderPosition)
+          : int.parse(orderPosition) + _tableManager.pinnedColumnInfo.length;
 
       if (this.onColumnOrderingSet != null) {
         Navigator.pop(context);
@@ -452,7 +466,7 @@ class TableColumnHeaderPopMenuButtonWidget extends StatelessWidget {
       SnackBar(
         content: Text(message),
         duration: const Duration(seconds: 4),
-        backgroundColor: Theme.of(this.context).errorColor,
+        backgroundColor: Theme.of(this.context).colorScheme.error,
       ),
     );
   }

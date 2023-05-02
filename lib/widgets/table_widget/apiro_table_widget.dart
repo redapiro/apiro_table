@@ -305,7 +305,6 @@ class ApiroTableWidget extends StatelessWidget {
                       tableFilterList: _tableManager.tableColumnFilterList,
                       onColumnClick:
                           (columnId, shouldShowSortWidget, updateMetaData) {
-                        print('savi');
                         if (this.onColumnClick != null) {
                           this.onColumnClick!(
                               columnId, shouldShowSortWidget, updateMetaData);
