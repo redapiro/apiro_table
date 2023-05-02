@@ -5,6 +5,7 @@ import 'package:apiro_table/model/row_pinning_info.dart';
 import 'package:apiro_table/utils/app_notifiers.dart';
 import 'package:apiro_table/utils/constants.dart';
 import 'package:apiro_table/utils/enum/cell_data_type.dart';
+import 'package:apiro_table/utils/provider_helper.dart';
 import 'package:apiro_table/utils/table_manager/table_manager.dart';
 import 'package:apiro_table/widgets/custom_pagination/custom_paginations.dart';
 import 'package:apiro_table/widgets/data_grid/table_data_grid.dart';
@@ -14,7 +15,10 @@ import 'package:apiro_table/widgets/table_cell/table_cell.dart';
 import 'package:apiro_table/widgets/table_cell/table_cell_detail_widget.dart';
 import 'package:apiro_table/widgets/table_header_cell/table_header_popup_menu_cell.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:syncfusion_flutter_datagrid/datagrid.dart';
+
+import '../../utils/controller/global_controllers.dart';
 
 class ApiroTableWidget extends StatelessWidget {
   ApiroTableWidget({
@@ -75,7 +79,8 @@ class ApiroTableWidget extends StatelessWidget {
     this.orderColumnsFromRemoteData();
     this.pinColumnsFromRemote();
 
-    _tableManager.applyAnyFilterHiddenColumnRowAndColumnPinningIfExists();
+    _tableManager
+        .applyAnyFilterHiddenColumnRowAndColumnPinningIfExists(context);
 
     perPageRowCountList = paginationPageSizes.map((e) => e.toString()).toList();
     perPageRowCountNotifier.value = paginationPageSizes.firstWhere(
@@ -201,175 +206,144 @@ class ApiroTableWidget extends StatelessWidget {
     screenHeight = MediaQuery.of(context).size.height;
     screenWidth = MediaQuery.of(context).size.width;
 
-    return Scaffold(key: key,
-      body: ValueListenableBuilder<Widget?>(
-          valueListenable: _appNotifiers.pinnedRowWidgetNotifier,
-          builder: (context, value, child) {
-            return Container(
-                width: double.maxFinite,
-                constraints: BoxConstraints(maxHeight: screenHeight),
-                child: Column(
+    return Scaffold(
+      key: key,
+      body: Consumer(builder: (context, value, child) {
+        return Container(
+            width: double.maxFinite,
+            constraints: BoxConstraints(maxHeight: screenHeight),
+            child: Column(
+              children: [
+                if (this.showTableHeaderBar)
+                  HiddenColumnDropDown(
+                      leftWidget: this.widgetInTableHeaderRow,
+                      clearAllPress: () {
+                        this.updateDataOnFilterColumn!([], "");
+                      },
+                      showAllPress: () {
+                        this.updateDataOnHideColumn!([]);
+                      },
+                      showColumnPress: () {
+                        sendUpdateCallback();
+                      }),
+                Row(
                   children: [
-                    if (this.showTableHeaderBar)
-                      HiddenColumnDropDown(
-                          leftWidget: this.widgetInTableHeaderRow,
-                          clearAllPress: () {
-                            this.updateDataOnFilterColumn!([], "");
-                          },
-                          showAllPress: () {
-                            this.updateDataOnHideColumn!([]);
-                          },
-                          showColumnPress: () {
-                            sendUpdateCallback();
-                          }),
-                    Row(
-                      children: [
-                        Expanded(child: _getSFDataTable()),
-                        if (value != null) value
-                      ],
-                    ),
+                    Expanded(child: _getSFDataTable()),
+                    if (value.watch(pinnedRowWidgetNotifier) != null)
+                      value.watch(pinnedRowWidgetNotifier) ?? Container()
                   ],
-                ));
-          }),
+                ),
+              ],
+            ));
+      }),
     );
   }
 
   Widget _getSFDataTable() {
-    return ValueListenableBuilder<bool>(
-        valueListenable: AppNotifiers.getInstance().refreshDataTableNotifier,
-        builder: (context, value, child) {
-          return Column(
+    return Consumer(builder: (context, ref, child) {
+      return Column(
+        children: [
+          Container(
+            height: tableHeight - 120,
+            width: double.maxFinite,
+            child: SfDataGrid(
+                source: _tableDataGridSource(),
+                frozenColumnsCount: ref.read(frozenColumnCountNotifier),
+                frozenRowsCount: ref.watch(frozenRowCountNotifier),
+                defaultColumnWidth: 150,
+                columnWidthMode: ColumnWidthMode.fill,
+                headerGridLinesVisibility: GridLinesVisibility.none,
+                headerRowHeight: 60,
+                rowHeight: 60,
+                gridLinesVisibility: GridLinesVisibility.none,
+                columns:
+                    List.generate(_tableManager.columnNames.length, (index) {
+                  //Getting column info to decide whether we need to pin or unpin the column
+                  ColumnPinningInfo colInfo;
+                  // if(_appNotifiers.frozenColumnCountNotifier.value == _tableManager.pinnedColumnInfo.length) {
+
+                  //   if(!AppNotifiers.getInstance().isRefreshingTable) {
+                  //   print("refreshing table --- ${AppNotifiers.getInstance().isRefreshingTable}");
+                  //   _appNotifiers.frozenColumnCountNotifier.value = 0;
+
+                  //   }
+                  // }
+                  // if(_appNotifiers.frozenColumnCountNotifier.value != _tableManager.pinnedColumnInfo.length || AppNotifiers.getInstance().isRefreshingTable) {
+                  colInfo = _tableManager.pinnedColumnInfo.firstWhere(
+                      (element) =>
+                          element.columnId == _tableManager.columnIds[index],
+                      orElse: () {
+                    return ColumnPinningInfo();
+                  });
+                  // } else {
+                  //   colInfo = ColumnPinningInfo();
+                  // }
+                  return GridColumn(
+                    minimumWidth: 150,
+                    columnName: _tableManager.columnNames[index],
+                    label: TableColumnHeaderPopMenuButtonWidget(
+                      title: _tableManager.columnIds[index],
+                      pinnedColumnInfo: _tableManager.pinnedColumnInfo,
+                      popUpButtonHeight: 50,
+                      columnOrderKey: Key('columnOrderKey_' +
+                          _tableManager.columnNames[index].toLowerCase()),
+                      hideKey: Key('hideKey_' +
+                          _tableManager.columnNames[index].toLowerCase()),
+                      columnPinKey: Key('columnPinKey_' +
+                          _tableManager.columnNames[index].toLowerCase()),
+                      filtersPopUpKey: Key('filtersPopUpKey_' +
+                          _tableManager.columnNames[index].toLowerCase()),
+                      isFilterOn: this.filtersOn,
+                      iscolumnOrderingOn: this.columnOrderingOn,
+                      iscolumnHidingOn: this.columnHidingOn,
+                      selectableText: selectableColumnText,
+                      metadata: {},
+                      tableSortWidget: this.tableSortWidget,
+                      isPinned: colInfo.columnId != null,
+                      id: _tableManager.columnIds[index],
+                      tableFilterList: _tableManager.tableColumnFilterList,
+                      onColumnClick:
+                          (columnId, shouldShowSortWidget, updateMetaData) {
+                        if (this.onColumnClick != null) {
+                          this.onColumnClick!(
+                              columnId, shouldShowSortWidget, updateMetaData);
+                        }
+                      },
+                      clearAllCallback: () {
+                        this.updateDataOnFilterColumn!([], "");
+                      },
+                      onColumnmPinClick: () {
+                        _columnPinClick(_tableManager.columnIds[index], index,
+                            colInfo.columnId != null);
+                      },
+                      onColumnmFilterClick: (filterList) {
+                        _onColumnFiterClick(
+                            filterList, _tableManager.columnIds[index]);
+                      },
+                      onColumnmHideClick: () {
+                        _onHideColumnClick(_tableManager.columnIds[index]);
+                      },
+                      onColumnOrderingSet: (indexToShiftOn) {
+                        _onColumnOrdering(_tableManager.columnIds[index],
+                            indexToShiftOn, index);
+                      },
+                      tootipName: _tableManager.columnNames[index],
+                      columnIndex: index,
+                    ),
+                  );
+                })),
+          ),
+          Row(
             children: [
-              ValueListenableBuilder<int>(
-                  valueListenable: _appNotifiers.frozenColumnCountNotifier,
-                  builder: (context, value, child) {
-                    return ValueListenableBuilder<int>(
-                        valueListenable: _appNotifiers.frozenRowCountNotifier,
-                        builder: (context, value, child) {
-                          Widget apiroTable =  Container(
-                            height: tableHeight - 120,
-                            width: double.maxFinite,
-                            child: SfDataGrid(
-                                source: _tableDataGridSource(),
-                                frozenColumnsCount: _appNotifiers
-                                    .frozenColumnCountNotifier.value,
-                                frozenRowsCount:
-                                    _appNotifiers.frozenRowCountNotifier.value,
-                                defaultColumnWidth: 150,
-                                columnWidthMode: ColumnWidthMode.fill,
-                                headerGridLinesVisibility:
-                                    GridLinesVisibility.none,
-                                headerRowHeight: 60,
-                                rowHeight: 60,
-                                gridLinesVisibility: GridLinesVisibility.none,
-                                columns: List.generate(
-                                    _tableManager.columnNames.length, (index) {
-                                  //Getting column info to decide whether we need to pin or unpin the column
-                                  ColumnPinningInfo colInfo;
-                                  // if(_appNotifiers.frozenColumnCountNotifier.value == _tableManager.pinnedColumnInfo.length) {
-                                    
-                                  //   if(!AppNotifiers.getInstance().isRefreshingTable) {
-                                  //   print("refreshing table --- ${AppNotifiers.getInstance().isRefreshingTable}");  
-                                  //   _appNotifiers.frozenColumnCountNotifier.value = 0;
-                                    
-                                  //   } 
-                                  // }
-                                  // if(_appNotifiers.frozenColumnCountNotifier.value != _tableManager.pinnedColumnInfo.length || AppNotifiers.getInstance().isRefreshingTable) {
-                                   colInfo =
-                                      _tableManager.pinnedColumnInfo.firstWhere(
-                                          (element) =>
-                                              element.columnId ==
-                                              _tableManager.columnIds[index],
-                                          orElse: () {
-                                    return ColumnPinningInfo();
-                                  });
-                                    // } else {
-                                    //   colInfo = ColumnPinningInfo();
-                                    // }
-                                  return GridColumn(
-                                    minimumWidth: 150,
-                                    columnName:
-                                        _tableManager.columnNames[index],
-                                    label: TableColumnHeaderPopMenuButtonWidget(
-                                      title: _tableManager.columnIds[index],pinnedColumnInfo: _tableManager.pinnedColumnInfo,
-                                      popUpButtonHeight: 50,
-                                      columnOrderKey: Key('columnOrderKey_' +
-                                          _tableManager.columnNames[index]
-                                              .toLowerCase()),
-                                      hideKey: Key('hideKey_' +
-                                          _tableManager.columnNames[index]
-                                              .toLowerCase()),
-                                      columnPinKey: Key('columnPinKey_' +
-                                          _tableManager.columnNames[index]
-                                              .toLowerCase()),
-                                      filtersPopUpKey: Key('filtersPopUpKey_' +
-                                          _tableManager.columnNames[index]
-                                              .toLowerCase()),
-                                      isFilterOn: this.filtersOn,
-                                      iscolumnOrderingOn: this.columnOrderingOn,
-                                      iscolumnHidingOn: this.columnHidingOn,
-                                      selectableText: selectableColumnText,
-                                      metadata: {},
-                                      tableSortWidget: this.tableSortWidget,
-                                      isPinned: colInfo.columnId != null,
-                                      id: _tableManager.columnIds[index],
-                                      tableFilterList:
-                                          _tableManager.tableColumnFilterList,
-                                      onColumnClick: (columnId,
-                                          shouldShowSortWidget,
-                                          updateMetaData) {
-                                        if (this.onColumnClick != null) {
-                                          this.onColumnClick!(
-                                              columnId,
-                                              shouldShowSortWidget,
-                                              updateMetaData);
-                                        }
-                                      },
-                                      clearAllCallback: () {
-                                        this.updateDataOnFilterColumn!([], "");
-                                      },
-                                      onColumnmPinClick: () {
-                                        _columnPinClick(
-                                            _tableManager.columnIds[index],
-                                            index,
-                                            colInfo.columnId != null);
-                                      },
-                                      onColumnmFilterClick: (filterList) {
-                                        _onColumnFiterClick(filterList,
-                                            _tableManager.columnIds[index]);
-                                      },
-                                      onColumnmHideClick: () {
-                                        _onHideColumnClick(
-                                            _tableManager.columnIds[index]);
-                                      },
-                                      onColumnOrderingSet: (indexToShiftOn) {
-                                        _onColumnOrdering(
-                                            _tableManager.columnIds[index],
-                                            indexToShiftOn,
-                                            index);
-                                      },
-                                      tootipName:
-                                          _tableManager.columnNames[index],
-                                      columnIndex: index,
-                                    ),
-                                  );
-                                })),
-                          );
-                          AppNotifiers.getInstance().isRefreshingTable = false;
-                          return apiroTable;
-                        });
-                  }),
-              Row(
-                children: [
-                  Expanded(
-                    child: Container(
-                      height: 50,
-                      child: CustomPaginationWidget(
-                        onPageNumberClick: (value) {
-                          _onPageNumberClick(value);
-                        },
-                        onNextClick: () {
-                          _onNextClick();
+              Expanded(
+                child: Container(
+                  height: 50,
+                  child: CustomPaginationWidget(
+                    onPageNumberClick: (value) {
+                      _onPageNumberClick(value);
+                    },
+                    onNextClick: () {
+                      _onNextClick();
                         },
                         onItemsPerPageChange: () {
                           _onItemPerPageChange();
@@ -409,9 +383,12 @@ class ApiroTableWidget extends StatelessWidget {
   //On click methods
   void _columnPinClick(String columnId, int currentPosition, bool isUnPin) {
     if (this.groupColumnPinning) {
-      _appNotifiers.frozenColumnCountNotifier.value += 1;
+      context
+          .riverPodReadStateNotifier(frozenColumnCountNotifier.notifier)
+          .decrement();
     } else {
-      _tableManager.singleColumnPinning(currentPosition, columnId, isUnPin);
+      _tableManager.singleColumnPinning(
+          currentPosition, columnId, isUnPin, context);
     }
     this.updateDataOnColumnPinned!(columnId, currentPosition);
   }
@@ -432,13 +409,19 @@ class ApiroTableWidget extends StatelessWidget {
       }));
       print("column pinning info added -- ${this.pinnedColumnInfo}");
     }
-    print("value to compare here -- ${AppNotifiers.getInstance().frozenColumnCountNotifier.value} and ${_tableManager.pinnedColumnInfo.length}");
-    if(AppNotifiers.getInstance().frozenColumnCountNotifier.value < _tableManager.pinnedColumnInfo.length && AppNotifiers.getInstance().frozenColumnCountNotifier.value != _tableManager.pinnedColumnInfo.length) {
-        this._reloadTableData();
+    print(
+        "value to compare here -- ${context.riverPodReadStateNotifier(frozenColumnCountNotifier)} and ${_tableManager.pinnedColumnInfo.length}");
+    if (context.riverPodReadStateNotifier(frozenColumnCountNotifier) <
+            _tableManager.pinnedColumnInfo.length &&
+        context.riverPodReadStateNotifier(frozenColumnCountNotifier) !=
+            _tableManager.pinnedColumnInfo.length) {
+      this._reloadTableData();
     } else {
-      AppNotifiers.getInstance().frozenColumnCountNotifier.value =0;
+      context
+          .riverPodReadStateNotifier(frozenColumnCountNotifier.notifier)
+          .updateValue(0);
+      // AppNotifiers.getInstance().frozenColumnCountNotifier.value =0;
     }
-    
   }
 
   //OrderColumns from Firebase
@@ -463,14 +446,14 @@ class ApiroTableWidget extends StatelessWidget {
   ///
   void _onColumnFiterClick(List<String> filterList, String columnId) {
     _tableManager.tableColumnFilterList = filterList;
-    _tableManager.addFilterToColumn(columnId);
+    _tableManager.addFilterToColumn(columnId, context);
     if (updateDataOnFilterColumn != null)
       updateDataOnFilterColumn!(_tableManager.tableColumnFilterList,
           _tableManager.currentFilterColumnId);
   }
 
   void _onHideColumnClick(String columnId) {
-    _tableManager.hideColumn(columnId);
+    _tableManager.hideColumn(columnId, context);
     sendUpdateCallback();
   }
 
@@ -494,7 +477,7 @@ class ApiroTableWidget extends StatelessWidget {
   }
 
   void _onColumnOrdering(String columnId, int sendTo, int currentPosition) {
-    _tableManager.setColumnOrdering(sendTo, currentPosition, columnId);
+    _tableManager.setColumnOrdering(sendTo, currentPosition, columnId, context);
     if (this.updateDataOnColumnOrdering != null) {
       this.updateDataOnColumnOrdering!(columnId, sendTo, currentPosition);
     }
@@ -502,9 +485,10 @@ class ApiroTableWidget extends StatelessWidget {
 
   //Pagination Methods
   void _onPageNumberClick(int pageNumber) {
-    AppNotifiers.getInstance().paginationPageNumberNotifier.value = pageNumber;
+    context.riverPodReadStateNotifier(paginationPageNumberNotifier.notifier).updateValue(pageNumber);
+
     this.onPageNumberClick(
-        AppNotifiers.getInstance().paginationPageNumberNotifier.value,
+        context.riverPodReadStateNotifier(paginationPageNumberNotifier),
         this.totalNumberOfPages);
     _reloadTableData();
   }
@@ -519,10 +503,10 @@ class ApiroTableWidget extends StatelessWidget {
             "Page number is not valid" + this.totalNumberOfPages.toString(),
             context: context);
       } else {
-        AppNotifiers.getInstance().paginationPageNumberNotifier.value =
-            int.parse(_jumpToPageController.text.trim());
+        context.riverPodReadStateNotifier(paginationPageNumberNotifier.notifier).updateValue(
+            int.parse(_jumpToPageController.text.trim()));
         this.onPageNumberTextFieldSubmit(
-            AppNotifiers.getInstance().paginationPageNumberNotifier.value,
+            context.riverPodReadStateNotifier(paginationPageNumberNotifier),
             this.totalNumberOfPages);
         _reloadTableData();
       }
@@ -541,12 +525,13 @@ class ApiroTableWidget extends StatelessWidget {
   }
 
   void _onItemPerPageChange() {
-    AppNotifiers.getInstance().paginationPageNumberNotifier.value = 1;
+    context.riverPodReadStateNotifier(paginationPageNumberNotifier.notifier).updateValue(1);
+
     // this.totalNumberOfPages =
     //     (this.rowData.length ~/ int.parse(this.perPageRowCountNotifier.value));
 
     this.onItemPerPageChange(
-        AppNotifiers.getInstance().paginationPageNumberNotifier.value,
+        context.riverPodReadStateNotifier(paginationPageNumberNotifier),
         this.totalNumberOfPages,
         int.parse(this.perPageRowCountNotifier.value));
     if ((this.rowData.length % int.parse(this.perPageRowCountNotifier.value)) >
@@ -558,9 +543,9 @@ class ApiroTableWidget extends StatelessWidget {
   }
 
   void _onNextClick() {
-    AppNotifiers.getInstance().paginationPageNumberNotifier.value += 1;
+    context.riverPodReadStateNotifier(paginationPageNumberNotifier.notifier).increment();
     this.onNextClick(
-        AppNotifiers.getInstance().paginationPageNumberNotifier.value,
+        context.riverPodReadStateNotifier(paginationPageNumberNotifier),
         this.totalNumberOfPages);
     _reloadTableData();
   }
@@ -572,15 +557,15 @@ class ApiroTableWidget extends StatelessWidget {
   }
 
   void _onPreviousClick() {
-    AppNotifiers.getInstance().paginationPageNumberNotifier.value -= 1;
+    context.riverPodReadStateNotifier(paginationPageNumberNotifier.notifier).decrement();
     this.onPreviousClick(
-        AppNotifiers.getInstance().paginationPageNumberNotifier.value,
+        context.riverPodReadStateNotifier(paginationPageNumberNotifier),
         this.totalNumberOfPages);
     _reloadTableData();
   }
 
   void _reloadTableData() {
-    TableManager.getInstance().refreshDataTable();
+    TableManager.getInstance().refreshDataTable(context);
   }
 
   void setupData({bool inConstructor = false}) {
@@ -617,7 +602,7 @@ class ApiroTableWidget extends StatelessWidget {
     this.getPinnedRowStream!(
         AppNotifiers.getInstance().isRowunpinController.stream,
         (index, isUnPin) {
-      _tableManager.singleRowPinning(index, isUnPin);
+          _tableManager.singleRowPinning(index, isUnPin, context);
     });
   }
 
@@ -738,23 +723,30 @@ class ApiroTableWidget extends StatelessWidget {
           return RowPinningInfo();
         }).lastPosition !=
         null;
-    AppNotifiers.getInstance().pinnedRowWidgetNotifier.value =
-        PinnedRowPopupWidget(
-      metadata: TableManager.getInstance().rowData[index]["metadata"] ?? [],
-      prodperties: TableManager.getInstance().rowData[index]["metadata"] ?? [],
-      onRowPinClick: (closeOnly) {
-        if (closeOnly) {
-          AppNotifiers.getInstance().pinnedRowWidgetNotifier.value = null;
-        } else {
-          TableManager.getInstance().singleRowPinning(index, isUnpin);
+    context
+        .riverPodReadStateNotifier(pinnedRowWidgetNotifier.notifier)
+        .updateValue(PinnedRowPopupWidget(
+          metadata: TableManager.getInstance().rowData[index]["metadata"] ?? [],
+          prodperties:
+              TableManager.getInstance().rowData[index]["metadata"] ?? [],
+          onRowPinClick: (closeOnly) {
+            if (closeOnly) {
+              context
+                  .riverPodReadStateNotifier(pinnedRowWidgetNotifier.notifier)
+                  .updateValue(null);
+            } else {
+              TableManager.getInstance()
+                  .singleRowPinning(index, isUnpin, context);
 
-          AppNotifiers.getInstance().pinnedRowWidgetNotifier.value = null;
-        }
-      },
-      isPinned: isUnpin,
-      title: TableManager.getInstance().columnNames[index],
-      subtitle: TableManager.getInstance().columnIds[index],
-    );
+              context
+                  .riverPodReadStateNotifier(pinnedRowWidgetNotifier.notifier)
+                  .updateValue(null);
+            }
+          },
+          isPinned: isUnpin,
+          title: TableManager.getInstance().columnNames[index],
+          subtitle: TableManager.getInstance().columnIds[index],
+        ));
   }
 
   void _onDataCellDoubleTap(

@@ -1,6 +1,5 @@
 import 'package:apiro_table/model/column_pinning_info.dart';
 import 'package:apiro_table/utils/app_colors.dart';
-import 'package:apiro_table/utils/app_notifiers.dart';
 import 'package:apiro_table/utils/table_manager/table_manager.dart';
 import 'package:apiro_table/widgets/custom_widgets/adaptive_elevated_button.dart';
 import 'package:apiro_table/widgets/custom_widgets/custom_drop_down.dart';
@@ -8,6 +7,7 @@ import 'package:apiro_table/widgets/custom_widgets/custom_pop_up_menu_item.dart'
 import 'package:apiro_table/widgets/table_header_cell/add_filter_widget.dart';
 import 'package:apiro_table/widgets/table_header_cell/table_column_filter_icon_widget.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class TableColumnHeaderPopMenuButtonWidget extends StatelessWidget {
   final String title;
@@ -121,20 +121,17 @@ class TableColumnHeaderPopMenuButtonWidget extends StatelessWidget {
         child: ValueListenableBuilder<bool>(
             valueListenable: isPopUpButtonPressed,
             builder: (context, value, child) {
-              return ValueListenableBuilder<bool>(
-                  valueListenable:
-                      AppNotifiers.getInstance().filterListUpdateNotifier,
-                  builder: (context, value, child) {
-                    return GestureDetector(
-                      key: filtersPopUpKey,
-                      behavior: HitTestBehavior.opaque,
-                      onTap: () {
-                        // _showPopUpMenu(context, tapDetails.globalPosition);
-                        if (this.onColumnClick != null) {
-                          this.onColumnClick!(this.id, (shouldShowSortWidget) {
-                            this.shouldShowSortWidget = shouldShowSortWidget;
-                          }, (metadata) {
-                            this.metadata = metadata;
+              return Consumer(builder: (context, value, child) {
+                return GestureDetector(
+                  key: filtersPopUpKey,
+                  behavior: HitTestBehavior.opaque,
+                  onTap: () {
+                    // _showPopUpMenu(context, tapDetails.globalPosition);
+                    if (this.onColumnClick != null) {
+                      this.onColumnClick!(this.id, (shouldShowSortWidget) {
+                        this.shouldShowSortWidget = shouldShowSortWidget;
+                      }, (metadata) {
+                        this.metadata = metadata;
                           });
                         }
                         _showPopUpMenu(context);

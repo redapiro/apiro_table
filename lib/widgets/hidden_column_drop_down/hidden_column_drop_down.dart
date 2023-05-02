@@ -5,6 +5,7 @@ import 'package:apiro_table/utils/table_manager/table_manager.dart';
 import 'package:apiro_table/widgets/custom_widgets/adaptive_outlined_button.dart';
 import 'package:apiro_table/widgets/custom_widgets/adaptive_text_button.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class HiddenColumnDropDown extends StatelessWidget {
   final Widget? leftWidget;
@@ -33,7 +34,7 @@ class HiddenColumnDropDown extends StatelessWidget {
           children: [
             SizedBox(width: 15),
             Expanded(child: (leftWidget == null) ? Container() : leftWidget!),
-            _getClearAllButton(),
+            _getClearAllButton(context),
             _getHiddenColumnDropDown(),
             SizedBox(width: 15),
           ],
@@ -44,7 +45,7 @@ class HiddenColumnDropDown extends StatelessWidget {
     ));
   }
 
-  Widget _getClearAllButton() {
+  Widget _getClearAllButton(BuildContext context) {
     return Container(
         width: 150,
         height: 30,
@@ -52,15 +53,15 @@ class HiddenColumnDropDown extends StatelessWidget {
           buttonColor: AppColors.appBlueColor,
           borderRadius: BorderRadius.circular(40),
           onPressed: () {
-            _clearAllFiltersPressed();
+            _clearAllFiltersPressed(context);
           },
           text: "Clear All Filters",
         ));
   }
 
   Widget _getHiddenColumnDropDown() {
-    return ValueListenableBuilder<String?>(
-        valueListenable: AppNotifiers.getInstance().hiddenColumnNotifier,
+    return Consumer(
+
         builder: (context, data, child) {
           return GestureDetector(
               behavior: HitTestBehavior.opaque,
@@ -167,19 +168,19 @@ class HiddenColumnDropDown extends StatelessWidget {
   }
 
   void _onShowAllPress(BuildContext context) {
-    TableManager.getInstance().showAllColumn();
+    TableManager.getInstance().showAllColumn(context);
     Navigator.pop(context);
     this.showAllPress!();
   }
 
   void _onHiddenColumnShowPress(String colName, BuildContext context) {
-    TableManager.getInstance().showColumn(colName);
+    TableManager.getInstance().showColumn(colName,context);
     if (this.showColumnPress != null) this.showColumnPress!();
     Navigator.pop(context);
   }
 
-  void _clearAllFiltersPressed() {
-    TableManager.getInstance().removeAllFilter();
+  void _clearAllFiltersPressed(BuildContext context) {
+    TableManager.getInstance().removeAllFilter(context);
     this.clearAllPress!();
   }
 }

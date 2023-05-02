@@ -1,12 +1,17 @@
 import 'package:apiro_table/model/column_pinning_info.dart';
 import 'package:apiro_table/model/row_pinning_info.dart';
 import 'package:apiro_table/utils/app_notifiers.dart';
+import 'package:apiro_table/utils/controller/global_controllers.dart';
+import 'package:apiro_table/utils/provider_helper.dart';
 import 'package:apiro_table/widgets/table_cell/table_cell.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:syncfusion_flutter_datagrid/datagrid.dart';
 
 class TableManager {
   static TableManager _instance = TableManager._internal();
+
   static TableManager getInstance() => _instance;
+
   TableManager._internal();
 
   //Table data variables
@@ -37,11 +42,16 @@ class TableManager {
   Function()? onRowpinning;
 
   //Filters working
-  void removeAllFilter() {
+  void removeAllFilter(BuildContext context) {
     if (this.tableColumnFilterList.length > 0) {
       //Updatetable filters
-      AppNotifiers.getInstance().frozenRowCountNotifier.value = 0;
-      AppNotifiers.getInstance().frozenColumnCountNotifier.value = 0;
+
+      context
+          .riverPodReadStateNotifier(frozenRowCountNotifier.notifier)
+          .updateValue(0);
+      context
+          .riverPodReadStateNotifier(frozenColumnCountNotifier.notifier)
+          .updateValue(0);
 
       this.tableColumnFilterList = [];
       this.rowData = [];
@@ -57,15 +67,17 @@ class TableManager {
       this.columnIds = List<String>.from(this.staticColumnIds);
       this.columnNames = List<String>.from(this.staticColumnsData);
 
-      this.applyAnyFilterHiddenColumnRowAndColumnPinningIfExists();
+      this.applyAnyFilterHiddenColumnRowAndColumnPinningIfExists(context);
       //refresh the view
-      this.refreshDataTable();
-      AppNotifiers.getInstance().filterListUpdateNotifier.value =
-          !AppNotifiers.getInstance().filterListUpdateNotifier.value;
+      this.refreshDataTable(context);
+
+      context
+          .riverPodReadStateNotifier(filterListUpdateNotifier.notifier)
+          .toggleValue();
     }
   }
 
-  void addFilterToColumn(String columnId) {
+  void addFilterToColumn(String columnId, BuildContext context) {
     List<Map<String, dynamic>> tempRowData = [];
     List<DataGridRow> _dataGridRow = [];
     int rowIndex = 0;
@@ -99,16 +111,17 @@ class TableManager {
 
     //refreshTable
     //remove all pinning and hidden column and apply them again
-    applyHideColumnRowAndColumnPinningIfExists();
-    this.refreshDataTable();
+    applyHideColumnRowAndColumnPinningIfExists(context);
+    this.refreshDataTable(context);
 
     //Updatetable filters
-    AppNotifiers.getInstance().filterListUpdateNotifier.value =
-        !AppNotifiers.getInstance().filterListUpdateNotifier.value;
+    context
+        .riverPodReadStateNotifier(filterListUpdateNotifier.notifier)
+        .toggleValue();
   }
 
   //Hidden ColumnsWorking
-  void hideColumn(String columnId) {
+  void hideColumn(String columnId, BuildContext context) {
     int rowIndex = 0;
 
     List<DataGridCell> cells = [];
@@ -150,9 +163,10 @@ class TableManager {
     }
 
     //refresh the table
-    this.refreshDataTable();
-    AppNotifiers.getInstance().hiddenColumnNotifier.value =
-        this.hiddenColumnIds.length.toString();
+    this.refreshDataTable(context);
+    context
+        .riverPodReadStateNotifier(hiddenColumnNotifier.notifier)
+        .updateValue(this.hiddenColumnIds.length.toString());
   }
 
   List<DataGridRow> decoupleCellObjects({List<DataGridRow>? gridRows}) {
@@ -191,7 +205,7 @@ class TableManager {
     return cell;
   }
 
-  void showColumn(String columnId) {
+  void showColumn(String columnId, BuildContext context) {
     // int rowIndex = 0;
     // //Add back the column at index
     // Map<String, dynamic> getHiddenColumnData =
@@ -248,10 +262,12 @@ class TableManager {
     this.columnNames = List<String>.from(this.staticColumnsData);
 
     ///refresh table
-    this.applyAnyFilterHiddenColumnRowAndColumnPinningIfExists();
-    AppNotifiers.getInstance().hiddenColumnNotifier.value =
-        this.hiddenColumnIds.length.toString();
-    this.refreshDataTable();
+    this.applyAnyFilterHiddenColumnRowAndColumnPinningIfExists(context);
+    context
+        .riverPodReadStateNotifier(hiddenColumnNotifier.notifier)
+        .updateValue(this.hiddenColumnIds.length.toString());
+
+    this.refreshDataTable(context);
   }
 
   //get hidden column data from column id
@@ -267,10 +283,14 @@ class TableManager {
     return hiddenColumnData;
   }
 
-  void showAllColumn() {
+  void showAllColumn(BuildContext context) {
     if (this.hiddenColumnIds.length > 0) {
-      AppNotifiers.getInstance().frozenRowCountNotifier.value = 0;
-      AppNotifiers.getInstance().frozenColumnCountNotifier.value = 0;
+      context
+          .riverPodReadStateNotifier(frozenRowCountNotifier.notifier)
+          .updateValue(0);
+      context
+          .riverPodReadStateNotifier(frozenColumnCountNotifier.notifier)
+          .updateValue(0);
 
       this.hiddenColumnIds = [];
       this.columnNames = [];
@@ -283,17 +303,19 @@ class TableManager {
       this.datagridRow = List<DataGridRow>.from(this.decoupleCellObjects());
 
       //apply if any row column pinning and filters are there
-      this.applyAnyFilterHiddenColumnRowAndColumnPinningIfExists();
-      AppNotifiers.getInstance().hiddenColumnNotifier.value =
-          this.hiddenColumnIds.length.toString();
+      this.applyAnyFilterHiddenColumnRowAndColumnPinningIfExists(context);
+      context
+          .riverPodReadStateNotifier(hiddenColumnNotifier.notifier)
+          .updateValue(this.hiddenColumnIds.length.toString());
 
       //refresh table
-      this.refreshDataTable();
+      this.refreshDataTable(context);
     }
   }
 
   //Column Ordering Working
-  void setColumnOrdering(int sendTo, int currentPosition, String columnId) {
+  void setColumnOrdering(
+      int sendTo, int currentPosition, String columnId, BuildContext context) {
     int rowIndex = 0;
     int colIndex = this.columnIds.indexOf(columnId);
     for (var rowsData in this.rowData) {
@@ -328,22 +350,23 @@ class TableManager {
     }
 
     //refresh table
-    this.refreshDataTable();
+    this.refreshDataTable(context);
   }
 
   //Single Column pinning working
-  void singleColumnPinning(int colIndex, String columnId, bool isUnPin) {
+  void singleColumnPinning(
+      int colIndex, String columnId, bool isUnPin, BuildContext context) {
     // print("pinned col info --- ${this.pinnedColumnInfo}");
     // print("pinned col info --- ${colIndex}");
     // print("pinned col info --- ${columnId}");
-    
+
     if (!isUnPin) {
       AppNotifiers.getInstance().isRefreshingTable = true;
       var tempRowData = List<Map<String, dynamic>>.from(this.rowData);
 
       int insertIndex =
           this.pinnedColumnInfo.length > 0 ? this.pinnedColumnInfo.length : 0;
-      
+
       int rowIndex = 0;
       for (var rowActData in tempRowData) {
         rowActData.remove(columnId);
@@ -376,9 +399,10 @@ class TableManager {
 
       //update frozen column count
       if(existingDataWithId.columnId == null) {
-        AppNotifiers.getInstance().frozenColumnCountNotifier.value += 1;
+        context
+            .riverPodReadStateNotifier(frozenColumnCountNotifier.notifier)
+            .increment();
       }
-      
     } else {
       var tempRowData = List<Map<String, dynamic>>.from(this.rowData);
       int insertIndex = (this.pinnedColumnInfo.length > 0
@@ -389,9 +413,9 @@ class TableManager {
               0
           : 0);
       if (insertIndex <
-          (AppNotifiers.getInstance().frozenColumnCountNotifier.value - 1)) {
+          (context.riverPodReadStateNotifier(frozenColumnCountNotifier) - 1)) {
         insertIndex =
-            (AppNotifiers.getInstance().frozenColumnCountNotifier.value - 1);
+            (context.riverPodReadStateNotifier(frozenColumnCountNotifier) - 1);
       }
       int rowIndex = 0;
       for (var rowActData in tempRowData) {
@@ -414,17 +438,19 @@ class TableManager {
           .removeWhere((element) => element.columnId == columnId);
 
       //update frozen column count
-      if(AppNotifiers.getInstance().frozenColumnCountNotifier.value > 0) {
-          AppNotifiers.getInstance().frozenColumnCountNotifier.value -= 1;
+      if (context.riverPodReadStateNotifier(frozenColumnCountNotifier) > 0) {
+        context
+            .riverPodReadStateNotifier(frozenColumnCountNotifier.notifier)
+            .decrement();
       }
-      
     }
     //refresh data table with new data
-    this.refreshDataTable();
+    this.refreshDataTable(context);
   }
 
   //Single Row pining working
-  void singleRowPinning(int currentPosition, bool isUnPin) {
+  void singleRowPinning(
+      int currentPosition, bool isUnPin, BuildContext context) {
     if (!isUnPin) {
       // int insertIndex = this.pinnedRowInfo.length > 0
       //     ? this.pinnedRowInfo.length == datagridRow.length
@@ -440,8 +466,10 @@ class TableManager {
 
       // this.pinnedRowInfo.add(info);
       //Notify client about pinned or unpinned row
+      context
+          .riverPodReadStateNotifier(frozenRowCountNotifier.notifier)
+          .increment();
 
-      AppNotifiers.getInstance().frozenRowCountNotifier.value += 1;
     } else {
       // int insertIndex = this.pinnedRowInfo.length > 0
       //     ? (this
@@ -460,7 +488,9 @@ class TableManager {
       //     .removeWhere((element) => element.currentPosition == currentPosition);
       //Notify client about pinned or unpinned row
 
-      AppNotifiers.getInstance().frozenRowCountNotifier.value -= 1;
+      context
+          .riverPodReadStateNotifier(frozenRowCountNotifier.notifier)
+          .decrement();
     }
 
     AppNotifiers.getInstance()
@@ -475,10 +505,11 @@ class TableManager {
               }).toList());
 
     //refresh table with new data
-    this.refreshDataTable();
+    this.refreshDataTable(context);
   }
 
-  void applyAnyFilterHiddenColumnRowAndColumnPinningIfExists() {
+  void applyAnyFilterHiddenColumnRowAndColumnPinningIfExists(
+      BuildContext context) {
     //Apply filter if there are any
 
     if (this.tableColumnFilterList.length > 0) {
@@ -486,7 +517,7 @@ class TableManager {
       //     ? this.tableColumnFilterList.sublist(0, 1)
       //     : []) {
 
-      this.addFilterToColumn(this.tableColumnFilterList[0]);
+      this.addFilterToColumn(this.tableColumnFilterList[0], context);
       // }
     }
 
@@ -499,7 +530,7 @@ class TableManager {
         //   return;
         // }
         print("column id to hide -- $columnId");
-        this.hideColumn(columnId);
+        this.hideColumn(columnId, context);
       }
     }
 
@@ -510,7 +541,7 @@ class TableManager {
     if (tempColInfos.length > 0) {
       for (var pinnedColInfos in tempColInfos) {
         this.singleColumnPinning(pinnedColInfos.lastPosition ?? 0,
-            pinnedColInfos.columnId ?? "", false);
+            pinnedColInfos.columnId ?? "", false, context);
       }
     }
 
@@ -531,17 +562,23 @@ class TableManager {
     for (var columnOrderData in this.columnOrderingDataInfo) {
       String columnId = columnOrderData.keys.toList()[0];
       this.setColumnOrdering(columnOrderData[columnId][0],
-          columnOrderData[columnId][1], columnId);
+          columnOrderData[columnId][1], columnId, context);
     }
   }
 
-  void applyHideColumnRowAndColumnPinningIfExists() {
+  void applyHideColumnRowAndColumnPinningIfExists(BuildContext context) {
     // resetTableManagerConfiguration(excepFilters: true);
     this.columnIds = List<String>.from(this.staticColumnIds);
     this.columnNames = List<String>.from(this.staticColumnsData);
-    AppNotifiers.getInstance().frozenColumnCountNotifier.value = 0;
-    AppNotifiers.getInstance().frozenRowCountNotifier.value = 0;
-    AppNotifiers.getInstance().paginationPageNumberNotifier.value = 1;
+    context
+        .riverPodReadStateNotifier(frozenColumnCountNotifier.notifier)
+        .updateValue(0);
+
+    context
+        .riverPodReadStateNotifier(frozenRowCountNotifier.notifier)
+        .updateValue(0);
+    context.riverPodReadStateNotifier(paginationPageNumberNotifier.notifier).updateValue(1);
+
 
     // hide columns if here are any
     if (this.hiddenColumnIds.length > 0) {
@@ -552,7 +589,7 @@ class TableManager {
         //   return;
         // }
         print("column id to hide -- $columnId");
-        this.hideColumn(columnId);
+        this.hideColumn(columnId, context);
       }
     }
 
@@ -563,7 +600,7 @@ class TableManager {
     if (tempColInfos.length > 0) {
       for (var pinnedColInfos in tempColInfos) {
         this.singleColumnPinning(pinnedColInfos.lastPosition ?? 0,
-            pinnedColInfos.columnId ?? "", false);
+            pinnedColInfos.columnId ?? "", false, context);
       }
     }
 
@@ -585,12 +622,12 @@ class TableManager {
     for (var columnOrderData in this.columnOrderingDataInfo) {
       String columnId = columnOrderData.keys.toList()[0];
       this.setColumnOrdering(columnOrderData[columnId][0],
-          columnOrderData[columnId][1], columnId);
+          columnOrderData[columnId][1], columnId, context);
     }
   }
 
-  void updateCellValue(
-      int rowIndex, int colIndex, String value, Function() onCellDoubleClick) {
+  void updateCellValue(int rowIndex, int colIndex, String value,
+      Function() onCellDoubleClick, BuildContext context) {
     this.rowData[rowIndex][this.columnIds[colIndex]] = value;
     List<DataGridCell> cells = this.datagridRow[rowIndex].getCells();
 
@@ -603,22 +640,30 @@ class TableManager {
           title: rowData[rowIndex][this.columnIds[colIndex]].toString(),
         ));
     this.datagridRow[rowIndex] = DataGridRow(cells: cells);
-    this.refreshDataTable();
+    this.refreshDataTable(context);
   }
 
-  void resetTableManagerConfiguration({bool excepFilters = false}) {
+  void resetTableManagerConfiguration(
+      {bool excepFilters = false, BuildContext? context}) {
     //reset all  values from table manager
-    AppNotifiers.getInstance().frozenColumnCountNotifier.value = 0;
-    AppNotifiers.getInstance().frozenRowCountNotifier.value = 0;
-    AppNotifiers.getInstance().paginationPageNumberNotifier.value = 1;
+    context!
+        .riverPodReadStateNotifier(frozenColumnCountNotifier.notifier)
+        .updateValue(0);
+    context
+        .riverPodReadStateNotifier(frozenRowCountNotifier.notifier)
+        .updateValue(0);
+    context.riverPodReadStateNotifier(paginationPageNumberNotifier.notifier).updateValue(1);
     if (!excepFilters) this.tableColumnFilterList = [];
     this.hiddenColumnIds = [];
     this.pinnedColumnInfo = [];
     this.pinnedRowInfo = [];
   }
 
-  void refreshDataTable() {
-    AppNotifiers.getInstance().refreshDataTableNotifier.value =
-        !AppNotifiers.getInstance().refreshDataTableNotifier.value;
+  void refreshDataTable(BuildContext context) {
+    // AppNotifiers.getInstance().refreshDataTableNotifier.value =
+    //     !AppNotifiers.getInstance().refreshDataTableNotifier.value;
+    context
+        .riverPodReadStateNotifier(refreshDataTableNotifier.notifier)
+        .toggleValue();
   }
 }

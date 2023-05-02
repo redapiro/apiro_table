@@ -243,7 +243,7 @@ class _AddFilterWidget extends State<AddFilterWidget> {
     //Refresh the UI
     this.filterListViewNotifier.value = !this.filterListViewNotifier.value;
     Navigator.pop(context);
-    TableManager.getInstance().removeAllFilter();
+    TableManager.getInstance().removeAllFilter(context);
     widget.clearAllCallback();
   }
 

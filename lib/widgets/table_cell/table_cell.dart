@@ -111,7 +111,7 @@ class TableGridCell extends StatelessWidget {
 
     if (_cellEditingController.text.trim() != this.title) {
       TableManager.getInstance().updateCellValue(rowIndex, colIndex,
-          _cellEditingController.text.trim(), onCellDoubleTap);
+          _cellEditingController.text.trim(), onCellDoubleTap, context!);
     }
   }
 
