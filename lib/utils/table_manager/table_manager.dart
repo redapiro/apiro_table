@@ -116,6 +116,7 @@ class TableManager {
     //
     // //Updatetable filters
       WidgetsBinding.instance.addPostFrameCallback((timeStamp)   {
+        this.refreshDataTable(context);
       context
           .riverPodReadStateNotifier(filterListUpdateNotifier.notifier)
           .toggleValue();
