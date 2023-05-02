@@ -63,6 +63,8 @@ class _AddFilterWidget extends State<AddFilterWidget> {
   Widget build(BuildContext context) {
     _themeData = Theme.of(context);
     return Consumer(builder: (context, ref, child) {
+     ref.watch(filterListViewNotifier);
+    
       return Column(
         children: [
           _getTitleAndPopUpCloseRow(context),
@@ -217,6 +219,7 @@ class _AddFilterWidget extends State<AddFilterWidget> {
 
       //Refresh the UI
       ref.read(filterListViewNotifier.notifier).toggleValue();
+
     } else {
       _showSnackBarWithMessage("Filter already exists");
     }
