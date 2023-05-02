@@ -58,7 +58,7 @@ class SchemaCellDetailTableCellWidget extends StatelessWidget {
                 alignment: AlignmentDirectional.center,
                 child: Text(this.data,
                     textAlign: TextAlign.center,
-                    style: _themeData.textTheme.subtitle2!)),
+                    style: _themeData.textTheme.titleSmall!)),
           );
         });
   }

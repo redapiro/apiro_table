@@ -1,7 +1,4 @@
 import 'dart:async';
-
-import 'package:flutter/material.dart';
-
 class AppNotifiers {
   static final AppNotifiers _instance = AppNotifiers._internal();
   static AppNotifiers getInstance() => _instance;

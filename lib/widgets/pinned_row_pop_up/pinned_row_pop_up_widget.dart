@@ -92,7 +92,7 @@ class PinnedRowPopupWidget extends StatelessWidget {
     return Container(
         child: Text(this.subtitle,
             textAlign: TextAlign.start,
-            style: _themeData!.textTheme.subtitle2!
+            style: _themeData!.textTheme.titleSmall!
                 .copyWith(color: AppColors.disabledColor)));
   }
 
@@ -136,7 +136,7 @@ class PinnedRowPopupWidget extends StatelessWidget {
       },
       child: Text(
         title,
-        style: _themeData!.textTheme.subtitle2!.copyWith(color: textColor),
+        style: _themeData!.textTheme.titleSmall!.copyWith(color: textColor),
       ),
     ));
   }
@@ -155,7 +155,7 @@ class PinnedRowPopupWidget extends StatelessWidget {
         children: [
           Text(
             "\nMetaData:\n",
-            style: _themeData!.textTheme.subtitle1!,
+            style: _themeData!.textTheme.titleMedium!,
           ),
           Column(
             children: List.generate(
@@ -164,9 +164,9 @@ class PinnedRowPopupWidget extends StatelessWidget {
               return Row(
                 children: [
                   Text(this.metadata![0].keys.toList()[index] + ": ",
-                      style: _themeData!.textTheme.subtitle2!),
+                      style: _themeData!.textTheme.titleSmall!),
                   Text(this.metadata![0].values.toList()[index],
-                      style: _themeData!.textTheme.subtitle2!),
+                      style: _themeData!.textTheme.titleSmall!),
                 ],
               );
             }),
@@ -181,7 +181,7 @@ class PinnedRowPopupWidget extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text("Properties: \n", style: _themeData!.textTheme.subtitle1!),
+          Text("Properties: \n", style: _themeData!.textTheme.titleMedium!),
           Column(
             children: List.generate(
                 this.prodperties!.length == 0 ? 0 : this.prodperties![0].length,
@@ -189,9 +189,9 @@ class PinnedRowPopupWidget extends StatelessWidget {
               return Row(
                 children: [
                   Text(this.prodperties![0].keys.toList()[index] + ": ",
-                      style: _themeData!.textTheme.subtitle2!),
+                      style: _themeData!.textTheme.titleSmall!),
                   Text(this.prodperties![0].values.toList()[index],
-                      style: _themeData!.textTheme.subtitle2!),
+                      style: _themeData!.textTheme.titleSmall!),
                 ],
               );
             }),

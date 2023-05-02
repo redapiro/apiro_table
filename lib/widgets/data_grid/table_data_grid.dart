@@ -1,6 +1,5 @@
 import 'package:apiro_table/utils/app_colors.dart';
 import 'package:apiro_table/utils/table_manager/table_manager.dart';
-import 'package:apiro_table/widgets/table_cell/table_cell.dart';
 import 'package:flutter/material.dart';
 import 'package:syncfusion_flutter_datagrid/datagrid.dart';
 

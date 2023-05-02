@@ -20,6 +20,7 @@ import 'package:syncfusion_flutter_datagrid/datagrid.dart';
 
 import '../../utils/controller/global_controllers.dart';
 
+// ignore: must_be_immutable
 class ApiroTableWidget extends StatelessWidget {
   ApiroTableWidget({
     Key? key,
@@ -191,8 +192,7 @@ class ApiroTableWidget extends StatelessWidget {
   ValueNotifier<String> perPageRowCountNotifier = ValueNotifier<String>("5");
   List<String> perPageRowCountList = ["5", "10", "30", "40", "50", "100"];
 
-  late double screenHeight;
-  late double screenWidth;
+
   late TableManager _tableManager;
 
   List<String> colData = [];
@@ -202,15 +202,15 @@ class ApiroTableWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     context = context;
-    screenHeight = MediaQuery.of(context).size.height;
-    screenWidth = MediaQuery.of(context).size.width;
+    // screenHeight = MediaQuery.of(context).size.height;
+    // screenWidth = MediaQuery.of(context).size.width;
 
     return Scaffold(
       key: key,
       body: Consumer(builder: (context, value, child) {
         return Container(
             width: double.maxFinite,
-            constraints: BoxConstraints(maxHeight: screenHeight),
+            constraints: BoxConstraints(maxHeight: double.maxFinite),
             child: Column(
               children: [
                 if (this.showTableHeaderBar)
@@ -241,7 +241,7 @@ class ApiroTableWidget extends StatelessWidget {
   Widget _getSFDataTable() {
     return Consumer(builder: (context, ref, child) {
       var item = ref.watch(refreshDataTableNotifier);
-      print(item);
+      print(item.toString()+".>>>>>>");
       return Column(
         children: [
           Container(
@@ -295,8 +295,8 @@ class ApiroTableWidget extends StatelessWidget {
                       filtersPopUpKey: Key('filtersPopUpKey_' +
                           _tableManager.columnNames[index].toLowerCase()),
                       isFilterOn: this.filtersOn,
-                      iscolumnOrderingOn: this.columnOrderingOn,
-                      iscolumnHidingOn: this.columnHidingOn,
+                      isColumnOrderingOn: this.columnOrderingOn,
+                      isColumnHidingOn: this.columnHidingOn,
                       selectableText: selectableColumnText,
                       metadata: {},
                       tableSortWidget: this.tableSortWidget,
@@ -313,22 +313,22 @@ class ApiroTableWidget extends StatelessWidget {
                       clearAllCallback: () {
                         this.updateDataOnFilterColumn!([], "");
                       },
-                      onColumnmPinClick: () {
+                      onColumnPinClick: () {
                         _columnPinClick(_tableManager.columnIds[index], index,
                             colInfo.columnId != null);
                       },
-                      onColumnmFilterClick: (filterList) {
+                      onColumnFilterClick: (filterList) {
                         _onColumnFiterClick(
                             filterList, _tableManager.columnIds[index]);
                       },
-                      onColumnmHideClick: () {
+                      onColumnHideClick: () {
                         _onHideColumnClick(_tableManager.columnIds[index]);
                       },
                       onColumnOrderingSet: (indexToShiftOn) {
                         _onColumnOrdering(_tableManager.columnIds[index],
                             indexToShiftOn, index);
                       },
-                      tootipName: _tableManager.columnNames[index],
+                      toolTipName: _tableManager.columnNames[index],
                       columnIndex: index,
                     ),
                   );
@@ -434,7 +434,7 @@ class ApiroTableWidget extends StatelessWidget {
 
         this._onColumnOrdering(key, this.columnOrderingInfo[i][key][0],
             this.columnOrderingInfo[i][key][1]);
-        print("column ordering info added -- ${columnOrderingInfo}");
+        print("column ordering info added -- $columnOrderingInfo");
       }
     }
 
@@ -521,7 +521,7 @@ class ApiroTableWidget extends StatelessWidget {
       SnackBar(
         content: Text(message),
         duration: const Duration(seconds: 4),
-        backgroundColor: Theme.of(context).errorColor,
+        backgroundColor: Theme.of(context).colorScheme.error,
       ),
     );
   }

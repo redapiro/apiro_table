@@ -1,9 +1,7 @@
 import 'package:apiro_table/utils/app_colors.dart';
-import 'package:apiro_table/utils/app_notifiers.dart';
 import 'package:apiro_table/utils/common_methods.dart';
 import 'package:apiro_table/utils/table_manager/table_manager.dart';
 import 'package:apiro_table/widgets/custom_widgets/adaptive_outlined_button.dart';
-import 'package:apiro_table/widgets/custom_widgets/adaptive_text_button.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -89,13 +87,13 @@ class HiddenColumnDropDown extends StatelessWidget {
                             text: TextSpan(children: [
                           TextSpan(
                               text: "Hidden Columns",
-                              style: _themeData.textTheme.subtitle2!
-                                  .copyWith(color: AppColors.dividerColor)),
+                              style: _themeData.textTheme.titleSmall!
+                              .copyWith(color: AppColors.dividerColor)),
                           TextSpan(
                               text:
                                   " (${TableManager.getInstance().hiddenColumnIds.length})",
-                              style: _themeData.textTheme.subtitle2!
-                                  .copyWith(color: AppColors.appBlueColor))
+                              style: _themeData.textTheme.titleSmall!
+                              .copyWith(color: AppColors.appBlueColor))
                         ])),
                         SizedBox(width: 20),
                         Icon(Icons.keyboard_arrow_down_sharp)
@@ -138,7 +136,7 @@ class HiddenColumnDropDown extends StatelessWidget {
             Expanded(
               child: Text(
                 value,
-                style: _themeData.textTheme.subtitle2!
+                style: _themeData.textTheme.titleSmall!
                     .copyWith(color: AppColors.dividerColor),
               ),
             ),
@@ -149,7 +147,7 @@ class HiddenColumnDropDown extends StatelessWidget {
                 },
                 child: Container(
                     child: Text("Show",
-                        style: _themeData.textTheme.subtitle2!
+                        style: _themeData.textTheme.titleSmall!
                             .copyWith(color: AppColors.appBlueColor)))),
           ],
         ));
@@ -162,7 +160,7 @@ class HiddenColumnDropDown extends StatelessWidget {
       },
       child: Container(
           child: Text("Show All",
-              style: _themeData.textTheme.subtitle2!
+              style: _themeData.textTheme.titleSmall!
                   .copyWith(color: AppColors.appBlueColor))),
     );
   }

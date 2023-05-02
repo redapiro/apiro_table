@@ -81,7 +81,7 @@ class TableGridCell extends StatelessWidget {
                           )
                       : (Text(this.title,
                           textAlign: TextAlign.center,
-                          style: _themeData.textTheme.subtitle2!.copyWith(
+                          style: _themeData.textTheme.titleSmall!.copyWith(
                               // color: this
                               //     .cellStatus
                               //     .getTextColorFromTableCellStatus()
@@ -150,7 +150,7 @@ class TableGridCell extends StatelessWidget {
                     children: [
                       Text(
                         Constants.cellPopupMenuOptions[index],
-                        style: _themeData.textTheme.subtitle1!
+                        style: _themeData.textTheme.titleMedium!
                             .copyWith(color: AppColors.dividerColor),
                       ),
                     ],

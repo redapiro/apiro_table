@@ -545,7 +545,6 @@ class TableManager {
     }
 
     //Pin rows if there are any
-    var tempRowInfos = this.pinnedRowInfo.map((e) => e.copyFrom()).toList();
     this.pinnedRowInfo = [];
     if (this.onRowpinning != null) {
       this.onRowpinning!();

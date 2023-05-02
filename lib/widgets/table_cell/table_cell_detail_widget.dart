@@ -104,37 +104,37 @@ class TableCellDetailWidget extends StatelessWidget {
         child: Row(
           children: [
             Text("label_status",
-                style: _themeData!.textTheme.subtitle1!
+                style: _themeData!.textTheme.titleMedium!
                     .copyWith(fontWeight: FontWeight.bold, color: textColor)),
             Text(cellStatus,
-                style: _themeData!.textTheme.subtitle1!
+                style: _themeData!.textTheme.titleMedium!
                     .copyWith(color: textColor)),
             SizedBox(width: 15),
             _getVerticalSeparator(),
             SizedBox(width: 15),
             Text("label_data_type",
-                style: _themeData!.textTheme.subtitle1!
+                style: _themeData!.textTheme.titleMedium!
                     .copyWith(fontWeight: FontWeight.bold, color: textColor)),
             Text(this.cellDataType.getStringFromCellDatType(),
-                style: _themeData!.textTheme.subtitle1!
+                style: _themeData!.textTheme.titleMedium!
                     .copyWith(color: textColor)),
             SizedBox(width: 15),
             _getVerticalSeparator(),
             SizedBox(width: 15),
             Text("label_column_name",
-                style: _themeData!.textTheme.subtitle1!
+                style: _themeData!.textTheme.titleMedium!
                     .copyWith(fontWeight: FontWeight.bold, color: textColor)),
             Text(colName,
-                style: _themeData!.textTheme.subtitle1!
+                style: _themeData!.textTheme.titleMedium!
                     .copyWith(color: textColor)),
             SizedBox(width: 15),
             _getVerticalSeparator(),
             SizedBox(width: 15),
             Text("label_schema",
-                style: _themeData!.textTheme.subtitle1!
+                style: _themeData!.textTheme.titleMedium!
                     .copyWith(fontWeight: FontWeight.bold, color: textColor)),
             Text("Schema Name",
-                style: _themeData!.textTheme.subtitle1!
+                style: _themeData!.textTheme.titleMedium!
                     .copyWith(color: textColor)),
             SizedBox(width: 15),
           ],
@@ -194,7 +194,7 @@ class TableCellDetailWidget extends StatelessWidget {
                             rowHeight: 60,
                             gridLinesVisibility: GridLinesVisibility.none,
                             columns: List.generate(columnData.length, (index) {
-                              return GridTextColumn(
+                              return GridColumn(
                                 minimumWidth: 150,
                                 columnName: columnData[index],
                                 label: Container(
@@ -203,7 +203,7 @@ class TableCellDetailWidget extends StatelessWidget {
                                     alignment: AlignmentDirectional.center,
                                     child: Text(columnData[index],
                                         textAlign: TextAlign.center,
-                                        style: _themeData!.textTheme.subtitle1!
+                                        style: _themeData!.textTheme.titleMedium!
                                             .copyWith(fontFamily: "OpenSans"))),
                               );
                             })),
@@ -247,7 +247,7 @@ class TableCellDetailWidget extends StatelessWidget {
                     child: Text(
                       "Aggregators",
                       textAlign: TextAlign.center,
-                      style: _themeData!.textTheme.subtitle1!,
+                      style: _themeData!.textTheme.titleMedium!,
                     )),
               Container(
                   width: 160,
@@ -257,7 +257,7 @@ class TableCellDetailWidget extends StatelessWidget {
                   child: Text(
                     "Final",
                     textAlign: TextAlign.center,
-                    style: _themeData!.textTheme.subtitle1!,
+                    style: _themeData!.textTheme.titleMedium!,
                   ))
             ],
           ),

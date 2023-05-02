@@ -1,5 +1,5 @@
 import 'package:apiro_table/utils/app_colors.dart';
-import 'package:apiro_table/utils/app_notifiers.dart';
+
 import 'package:apiro_table/utils/controller/global_controllers.dart';
 import 'package:apiro_table/utils/provider_helper.dart';
 import 'package:apiro_table/widgets/custom_widgets/app_text_field.dart';
@@ -14,6 +14,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 //
 bool isListAlreadyScrolled = false;
 
+// ignore: must_be_immutable
 class CustomPaginationWidget extends StatelessWidget {
   final Function() onPreviousClick;
   final Function() onNextClick;
@@ -167,7 +168,7 @@ class CustomPaginationWidget extends StatelessWidget {
       Row(
             children: [
               Text("Page",
-                  style: _themeData!.textTheme.bodyText1!
+                  style: _themeData!.textTheme.bodyLarge!
                       .copyWith(color: AppColors.disabledColor)),
               _getPagingContainerWith("<",
                   clickable: ref.watch(paginationPageNumberNotifier) >
@@ -261,7 +262,7 @@ class CustomPaginationWidget extends StatelessWidget {
   }
 
   TextStyle _getSelectedPageTextStyle(int index,WidgetRef ref) {
-    return _themeData!.textTheme.bodyText1!.copyWith(
+    return _themeData!.textTheme.bodyLarge!.copyWith(
         color: ((ref.watch(paginationPageNumberNotifier)-
                     1) ==
                 index)
@@ -283,7 +284,7 @@ class CustomPaginationWidget extends StatelessWidget {
                 width: 0.5),
             shape: BoxShape.circle),
         child: Text(data,
-            style: _themeData!.textTheme.bodyText1!.copyWith(
+            style: _themeData!.textTheme.bodyLarge!.copyWith(
                 color: clickable
                     ? AppColors.dividerColor
                     : AppColors.disabledColor)));

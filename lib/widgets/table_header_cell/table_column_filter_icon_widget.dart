@@ -1,7 +1,7 @@
-import 'dart:io';
 import 'package:apiro_table/utils/app_colors.dart';
 import 'package:flutter/material.dart';
 
+// ignore: must_be_immutable
 class TableColumnFilterIconWidget extends StatelessWidget {
   final double height;
   final double width;
@@ -55,7 +55,7 @@ class TableColumnFilterIconWidget extends StatelessWidget {
               ),
               child: Text(
                 this.text!,
-                style: Theme.of(context).textTheme.bodyText2!.copyWith(
+                style: Theme.of(context).textTheme.bodyMedium!.copyWith(
                     color: Theme.of(context).scaffoldBackgroundColor,
                     fontSize: 9),
               ),

@@ -1,5 +1,9 @@
+// ignore_for_file: must_be_immutable
+
 import 'package:apiro_table/model/column_pinning_info.dart';
 import 'package:apiro_table/utils/app_colors.dart';
+import 'package:apiro_table/utils/controller/global_controllers.dart';
+import 'package:apiro_table/utils/provider_helper.dart';
 import 'package:apiro_table/utils/table_manager/table_manager.dart';
 import 'package:apiro_table/widgets/custom_widgets/adaptive_elevated_button.dart';
 import 'package:apiro_table/widgets/custom_widgets/custom_drop_down.dart';
@@ -14,24 +18,24 @@ class TableColumnHeaderPopMenuButtonWidget extends StatelessWidget {
   final String id;
 
   final String subtitle;
-  final String tootipName;
+  final String toolTipName;
 
-  Map<String, dynamic> metadata;
+  late Map<String, dynamic> metadata;
   final bool isPinned;
   final List<String>? tableFilterList;
 
   final bool isFilterOn;
   final bool selectableText;
-  final bool iscolumnOrderingOn;
-  final bool iscolumnHidingOn;
+  final bool isColumnOrderingOn;
+  final bool isColumnHidingOn;
 
-  final Function()? onColumnmPinClick;
-  final Function()? onColumnmHideClick;
+  final Function()? onColumnPinClick;
+  final Function()? onColumnHideClick;
   final Function()? clearAllCallback;
   final Function(String, Function(bool), Function(Map<String, dynamic>))?
       onColumnClick;
   final Function(int)? onColumnOrderingSet;
-  final Function(List<String>)? onColumnmFilterClick;
+  final Function(List<String>)? onColumnFilterClick;
   final double? popUpButtonHeight;
   int columnIndex;
   bool shouldShowSortWidget = false;
@@ -47,17 +51,17 @@ class TableColumnHeaderPopMenuButtonWidget extends StatelessWidget {
       {required this.metadata,
       required this.columnIndex,
       this.pinnedColumnInfo,
-      this.onColumnmFilterClick,
-      this.onColumnmHideClick,
+      this.onColumnFilterClick,
+      this.onColumnHideClick,
       this.clearAllCallback,
       this.tableFilterList,
       this.isFilterOn = true,
-      this.iscolumnHidingOn = true,
-      this.iscolumnOrderingOn = true,
+      this.isColumnHidingOn = true,
+      this.isColumnOrderingOn = true,
       this.selectableText = false,
-      required this.tootipName,
+      required this.toolTipName,
       required this.id,
-      this.onColumnmPinClick,
+      this.onColumnPinClick,
       this.onColumnOrderingSet,
       this.onColumnClick,
       this.tableSortWidget,
@@ -78,13 +82,18 @@ class TableColumnHeaderPopMenuButtonWidget extends StatelessWidget {
   ThemeData? _themeData;
   late BuildContext context;
   GlobalKey _key = GlobalKey();
-  ValueNotifier<bool> shouldShowFilterUI = ValueNotifier<bool>(false);
-  ValueNotifier<bool> isPopUpButtonPressed = ValueNotifier<bool>(false);
+
+  final isPopUpButtonPressed =
+  StateNotifierProvider<IsPopUpButtonPressed, bool>((ref) {
+    return IsPopUpButtonPressed();
+  });
+  final shouldShowFilterUI =
+  StateNotifierProvider<ShouldShowFilterUI, bool>((ref) {
+    return ShouldShowFilterUI();
+  });
   late ValueNotifier<int> selectedColumnOrderIndex;
   late ValueNotifier<int> selectedPinnedColumnOrderIndex;
   double? screenWidth;
-
-  TextEditingController _columnOrderingController = TextEditingController();
   List<String> columnNameList = [];
   List<String> pinnedColumnNameList = [];
   late TableManager _tableManager;
@@ -104,10 +113,10 @@ class TableColumnHeaderPopMenuButtonWidget extends StatelessWidget {
         return tempString;
       }).toList();
       selectedColumnOrderIndex.value = _tableManager.columnNames
-              .indexWhere((element) => element == tootipName) -
+              .indexWhere((element) => element == toolTipName) -
           _tableManager.pinnedColumnInfo.length;
       selectedPinnedColumnOrderIndex.value = _tableManager.columnNames
-          .indexWhere((element) => element == tootipName);
+          .indexWhere((element) => element == toolTipName);
     }
     int pinnedColNumber = 1;
     if (pinnedColumnNameList.length == 0) {
@@ -131,62 +140,55 @@ class TableColumnHeaderPopMenuButtonWidget extends StatelessWidget {
         height: 50,
         key: _key,
         color: AppColors.secondaryColor,
-        child: ValueListenableBuilder<bool>(
-            valueListenable: isPopUpButtonPressed,
-            builder: (context, value, child) {
-              return Consumer(builder: (context, value, child) {
-                return GestureDetector(
-                  key: filtersPopUpKey,
-                  behavior: HitTestBehavior.opaque,
-                  onTap: () {
-                    // _showPopUpMenu(context, tapDetails.globalPosition);
-                    if (this.onColumnClick != null) {
-                      this.onColumnClick!(this.id, (shouldShowSortWidget) {
-                        this.shouldShowSortWidget = shouldShowSortWidget;
-                      }, (metadata) {
-                        this.metadata = metadata;
-                          });
-                        }
-                        _showPopUpMenu(context);
-                        isPopUpButtonPressed.value =
-                            !isPopUpButtonPressed.value;
-                      },
-                      child: Container(
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Expanded(
-                              child: Tooltip(
-                                message: this.tootipName,
-                                child: (this.selectableText)
-                                    ? SelectableText(this.title,
-                                        textAlign: TextAlign.center,
-                                        style: _themeData!.textTheme.titleSmall!
-                                            .copyWith(
-                                                color: isPopUpButtonPressed
-                                                        .value
-                                                    ? AppColors.appBlueColor
-                                                    : AppColors.dividerColor))
-                                    : Text(this.title,
-                                        textAlign: TextAlign.center,
-                                        style: _themeData!.textTheme.titleSmall!
-                                            .copyWith(
-                                                color: isPopUpButtonPressed
-                                                        .value
-                                                    ? AppColors.appBlueColor
-                                                    : AppColors.dividerColor)),
-                              ),
-                            ),
-                            SizedBox(width: 3),
-                            _getTableColumnFilterIcon(),
-                            Icon(Icons.keyboard_arrow_down,
-                                size: 15, color: AppColors.disabledColor)
-                          ],
-                        ),
-                      ),
-                    );
-                  });
-            }));
+        child: Consumer(builder: (context, value, child) {
+          return GestureDetector(
+            key: filtersPopUpKey,
+            behavior: HitTestBehavior.opaque,
+            onTap: () {
+              // _showPopUpMenu(context, tapDetails.globalPosition);
+              if (this.onColumnClick != null) {
+                this.onColumnClick!(this.id, (shouldShowSortWidget) {
+                  this.shouldShowSortWidget = shouldShowSortWidget;
+                }, (metadata) {
+                  this.metadata = metadata;
+                });
+              }
+              if (context.mounted) {
+                _showPopUpMenu(context, value);
+              }
+              value.read(isPopUpButtonPressed.notifier).toggleValue();
+            },
+            child: Container(
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Expanded(
+                    child: Tooltip(
+                      message: this.toolTipName,
+                      child: (this.selectableText)
+                          ? SelectableText(this.title,
+                              textAlign: TextAlign.center,
+                              style: _themeData!.textTheme.titleSmall!.copyWith(
+                                  color: value.watch(isPopUpButtonPressed)
+                                      ? AppColors.appBlueColor
+                                      : AppColors.dividerColor))
+                          : Text(this.title,
+                              textAlign: TextAlign.center,
+                              style: _themeData!.textTheme.titleSmall!.copyWith(
+                                  color: value.watch(isPopUpButtonPressed)
+                                      ? AppColors.appBlueColor
+                                      : AppColors.dividerColor)),
+                    ),
+                  ),
+                  SizedBox(width: 3),
+                  _getTableColumnFilterIcon(),
+                  Icon(Icons.keyboard_arrow_down,
+                      size: 15, color: AppColors.disabledColor)
+                ],
+              ),
+            ),
+          );
+        }));
   }
 
   Widget _getTableColumnFilterIcon() {
@@ -207,38 +209,36 @@ class TableColumnHeaderPopMenuButtonWidget extends StatelessWidget {
     return CustomPopUpMenuItem(
         child: Container(
       color: Colors.white,
-      child: ValueListenableBuilder<bool>(
-          valueListenable: shouldShowFilterUI,
-          builder: (context, value, child) {
-            if (value) {
-              return Container(
-                padding: EdgeInsets.only(left: 5, right: 5),
-                color: Colors.white,
-                child: AddFilterWidget(
-                  onApplyFilterClick: _applyFilterCallback,
-                  removeFilterUI: _hideFilterUI,
-                  columnName: this.title,
-                  clearAllCallback: this.clearAllCallback ?? () {},
-                  filterList: this.tableFilterList ?? [],
-                ),
-              );
-            }
-            return Container(
-              padding: EdgeInsets.only(left: 5, right: 5),
-              color: Colors.white,
-              child: Column(children: [
-                _getTitleAndPopUpCloseRow(context),
-                SizedBox(height: 5),
-                _getSubtitleRow(),
-                SizedBox(height: 5),
-                _getPinFilterHideRow(),
-                SizedBox(height: 5),
-                _getHorizontalLine(),
-                SizedBox(height: 5),
-                _getMetadataWidget()
-              ]),
-            );
-          }),
+      child: Consumer(builder: (context, value, child) {
+        if (value.watch(shouldShowFilterUI)) {
+          return Container(
+            padding: EdgeInsets.only(left: 5, right: 5),
+            color: Colors.white,
+            child: AddFilterWidget(
+              onApplyFilterClick: _applyFilterCallback,
+              removeFilterUI: _hideFilterUI,
+              columnName: this.title,
+              clearAllCallback: this.clearAllCallback ?? () {},
+              filterList: this.tableFilterList ?? [],
+            ),
+          );
+        }
+        return Container(
+          padding: EdgeInsets.only(left: 5, right: 5),
+          color: Colors.white,
+          child: Column(children: [
+            _getTitleAndPopUpCloseRow(context),
+            SizedBox(height: 5),
+            _getSubtitleRow(),
+            SizedBox(height: 5),
+            _getPinFilterHideRow(),
+            SizedBox(height: 5),
+            _getHorizontalLine(),
+            SizedBox(height: 5),
+            _getMetadataWidget()
+          ]),
+        );
+      }),
     ));
     // return PopupMenuItem(
     //   enabled: false,
@@ -323,12 +323,12 @@ class TableColumnHeaderPopMenuButtonWidget extends StatelessWidget {
         SizedBox(height: 10),
         Row(
           children: [
-            if (this.iscolumnHidingOn)
+            if (this.isColumnHidingOn)
               _getButtonWithTitle("Hide", Icons.remove_red_eye_outlined,
                   Theme.of(context).scaffoldBackgroundColor,
                   onClick: _onColumnHideClick, columnKey: hideKey),
             SizedBox(width: 5),
-            if (this.iscolumnOrderingOn) _getColumnOrderTextField(),
+            if (this.isColumnOrderingOn) _getColumnOrderTextField(),
           ],
         ),
         SizedBox(height: 5),
@@ -423,9 +423,7 @@ class TableColumnHeaderPopMenuButtonWidget extends StatelessWidget {
 
   ///on Click methods
 
-  void _showPopUpMenu(
-    BuildContext context,
-  ) {
+  void _showPopUpMenu(BuildContext context, WidgetRef ref) {
     RenderBox renderBox = _key.currentContext!.findRenderObject()! as RenderBox;
     Offset position = renderBox.localToGlobal(Offset.zero);
 
@@ -439,7 +437,7 @@ class TableColumnHeaderPopMenuButtonWidget extends StatelessWidget {
           _getPopUpMenuItems(context),
         ]).then((value) {
       //OnMenuClose
-      isPopUpButtonPressed.value = !isPopUpButtonPressed.value;
+      ref.read(isPopUpButtonPressed.notifier).toggleValue();
     });
   }
 
@@ -471,37 +469,42 @@ class TableColumnHeaderPopMenuButtonWidget extends StatelessWidget {
     );
   }
 
-  void _resetPopPressValue(context) {
+  void _resetPopPressValue(BuildContext context) {
     Navigator.of(context).pop();
-    isPopUpButtonPressed.value = !isPopUpButtonPressed.value;
+    context
+        .riverPodReadStateNotifier(isPopUpButtonPressed.notifier)
+        .toggleValue();
   }
 
   void _onColumnPinClick() {
     _resetPopPressValue(context);
 
-    this.onColumnmPinClick!();
+    this.onColumnPinClick!();
   }
 
   void _onColumnHideClick() {
     _resetPopPressValue(context);
-    this.onColumnmHideClick!();
+    this.onColumnHideClick!();
   }
 
   void _onColumnFilterClick() {
-    // _resetPopPressValue(context);
-    // this.onColumnmFilterClick!();
-
-    shouldShowFilterUI.value = !shouldShowFilterUI.value;
+    context
+        .riverPodReadStateNotifier(shouldShowFilterUI.notifier)
+        .toggleValue();
   }
 
   //Filter callback method
   void _applyFilterCallback(List<String> filterList) {
-    this.onColumnmFilterClick!(filterList);
+    this.onColumnFilterClick!(filterList);
     _resetPopPressValue(context);
-    shouldShowFilterUI.value = !shouldShowFilterUI.value;
+    context
+        .riverPodReadStateNotifier(shouldShowFilterUI.notifier)
+        .toggleValue();
   }
 
   void _hideFilterUI() {
-    shouldShowFilterUI.value = !shouldShowFilterUI.value;
+    context
+        .riverPodReadStateNotifier(shouldShowFilterUI.notifier)
+        .toggleValue();
   }
 }

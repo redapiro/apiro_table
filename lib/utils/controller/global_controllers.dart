@@ -98,3 +98,17 @@ class IsRefreshingTable extends StateNotifier<bool> {
 
   void toggleValue() => state = !state;
 }
+class IsPopUpButtonPressed extends StateNotifier<bool> {
+  IsPopUpButtonPressed() : super(false);
+
+  void updateValue(bool val) => state = val;
+
+  void toggleValue() => state = !state;
+}
+class ShouldShowFilterUI extends StateNotifier<bool> {
+  ShouldShowFilterUI() : super(false);
+
+  void updateValue(bool val) => state = val;
+
+  void toggleValue() => state = !state;
+}

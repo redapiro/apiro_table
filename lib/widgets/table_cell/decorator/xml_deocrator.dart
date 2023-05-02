@@ -16,13 +16,8 @@ class XMLDecoratorWidget extends StatelessWidget {
     required this.onCellDoubleTap,
   });
 
-  late ThemeData _themeData;
-  BuildContext? context;
-
   @override
   Widget build(BuildContext context) {
-    _themeData = Theme.of(context);
-    this.context = context;
     return GestureDetector(
         onTap: () {
           _onDataCellTap();

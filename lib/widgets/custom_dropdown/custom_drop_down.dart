@@ -1,6 +1,7 @@
 import 'package:apiro_table/utils/app_colors.dart';
 import 'package:flutter/material.dart';
 
+// ignore: must_be_immutable
 class CustomDropDownWidget extends StatelessWidget {
   final List<String> items;
   final Function(String) onChange;
@@ -45,7 +46,7 @@ class CustomDropDownWidget extends StatelessWidget {
           child: DropdownButton<String>(
             isExpanded: true,
 
-            style: _themeData.textTheme.bodyText1!
+            style: _themeData.textTheme.bodyLarge!
                 .copyWith(color: textColor ?? AppColors.dividerColor),
             underline: Container(),
             // itemHeight: kMinInteractiveDimension,
@@ -60,7 +61,7 @@ class CustomDropDownWidget extends StatelessWidget {
                       : Container(
                           child: Text(
                           value,
-                          style: _themeData.textTheme.bodyText1!.copyWith(
+                          style: _themeData.textTheme.bodyLarge!.copyWith(
                               color: textColor ?? AppColors.dividerColor),
                         )),
                   value: value,

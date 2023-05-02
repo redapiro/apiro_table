@@ -40,7 +40,7 @@ class CommonMethods {
       SnackBar(
         content: Text(message),
         duration: const Duration(seconds: 4),
-        backgroundColor: Theme.of(context).errorColor,
+        backgroundColor: Theme.of(context).colorScheme.error,
       ),
     );
   }

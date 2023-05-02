@@ -1,3 +1,5 @@
+// ignore_for_file: must_be_immutable
+
 import 'package:flutter/material.dart';
 
 class CustomDropDownWidget extends StatelessWidget {
@@ -44,7 +46,7 @@ class CustomDropDownWidget extends StatelessWidget {
           child: DropdownButton<String>(
             isExpanded: true,
 
-            style: _themeData.textTheme.bodyText1!
+            style: _themeData.textTheme.bodyLarge!
                 .copyWith(color: textColor ?? Theme.of(context).dividerColor),
             underline: Container(),
             // itemHeight: kMinInteractiveDimension,
@@ -59,7 +61,7 @@ class CustomDropDownWidget extends StatelessWidget {
                       : Container(
                           child: Text(
                           value,
-                          style: _themeData.textTheme.bodyText1!.copyWith(
+                          style: _themeData.textTheme.bodyLarge!.copyWith(
                               color:
                                   textColor ?? Colors.black),
                         )),

@@ -84,7 +84,7 @@ class _AppTextFieldState extends State<AppTextField> {
         child: IgnorePointer(
           ignoring: widget.onTap != null,
           child: TextFormField(
-              focusNode: widget.focusNode ?? FocusNode(),
+              // focusNode: widget.focusNode ?? FocusNode(),
               autofocus: widget.autoFocus,
               onEditingComplete: widget.onEditingComplete ?? () {},
               enabled: widget.editable,
@@ -125,7 +125,7 @@ class _AppTextFieldState extends State<AppTextField> {
                       EdgeInsets.only(bottom: 10, left: 10, right: 10),
                   hintText: widget.label,
                   hintStyle: widget.textStyle ??
-                      _themeData!.textTheme.subtitle1!
+                      _themeData!.textTheme.titleMedium!
                           .copyWith(color: _themeData!.disabledColor),
                   fillColor: widget.backgroundColor ?? Colors.white,
                   filled: true),

@@ -1,6 +1,4 @@
-import 'dart:async';
 
-import 'package:apiro_table/utils/app_notifiers.dart';
 import 'package:apiro_table/widgets/table_widget/apiro_table_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
@@ -27,7 +25,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     this.context = context;
 
-    return MaterialApp(
+    return MaterialApp(useInheritedMediaQuery: true,
       title: 'Apiro Table',
       debugShowCheckedModeBanner: false,
       theme: ThemeData(

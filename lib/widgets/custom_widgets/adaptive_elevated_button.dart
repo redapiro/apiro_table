@@ -33,7 +33,7 @@ class AdaptiveElevatedButton extends StatelessWidget {
     } else if (Platform.isLinux) {
       return _getElevatedButton(context);
     } else if (Platform.isIOS) {
-      return _getCupertinoButton();
+      return _getElevatedButton(context);
     } else if (Platform.isMacOS) {
       return _getCupertinoButton();
     } else {
@@ -49,9 +49,7 @@ class AdaptiveElevatedButton extends StatelessWidget {
       child: ElevatedButton(
         style: this.style ??
             ElevatedButton.styleFrom(
-              primary:
-                  this.buttonBackgroundColor ?? Theme.of(context).primaryColor,
-              onPrimary: Theme.of(context).scaffoldBackgroundColor,
+              foregroundColor: Theme.of(context).scaffoldBackgroundColor, backgroundColor: this.buttonBackgroundColor ?? Theme.of(context).primaryColor,
             ),
         child: this.child ??
             Text(

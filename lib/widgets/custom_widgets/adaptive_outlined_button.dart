@@ -30,7 +30,7 @@ class AdaptiveOutlinedButton extends StatelessWidget {
       return _getCupertinoButton();
     } else {
       return _getOutLinedButton(context);
-      ;
+
     }
   }
 
@@ -38,8 +38,7 @@ class AdaptiveOutlinedButton extends StatelessWidget {
     return OutlinedButton(
       style: this.style ??
           OutlinedButton.styleFrom(
-              primary: buttonColor ?? Theme.of(context).primaryColor,
-              shape: RoundedRectangleBorder(
+              foregroundColor: buttonColor ?? Theme.of(context).primaryColor, shape: RoundedRectangleBorder(
                   borderRadius:
                       this.borderRadius ?? BorderRadius.circular(5.0)),
               side: BorderSide(

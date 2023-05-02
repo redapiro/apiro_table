@@ -13,7 +13,7 @@ class TableCellWithDropDownWidget extends StatelessWidget {
       this.colName,
       this.border,
       required this.cellStatus,
-      this.shouldShowGridLines = true}) {}
+      this.shouldShowGridLines = true});
 
   ValueNotifier<int> selectedValue = ValueNotifier<int>(0);
 

@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 
 class TableHeaderCell extends StatelessWidget {
-  final String tableHealderCellTitle;
-  TableHeaderCell({Key? key, required this.tableHealderCellTitle})
+  final String tableHeaderCellTitle;
+  TableHeaderCell({Key? key, required this.tableHeaderCellTitle})
       : super(key: key);
 
   late ThemeData _themeData;
@@ -16,9 +16,9 @@ class TableHeaderCell extends StatelessWidget {
       alignment: AlignmentDirectional.center,
       color: Colors.grey.withOpacity(0.3),
       child: Text(
-        this.tableHealderCellTitle,
+        this.tableHeaderCellTitle,
         textAlign: TextAlign.center,
-        style: _themeData.textTheme.subtitle1!.copyWith(color: Colors.black),
+        style: _themeData.textTheme.titleMedium!.copyWith(color: Colors.black),
       ),
     );
   }

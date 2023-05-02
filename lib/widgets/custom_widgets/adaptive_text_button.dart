@@ -42,7 +42,7 @@ class AdaptiveTextButton extends StatelessWidget {
       height: this.height ?? 50,
       child: TextButton(
         style: this.style ??
-            TextButton.styleFrom(primary: Theme.of(context).primaryColor),
+            TextButton.styleFrom(foregroundColor: Theme.of(context).primaryColor),
         child: this.child ??
             Text(
               text ?? "",

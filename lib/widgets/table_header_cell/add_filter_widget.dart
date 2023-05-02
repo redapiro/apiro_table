@@ -3,6 +3,15 @@ import 'package:apiro_table/widgets/custom_widgets/adaptive_elevated_button.dart
 import 'package:apiro_table/widgets/custom_widgets/adaptive_text_button.dart';
 import 'package:apiro_table/widgets/custom_widgets/app_text_field.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+
+class FilterListViewNotifier extends StateNotifier<bool> {
+  FilterListViewNotifier() : super(false);
+
+  void updateValue(bool val) => state = val;
+
+  void toggleValue() => state = !state;
+}
 
 class AddFilterWidget extends StatefulWidget {
   final Function(List<String>)? onApplyFilterClick;
@@ -10,6 +19,7 @@ class AddFilterWidget extends StatefulWidget {
   final String columnName;
   final List<String> filterList;
   final Function clearAllCallback;
+
   AddFilterWidget(
       {required this.columnName,
       required this.clearAllCallback,
@@ -24,7 +34,10 @@ class _AddFilterWidget extends State<AddFilterWidget> {
   TextEditingController _addFilterTextController = TextEditingController();
   ThemeData? _themeData;
 
-  ValueNotifier<bool> filterListViewNotifier = ValueNotifier<bool>(false);
+  final filterListViewNotifier =
+      StateNotifierProvider<FilterListViewNotifier, bool>((ref) {
+    return FilterListViewNotifier();
+  });
   List<String>? filterList;
   bool shouldShowAddFilterTextField = true;
 
@@ -49,40 +62,33 @@ class _AddFilterWidget extends State<AddFilterWidget> {
   @override
   Widget build(BuildContext context) {
     _themeData = Theme.of(context);
-
-    return Container(
-        child: Column(
-      children: [
-        _getTitleAndPopUpCloseRow(context),
-        _getAddFilterWidget(),
-      ],
-    ));
+    return Consumer(builder: (context, ref, child) {
+      return Column(
+        children: [
+          _getTitleAndPopUpCloseRow(context),
+          _getAddFilterWidget(ref),
+        ],
+      );
+    });
   }
 
-  Widget _getAddFilterWidget() {
-    return ValueListenableBuilder<bool>(
-        valueListenable: this.filterListViewNotifier,
-        builder: (context, value, child) {
-          return Container(
-              child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                SizedBox(height: 10),
-                _getAvailableFilterCriteriaList(),
-                SizedBox(height: 10),
-                if (shouldShowAddFilterTextField) _getFilterTextField(),
-                if (this.filterList!.length > 1) _addNewCriteria(),
-                SizedBox(height: 10),
-                _getApplyAndClearAllRow(),
-              ]));
-        });
+  Widget _getAddFilterWidget(WidgetRef value) {
+    return Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+      SizedBox(height: 10),
+      _getAvailableFilterCriteriaList(value),
+      SizedBox(height: 10),
+      if (shouldShowAddFilterTextField) _getFilterTextField(value),
+      if (this.filterList!.length > 1) _addNewCriteria(value),
+      SizedBox(height: 10),
+      _getApplyAndClearAllRow(value),
+    ]);
   }
 
-  Widget _getFilterTextField() {
+  Widget _getFilterTextField(WidgetRef ref) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        AppTextField(
+        AppTextField(autoFocus: false,
           label: "",
           textFieldHeight: 40,
           controller: _addFilterTextController,
@@ -96,11 +102,11 @@ class _AddFilterWidget extends State<AddFilterWidget> {
           width: 80,
           child: Text(
             "Add",
-            style: _themeData!.textTheme.subtitle2!
+            style: _themeData!.textTheme.titleSmall!
                 .copyWith(color: _themeData!.scaffoldBackgroundColor),
           ),
           buttonBackgroundColor: Colors.black,
-          onPressed: _onAddFilterPress,
+          onPressed: () => _onAddFilterPress(ref),
         )
       ],
     );
@@ -112,8 +118,8 @@ class _AddFilterWidget extends State<AddFilterWidget> {
       children: [
         Expanded(
             child: Text(
-          title ?? "",
-          style: _themeData!.textTheme.subtitle1,
+              title ?? "",
+          style: _themeData!.textTheme.titleMedium,
         )),
         SizedBox(width: 10),
         InkWell(
@@ -133,7 +139,7 @@ class _AddFilterWidget extends State<AddFilterWidget> {
     );
   }
 
-  Widget _getFilterNameWidget(int index) {
+  Widget _getFilterNameWidget(int index, WidgetRef ref) {
     return Container(
         padding: EdgeInsets.symmetric(horizontal: 5, vertical: 8),
         margin: EdgeInsets.only(top: 10),
@@ -142,31 +148,30 @@ class _AddFilterWidget extends State<AddFilterWidget> {
             border: Border.all(color: _themeData!.disabledColor, width: 0.5)),
         child: _getTitleAndPopUpCloseRow(this.context,
             title: filterList![index], onDeleteClick: () {
-          _onDeleteFilterClick(index);
+          _onDeleteFilterClick(index, ref);
         }));
   }
 
-  Widget _getAvailableFilterCriteriaList() {
+  Widget _getAvailableFilterCriteriaList(WidgetRef ref) {
     return Container(
       child: Column(
         children: List.generate(
           this.filterList!.length - 1,
           (index) {
-            return _getFilterNameWidget(index + 1);
+            return _getFilterNameWidget(index + 1, ref);
           },
         ),
       ),
     );
   }
 
-  Widget _getApplyAndClearAllRow() {
-    return Container(
-        child: Row(
+  Widget _getApplyAndClearAllRow(WidgetRef ref) {
+    return Row(
       children: [
         AdaptiveElevatedButton(
           child: Text(
             "Apply",
-            style: _themeData!.textTheme.subtitle2!
+            style: _themeData!.textTheme.titleSmall!
                 .copyWith(color: _themeData!.scaffoldBackgroundColor),
           ),
           height: 40,
@@ -179,29 +184,29 @@ class _AddFilterWidget extends State<AddFilterWidget> {
           width: 80,
           child: Text(
             "Clear All",
-            style: _themeData!.textTheme.subtitle2,
+            style: _themeData!.textTheme.titleSmall,
           ),
-          onPressed: _onClearAllClick,
+          onPressed: () => _onClearAllClick(ref),
         )
       ],
-    ));
+    );
   }
 
-  Widget _addNewCriteria() {
+  Widget _addNewCriteria(WidgetRef ref) {
     return InkWell(
-      onTap: _onAddNewCriteriaClick,
+      onTap: () => _onAddNewCriteriaClick(ref),
       child: Container(
         margin: EdgeInsets.only(top: 10),
         child: Text(
           "Add new criteria",
-          style: _themeData!.textTheme.subtitle2,
+          style: _themeData!.textTheme.titleSmall,
         ),
       ),
     );
   }
 
   //OnClick methods
-  void _onAddFilterPress() {
+  void _onAddFilterPress(WidgetRef ref) {
     List<String> tempList = this.filterList!;
     if (!tempList.contains(_addFilterTextController.text.trim())) {
       tempList.add(_addFilterTextController.text.trim());
@@ -211,13 +216,13 @@ class _AddFilterWidget extends State<AddFilterWidget> {
       this.shouldShowAddFilterTextField = false;
 
       //Refresh the UI
-      this.filterListViewNotifier.value = !this.filterListViewNotifier.value;
+      ref.read(filterListViewNotifier.notifier).toggleValue();
     } else {
       _showSnackBarWithMessage("Filter already exists");
     }
   }
 
-  void _onDeleteFilterClick(int index) {
+  void _onDeleteFilterClick(int index, WidgetRef ref) {
     List<String> tempList = this.filterList!;
     tempList.removeAt(index);
 
@@ -225,23 +230,23 @@ class _AddFilterWidget extends State<AddFilterWidget> {
     _addFilterTextController.text = "";
 
     //Refresh the UI
-    this.filterListViewNotifier.value = !this.filterListViewNotifier.value;
+    ref.read(filterListViewNotifier.notifier).toggleValue();
   }
 
-  void _onAddNewCriteriaClick() {
+  void _onAddNewCriteriaClick(WidgetRef ref) {
     this.shouldShowAddFilterTextField = true;
 
     //Refresh the UI
-    this.filterListViewNotifier.value = !this.filterListViewNotifier.value;
+    ref.read(filterListViewNotifier.notifier).toggleValue();
   }
 
-  void _onClearAllClick() {
+  void _onClearAllClick(WidgetRef ref) {
     this.filterList = [];
     this.filterList!.add(widget.columnName);
     this.shouldShowAddFilterTextField = true;
 
     //Refresh the UI
-    this.filterListViewNotifier.value = !this.filterListViewNotifier.value;
+    ref.read(filterListViewNotifier.notifier).toggleValue();
     Navigator.pop(context);
     TableManager.getInstance().removeAllFilter(context);
     widget.clearAllCallback();
@@ -257,7 +262,7 @@ class _AddFilterWidget extends State<AddFilterWidget> {
       SnackBar(
         content: Text(message),
         duration: const Duration(seconds: 4),
-        backgroundColor: Theme.of(this.context).errorColor,
+        backgroundColor: Theme.of(this.context).colorScheme.error,
       ),
     );
   }
