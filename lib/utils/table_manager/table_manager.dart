@@ -112,12 +112,12 @@ class TableManager {
     //refreshTable
     //remove all pinning and hidden column and apply them again
     applyHideColumnRowAndColumnPinningIfExists(context);
-    this.refreshDataTable(context);
-
-    //Updatetable filters
-    context
-        .riverPodReadStateNotifier(filterListUpdateNotifier.notifier)
-        .toggleValue();
+    // this.refreshDataTable(context);
+    //
+    // //Updatetable filters
+    // context
+    //     .riverPodReadStateNotifier(filterListUpdateNotifier.notifier)
+    //     .toggleValue();
   }
 
   //Hidden ColumnsWorking

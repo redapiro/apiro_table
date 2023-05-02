@@ -1,5 +1,4 @@
 import 'package:apiro_table/utils/app_colors.dart';
-
 import 'package:apiro_table/utils/controller/global_controllers.dart';
 import 'package:apiro_table/utils/provider_helper.dart';
 import 'package:apiro_table/widgets/custom_widgets/app_text_field.dart';
@@ -44,7 +43,7 @@ class CustomPaginationWidget extends StatelessWidget {
     required this.jumpToPageTextFieldFocusNode,
     required this.perPageRowCountNotifier,
   }) : super(key: key) {
-    jumpToPageNumberController.text = context?.riverPodReadStateNotifier(paginationPageNumberNotifier).toString() ?? '';
+    jumpToPageNumberController.text = context?.riverPodReadStateNotifier(paginationPageNumberNotifier).toString() ?? '0';
 
     rowCountPerPageList = this.pageNumbers;
     Future.delayed(Duration(milliseconds: 300), () {
