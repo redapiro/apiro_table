@@ -115,9 +115,11 @@ class TableManager {
     // this.refreshDataTable(context);
     //
     // //Updatetable filters
-    context
-        .riverPodReadStateNotifier(filterListUpdateNotifier.notifier)
-        .toggleValue();
+      WidgetsBinding.instance.addPostFrameCallback((timeStamp)   {
+      context
+          .riverPodReadStateNotifier(filterListUpdateNotifier.notifier)
+          .toggleValue();
+    });
   }
 
   //Hidden ColumnsWorking
