@@ -502,20 +502,15 @@ class ApiroTableWidget extends StatelessWidget {
   }
 
   void _onTextFiledSubmit() {
-    print('step 1');
     if (_jumpToPageTextFiledFocusNode.hasFocus) {
-      print('step 2');
       _jumpToPageTextFiledFocusNode.unfocus();
-      print('step 3');
 
       if (int.parse(_jumpToPageController.text.trim()) >
           this.totalNumberOfPages) {
-        print('step 4');
         showSnackBarWithMessage(
-            "Page number is not valid" + this.totalNumberOfPages.toString(),
+            "Page number is not valid " + _jumpToPageController.text,
             context: context);
       } else {
-        print('step 5');
         context.riverPodReadStateNotifier(paginationPageNumberNotifier.notifier).updateValue(
             int.parse(_jumpToPageController.text.trim()));
         this.onPageNumberTextFieldSubmit(
