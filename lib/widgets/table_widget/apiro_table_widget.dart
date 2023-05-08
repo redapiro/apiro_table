@@ -14,6 +14,7 @@ import 'package:apiro_table/widgets/pinned_row_pop_up/pinned_row_pop_up_widget.d
 import 'package:apiro_table/widgets/table_cell/table_cell.dart';
 import 'package:apiro_table/widgets/table_cell/table_cell_detail_widget.dart';
 import 'package:apiro_table/widgets/table_header_cell/table_header_popup_menu_cell.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:syncfusion_flutter_datagrid/datagrid.dart';
@@ -209,8 +210,12 @@ class ApiroTableWidget extends StatelessWidget {
       key: key,
       body: Consumer(builder: (context, value, child) {
         return Container(
-            width: double.maxFinite,
-            constraints: BoxConstraints(maxHeight: double.maxFinite),
+            width:
+                kIsWeb ? MediaQuery.of(context).size.width : double.maxFinite,
+            constraints: BoxConstraints(
+                maxHeight: kIsWeb
+                    ? MediaQuery.of(context).size.height
+                    : double.maxFinite),
             child: Column(
               children: [
                 if (this.showTableHeaderBar)
@@ -241,12 +246,12 @@ class ApiroTableWidget extends StatelessWidget {
   Widget _getSFDataTable() {
     return Consumer(builder: (context, ref, child) {
       var item = ref.watch(refreshDataTableNotifier);
-      print(item.toString()+".>>>>>>");
       return Column(
         children: [
           Container(
             height: tableHeight - 120,
-            width: double.maxFinite,
+            width:
+                kIsWeb ? MediaQuery.of(context).size.width : double.maxFinite,
             child: SfDataGrid(
                 source: _tableDataGridSource(),
                 frozenColumnsCount: ref.read(frozenColumnCountNotifier),
