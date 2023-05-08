@@ -84,7 +84,7 @@ class _AppTextFieldState extends State<AppTextField> {
         child: IgnorePointer(
           ignoring: widget.onTap != null,
           child: TextFormField(
-              // focusNode: widget.focusNode ?? FocusNode(),
+              focusNode: widget.focusNode ?? FocusNode(),
               autofocus: widget.autoFocus,
               onEditingComplete: widget.onEditingComplete ?? () {},
               enabled: widget.editable,

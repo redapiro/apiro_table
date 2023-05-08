@@ -43,7 +43,6 @@ class CustomPaginationWidget extends StatelessWidget {
     required this.jumpToPageTextFieldFocusNode,
     required this.perPageRowCountNotifier,
   }) : super(key: key) {
-    jumpToPageNumberController.text = context?.riverPodReadStateNotifier(paginationPageNumberNotifier).toString() ?? '0';
 
     rowCountPerPageList = this.pageNumbers;
     Future.delayed(Duration(milliseconds: 300), () {
@@ -74,32 +73,32 @@ class CustomPaginationWidget extends StatelessWidget {
       body: Consumer(
 
           builder: (context, value, child) {
-            return Container(
-                height: 50,
-                child: Column(
-                  children: [
-                    Container(
-                        height: 0.5,
-                        color: _themeData!.disabledColor,
-                        width: double.maxFinite),
-                    Expanded(child: Container()),
-                    Container(
-                        margin: EdgeInsets.only(left: 10, right: 10),
-                        width: double.maxFinite,
-                        child: Row(children: [
-                          Expanded(
-                            child: Container(
-                              child:  Row(
-                                  children: [
-                                    Expanded(child:   _getPaginationPagesWidget(value)
-                                    ),
-                                    _getJumpToPageNumberWidget(),
-                                    Container(child: _getPageNumberDropDown()),
-                                    Expanded(child:Container()),
-                                  ],
-                                ),
-                              
-                            ),
+        jumpToPageNumberController.text =
+            value.read(paginationPageNumberNotifier).toString();
+        return Container(
+            height: 50,
+            child: Column(
+              children: [
+                Container(
+                    height: 0.5,
+                    color: _themeData!.disabledColor,
+                    width: double.maxFinite),
+                Expanded(child: Container()),
+                Container(
+                    margin: EdgeInsets.only(left: 10, right: 10),
+                    width: double.maxFinite,
+                    child: Row(children: [
+                      Expanded(
+                        child: Container(
+                          child: Row(
+                            children: [
+                              Expanded(child: _getPaginationPagesWidget(value)),
+                              _getJumpToPageNumberWidget(),
+                              Container(child: _getPageNumberDropDown()),
+                              Expanded(child: Container()),
+                            ],
+                          ),
+                        ),
                           ),
                         ])),
                     Expanded(child: Container()),
@@ -141,8 +140,7 @@ class CustomPaginationWidget extends StatelessWidget {
   }
 
   Widget _getJumpToPageNumberWidget() {
-    return Container(
-        child: Row(
+    return Row(
       children: [
         Text("Page"),
         Container(
@@ -159,7 +157,7 @@ class CustomPaginationWidget extends StatelessWidget {
           ),
         )
       ],
-    ));
+    );
   }
 
   Widget _getPaginationPagesWidget(WidgetRef ref) {

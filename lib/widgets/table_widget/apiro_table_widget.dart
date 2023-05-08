@@ -355,8 +355,8 @@ class ApiroTableWidget extends StatelessWidget {
                           _onItemPerPageChange();
                         },
                         jumpToPageTextFieldFocusNode:
-                            this._jumpToPageTextFiledFocusNode,
-                        jumpToPageNumberController: this._jumpToPageController,
+                            _jumpToPageTextFiledFocusNode,
+                        jumpToPageNumberController: _jumpToPageController,
                         onPageNumberSelect: (selectedPageNumber) {
                           _onPageNumberDropDownSelect(selectedPageNumber);
                         },
@@ -364,6 +364,7 @@ class ApiroTableWidget extends StatelessWidget {
                           _onPreviousClick();
                         },
                         onTextFieldSubmit: (data) {
+
                           _onTextFiledSubmit();
                         },
                         pageNumbers: perPageRowCountList,
@@ -501,15 +502,20 @@ class ApiroTableWidget extends StatelessWidget {
   }
 
   void _onTextFiledSubmit() {
+    print('step 1');
     if (_jumpToPageTextFiledFocusNode.hasFocus) {
+      print('step 2');
       _jumpToPageTextFiledFocusNode.unfocus();
+      print('step 3');
 
       if (int.parse(_jumpToPageController.text.trim()) >
           this.totalNumberOfPages) {
+        print('step 4');
         showSnackBarWithMessage(
             "Page number is not valid" + this.totalNumberOfPages.toString(),
             context: context);
       } else {
+        print('step 5');
         context.riverPodReadStateNotifier(paginationPageNumberNotifier.notifier).updateValue(
             int.parse(_jumpToPageController.text.trim()));
         this.onPageNumberTextFieldSubmit(
