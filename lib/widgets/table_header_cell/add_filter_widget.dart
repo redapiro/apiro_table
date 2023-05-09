@@ -90,7 +90,7 @@ class _AddFilterWidget extends State<AddFilterWidget> {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         AppTextField(autoFocus: false,
-          label: "",
+          label: "Filter",
           textFieldHeight: 40,
           controller: _addFilterTextController,
           backgroundColor: Colors.transparent,
