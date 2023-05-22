@@ -111,12 +111,13 @@ class TableManager {
 
     //refreshTable
     //remove all pinning and hidden column and apply them again
-    applyHideColumnRowAndColumnPinningIfExists(context);
+
     // this.refreshDataTable(context);
     //
     // //Updatetable filters
       WidgetsBinding.instance.addPostFrameCallback((timeStamp)   {
         this.refreshDataTable(context);
+        // applyHideColumnRowAndColumnPinningIfExists(context);
       context
           .riverPodReadStateNotifier(filterListUpdateNotifier.notifier)
           .toggleValue();

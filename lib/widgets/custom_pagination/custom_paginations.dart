@@ -23,10 +23,10 @@ class CustomPaginationWidget extends StatelessWidget {
   final Function(String) onTextFieldSubmit;
   final List<String> pageNumbers;
   final int totalNumberOfPages;
+
   // final ValueNotiAppNotifiers.getInstance().paginationPageNumberNotifier;
   final ValueNotifier perPageRowCountNotifier;
 
-  
 
   CustomPaginationWidget({
     Key? key,
@@ -43,13 +43,12 @@ class CustomPaginationWidget extends StatelessWidget {
     required this.jumpToPageTextFieldFocusNode,
     required this.perPageRowCountNotifier,
   }) : super(key: key) {
-
     rowCountPerPageList = this.pageNumbers;
     Future.delayed(Duration(milliseconds: 300), () {
-      if (!isListAlreadyScrolled) {
-        _scrollToIndex(
-            context!.riverPodReadStateNotifier(paginationPageNumberNotifier));
-      }
+      // if (!isListAlreadyScrolled) {
+      //   _scrollToIndex(
+      //       context!.riverPodReadStateNotifier(paginationPageNumberNotifier));
+      // }
     });
   }
 
@@ -71,34 +70,34 @@ class CustomPaginationWidget extends StatelessWidget {
 
     return Scaffold(
       body: Consumer(
-
           builder: (context, value, child) {
-        jumpToPageNumberController.text =
-            value.read(paginationPageNumberNotifier).toString();
-        return Container(
-            height: 50,
-            child: Column(
-              children: [
-                Container(
-                    height: 0.5,
-                    color: _themeData!.disabledColor,
-                    width: double.maxFinite),
-                Expanded(child: Container()),
-                Container(
-                    margin: EdgeInsets.only(left: 10, right: 10),
-                    width: double.maxFinite,
-                    child: Row(children: [
-                      Expanded(
-                        child: Container(
-                          child: Row(
-                            children: [
-                              Expanded(child: _getPaginationPagesWidget(value)),
-                              _getJumpToPageNumberWidget(),
-                              Container(child: _getPageNumberDropDown()),
-                              Expanded(child: Container()),
-                            ],
-                          ),
-                        ),
+            jumpToPageNumberController.text =
+                value.watch(paginationPageNumberNotifier).toString();
+            return Container(
+                height: 50,
+                child: Column(
+                  children: [
+                    Container(
+                        height: 0.5,
+                        color: _themeData!.disabledColor,
+                        width: double.maxFinite),
+                    Expanded(child: Container()),
+                    Container(
+                        margin: EdgeInsets.only(left: 10, right: 10),
+                        width: double.maxFinite,
+                        child: Row(children: [
+                          Expanded(
+                            child: Container(
+                              child: Row(
+                                children: [
+                                  Expanded(
+                                      child: _getPaginationPagesWidget(value)),
+                                  _getJumpToPageNumberWidget(),
+                                  Container(child: _getPageNumberDropDown()),
+                                  Expanded(child: Container()),
+                                ],
+                              ),
+                            ),
                           ),
                         ])),
                     Expanded(child: Container()),
@@ -163,51 +162,53 @@ class CustomPaginationWidget extends StatelessWidget {
   Widget _getPaginationPagesWidget(WidgetRef ref) {
     return Row(children: [
       Row(
-            children: [
-              Text("Page",
-                  style: _themeData!.textTheme.bodyLarge!
-                      .copyWith(color: AppColors.disabledColor)),
-              _getPagingContainerWith("<",
-                  clickable: ref.watch(paginationPageNumberNotifier) >
-                      1,
-                  onPress: this.onPreviousClick),
-            ],
-          ),
-      Expanded(child:Container(height: 30, child: ListView.builder(
-        controller: _scrollController,
-        scrollDirection: Axis.horizontal,
-                                           itemCount: this.totalNumberOfPages,itemBuilder: (context, index) {
-                                             Color pageNumberBckColor =
+        children: [
+          Text("Page",
+              style: _themeData!.textTheme.bodyLarge!
+                  .copyWith(color: AppColors.disabledColor)),
+          _getPagingContainerWith("<",
+              clickable: ref.watch(paginationPageNumberNotifier) >
+                  1,
+              onPress: this.onPreviousClick),
+        ],
+      ),
+      Expanded(child: Container(height: 30, child: ListView.builder(
+          controller: _scrollController,
+          scrollDirection: Axis.horizontal,
+          itemCount: this.totalNumberOfPages, itemBuilder: (context, index) {
+        Color pageNumberBckColor =
         ((ref.watch(paginationPageNumberNotifier) - 1) ==
-                index)
+            index)
             ? AppColors.appBlueColor
             : Colors.transparent;
-                                      return InkWell(
+        return InkWell(
           onTap: () {
-            ref.watch(paginationPageNumberNotifier.notifier).updateValue(index+1);
+            ref.read(paginationPageNumberNotifier.notifier).updateValue(
+                index + 1);
             isListAlreadyScrolled = false;
             this.onPageNumberClick(index + 1);
           },
           child: Container(
             height: 28,
             width: 40,
-              padding: EdgeInsets.all(8),
-              decoration: BoxDecoration(
-                  color: pageNumberBckColor,
-                  border: Border.all(color: pageNumberBckColor, width: 0.5),
-                  // boxShadow: AppColors.boxShadow,
-                  shape: BoxShape.circle),
-                  
-              child: Center(child:Text("${index + 1}",
-                  style: _getSelectedPageTextStyle(index,ref))),),
-        );}),)),
-        _getPagingContainerWith(">",
-              clickable: ((this.totalNumberOfPages > 1) &&
-                  ref.watch(paginationPageNumberNotifier) <
-                      this.totalNumberOfPages),
-              onPress: onNextClick),
-              
-        ]);
+            padding: EdgeInsets.all(8),
+            decoration: BoxDecoration(
+                color: pageNumberBckColor,
+                border: Border.all(color: pageNumberBckColor, width: 0.5),
+                // boxShadow: AppColors.boxShadow,
+                shape: BoxShape.circle),
+
+            child: Center(child: Text("${index + 1}",
+                style: _getSelectedPageTextStyle(index, ref))),),
+        );
+      }),)),
+      _getPagingContainerWith(">",
+          clickable: ((this.totalNumberOfPages > 1) &&
+              ref.watch(paginationPageNumberNotifier) <
+                  this.totalNumberOfPages),
+          onPress: onNextClick),
+
+    ]);
     // Color pageNumberBckColor =
     //     ((AppNotifiers.getInstance().paginationPageNumberNotifier.value - 1) ==
     //             index)
@@ -258,11 +259,11 @@ class CustomPaginationWidget extends StatelessWidget {
     // );
   }
 
-  TextStyle _getSelectedPageTextStyle(int index,WidgetRef ref) {
+  TextStyle _getSelectedPageTextStyle(int index, WidgetRef ref) {
     return _themeData!.textTheme.bodyLarge!.copyWith(
-        color: ((ref.watch(paginationPageNumberNotifier)-
-                    1) ==
-                index)
+        color: ((ref.watch(paginationPageNumberNotifier) -
+            1) ==
+            index)
             ? AppColors.scaffoldBackgroundColor
             : AppColors.disabledColor);
   }
@@ -295,15 +296,14 @@ class CustomPaginationWidget extends StatelessWidget {
   void _ontextFieldSubmit() {
     this.onTextFieldSubmit(jumpToPageNumberController.text.trim());
     isListAlreadyScrolled = false;
-    
   }
 
   // Define the function that scroll to an item
   void _scrollToIndex(index) {
-    _scrollController.animateTo((40 * (index -1)).toDouble(),
-        duration: const Duration(milliseconds: 300), curve: Curves.bounceIn).then((value) {
-          isListAlreadyScrolled = true;
-        });
-        
+    _scrollController.animateTo((40 * (index - 1)).toDouble(),
+        duration: const Duration(milliseconds: 300), curve: Curves.bounceIn)
+        .then((value) {
+      isListAlreadyScrolled = true;
+    });
   }
 }
