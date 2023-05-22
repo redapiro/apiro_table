@@ -1,5 +1,6 @@
 import 'package:apiro_table/utils/app_colors.dart';
 import 'package:apiro_table/utils/common_methods.dart';
+import 'package:apiro_table/utils/controller/global_controllers.dart';
 import 'package:apiro_table/utils/table_manager/table_manager.dart';
 import 'package:apiro_table/widgets/custom_widgets/adaptive_outlined_button.dart';
 import 'package:flutter/material.dart';
@@ -91,7 +92,7 @@ class HiddenColumnDropDown extends StatelessWidget {
                               .copyWith(color: AppColors.dividerColor)),
                           TextSpan(
                               text:
-                                  " (${TableManager.getInstance().hiddenColumnIds.length})",
+                                  " (${data.watch(hiddenColumnNumberNotifier)})",
                               style: _themeData.textTheme.titleSmall!
                               .copyWith(color: AppColors.appBlueColor))
                         ])),

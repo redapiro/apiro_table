@@ -76,7 +76,7 @@ class ApiroTableWidget extends StatelessWidget {
 
     _tableManager.hiddenColumnIds =
         List<Map<String, dynamic>>.from(this.hiddenColumnInfos);
-    _tableManager.onRowpinning = this.onPinRow;
+    _tableManager.onRowPinning = this.onPinRow;
     _tableManager.tableColumnFilterList = List<String>.from(this.filterList);
     print("setting column pinning info");
     this.orderColumnsFromRemoteData();
@@ -245,7 +245,7 @@ class ApiroTableWidget extends StatelessWidget {
 
   Widget _getSFDataTable() {
     return Consumer(builder: (context, ref, child) {
-      var item = ref.watch(refreshDataTableNotifier);
+      ref.watch(refreshDataTableNotifier);
       return Column(
         children: [
           Container(
@@ -264,26 +264,14 @@ class ApiroTableWidget extends StatelessWidget {
                 gridLinesVisibility: GridLinesVisibility.none,
                 columns:
                     List.generate(_tableManager.columnNames.length, (index) {
-                  //Getting column info to decide whether we need to pin or unpin the column
                   ColumnPinningInfo colInfo;
-                  // if(_appNotifiers.frozenColumnCountNotifier.value == _tableManager.pinnedColumnInfo.length) {
-
-                  //   if(!AppNotifiers.getInstance().isRefreshingTable) {
-                  //   print("refreshing table --- ${AppNotifiers.getInstance().isRefreshingTable}");
-                  //   _appNotifiers.frozenColumnCountNotifier.value = 0;
-
-                  //   }
-                  // }
-                  // if(_appNotifiers.frozenColumnCountNotifier.value != _tableManager.pinnedColumnInfo.length || AppNotifiers.getInstance().isRefreshingTable) {
                   colInfo = _tableManager.pinnedColumnInfo.firstWhere(
                       (element) =>
                           element.columnId == _tableManager.columnIds[index],
                       orElse: () {
                     return ColumnPinningInfo();
                   });
-                  // } else {
-                  //   colInfo = ColumnPinningInfo();
-                  // }
+
                   return GridColumn(
                     minimumWidth: 150,
                     columnName: _tableManager.columnNames[index],
@@ -384,7 +372,7 @@ class ApiroTableWidget extends StatelessWidget {
 
   TableDataGrid _tableDataGridSource() {
     return TableDataGrid(
-        context: this.context, gridRow: _tableManager.datagridRow);
+        context: this.context, gridRow: _tableManager.dataGridRow);
   }
 
   //On click methods
@@ -407,8 +395,6 @@ class ApiroTableWidget extends StatelessWidget {
     _tableManager.pinnedColumnInfo = [];
     for (var i = 0; i < this.pinnedColumnInfo.length; i++) {
       String key = this.pinnedColumnInfo[i].keys.toList()[0];
-      // _tableManager.singleColumnPinning(
-      //     this.pinnedColumnInfo[i][key], key, false);
       _tableManager.pinnedColumnInfo.add(ColumnPinningInfo.fromJson({
         "column_id": key,
         "column_name": key,
@@ -472,10 +458,10 @@ class ApiroTableWidget extends StatelessWidget {
       _tableManager.hiddenColumnIds = [];
 
       for (var colData in tempDataList) {
-        var celssData = colData["cells_data"];
+        var cellsData = colData["cells_data"];
         colData["cells_data"] = [];
         tempHiddenData.add(colData);
-        colData["cells_data"] = celssData;
+        colData["cells_data"] = cellsData;
         _tableManager.hiddenColumnIds.add(colData);
       }
       updateDataOnHideColumn!(tempHiddenData.map((e) {
@@ -589,7 +575,7 @@ class ApiroTableWidget extends StatelessWidget {
       _tableManager.rowData = List<Map<String, dynamic>>.from(this.rowData);
 
       //Data grid row
-      _tableManager.datagridRow = [];
+      _tableManager.dataGridRow = [];
       List<DataGridRow> rowss = this.gridRow.map((e) {
         return DataGridRow(
             cells: List.generate(e.getCells().length, (index) {
@@ -598,10 +584,10 @@ class ApiroTableWidget extends StatelessWidget {
               columnName: this.columnIds[index]);
         }));
       }).toList();
-      _tableManager.datagridRow = List<DataGridRow>.from(this.gridRow);
+      _tableManager.dataGridRow = List<DataGridRow>.from(this.gridRow);
 
-      _tableManager.staticDatagridRow = [];
-      _tableManager.staticDatagridRow = List<DataGridRow>.from(rowss);
+      _tableManager.staticDataGridRow = [];
+      _tableManager.staticDataGridRow = List<DataGridRow>.from(rowss);
     } else {
       _getColumnData();
       _getDataGridRow();
@@ -699,7 +685,7 @@ class ApiroTableWidget extends StatelessWidget {
     _tableManager.rowData = List<Map<String, dynamic>>.from(tableRowData);
 
     //Data grid row
-    _tableManager.datagridRow = [];
+    _tableManager.dataGridRow = [];
     List<DataGridRow> rowss = gridRows.map((e) {
       return DataGridRow(
           cells: List.generate(e.getCells().length, (index) {
@@ -709,10 +695,10 @@ class ApiroTableWidget extends StatelessWidget {
       }));
     }).toList();
 
-    _tableManager.datagridRow = List<DataGridRow>.from(gridRows);
+    _tableManager.dataGridRow = List<DataGridRow>.from(gridRows);
 
-    _tableManager.staticDatagridRow = [];
-    _tableManager.staticDatagridRow = List<DataGridRow>.from(rowss);
+    _tableManager.staticDataGridRow = [];
+    _tableManager.staticDataGridRow = List<DataGridRow>.from(rowss);
 
     return List<DataGridRow>.from(gridRows);
   }

@@ -21,8 +21,8 @@ class TableManager {
   List<String> staticColumnsData = [];
   List<String> columnIds = [];
   List<String> staticColumnIds = [];
-  List<DataGridRow> datagridRow = [];
-  List<DataGridRow> staticDatagridRow = [];
+  List<DataGridRow> dataGridRow = [];
+  List<DataGridRow> staticDataGridRow = [];
 
   //Row data varaibles
   List<Map<String, dynamic>> rowData = [];
@@ -39,7 +39,7 @@ class TableManager {
   //Pinned Row data
   List<RowPinningInfo> pinnedRowInfo = [];
   List<Map<String, dynamic>> columnOrderingDataInfo = [];
-  Function()? onRowpinning;
+  Function()? onRowPinning;
 
   //Filters working
   void removeAllFilter(BuildContext context) {
@@ -56,10 +56,10 @@ class TableManager {
       this.tableColumnFilterList = [];
       this.rowData = [];
 
-      this.datagridRow = [];
+      this.dataGridRow = [];
 
       this.rowData = List<Map<String, dynamic>>.from(this.staticRowData);
-      this.datagridRow = this.decoupleCellObjects();
+      this.dataGridRow = this.decoupleCellObjects();
 
       this.columnIds = [];
       this.columnNames = [];
@@ -87,7 +87,7 @@ class TableManager {
     }
 
     this.rowData = List<Map<String, dynamic>>.from(this.staticRowData);
-    this.datagridRow = this.decoupleCellObjects();
+    this.dataGridRow = this.decoupleCellObjects();
 
     for (var data in rowData) {
       if (filterableList.any((element) {
@@ -98,12 +98,12 @@ class TableManager {
             .contains(element.toString().toLowerCase().trim());
       })) {
         tempRowData.add(data);
-        _dataGridRow.add(this.datagridRow[rowIndex]);
+        _dataGridRow.add(this.dataGridRow[rowIndex]);
       }
       rowIndex++;
     }
-    this.datagridRow = [];
-    this.datagridRow = this.decoupleCellObjects(gridRows: _dataGridRow);
+    this.dataGridRow = [];
+    this.dataGridRow = this.decoupleCellObjects(gridRows: _dataGridRow);
     this.rowData = [];
     this.rowData = List<Map<String, dynamic>>.from(tempRowData);
 
@@ -131,7 +131,7 @@ class TableManager {
     for (var row in this.rowData) {
       //Remove col data fro rows
       row.remove(columnId);
-      if (this.datagridRow.length > 0) {
+      if (this.dataGridRow.length > 0) {
         int colIndex = this.columnIds.indexOf(columnId);
         if (colIndex != -1) {
           DataGridCell? gridCell =
@@ -164,6 +164,12 @@ class TableManager {
         });
       } else {}
     }
+    if (pinnedColumnInfo.any((element) => element.columnId == columnId)) {
+      singleColumnPinning(colIndex, columnId, true, context);
+    }
+    context
+        .riverPodReadStateNotifier(hiddenColumnNumberNotifier.notifier)
+        .increment();
 
     //refresh the table
     this.refreshDataTable(context);
@@ -174,7 +180,7 @@ class TableManager {
 
   List<DataGridRow> decoupleCellObjects({List<DataGridRow>? gridRows}) {
     List<DataGridRow> rowss =
-        (gridRows != null ? gridRows : this.staticDatagridRow).map((e) {
+    (gridRows != null ? gridRows : this.staticDataGridRow).map((e) {
       return DataGridRow(
           cells: List.generate(e.getCells().length, (index) {
         return DataGridCell(
@@ -196,13 +202,13 @@ class TableManager {
   DataGridCell? removeDataGridRowForColumn(
       int colIndex, int rowIndex, String colId) {
     List<DataGridCell<dynamic>> dataGridCells =
-        datagridRow[rowIndex].getCells();
+        dataGridRow[rowIndex].getCells();
     DataGridCell? cell;
 
     if (dataGridCells[colIndex].columnName == colId) {
       cell = dataGridCells.removeAt(colIndex);
 
-      datagridRow[rowIndex] = DataGridRow(cells: dataGridCells);
+      dataGridRow[rowIndex] = DataGridRow(cells: dataGridCells);
     }
 
     return cell;
@@ -253,19 +259,26 @@ class TableManager {
         .removeWhere((element) => element.keys.toList().contains(columnId));
     this.rowData = [];
 
-    this.datagridRow = [];
+    this.dataGridRow = [];
 
     this.rowData = List<Map<String, dynamic>>.from(this.staticRowData);
-    this.datagridRow = this.decoupleCellObjects();
+    this.dataGridRow = this.decoupleCellObjects();
 
     this.columnIds = [];
     this.columnNames = [];
 
     this.columnIds = List<String>.from(this.staticColumnIds);
     this.columnNames = List<String>.from(this.staticColumnsData);
+    context
+        .riverPodReadStateNotifier(hiddenColumnNumberNotifier.notifier)
+        .decrement();
 
     ///refresh table
     this.applyAnyFilterHiddenColumnRowAndColumnPinningIfExists(context);
+    context
+        .riverPodReadStateNotifier(hiddenColumnNumberNotifier.notifier)
+        .updateValue(hiddenColumnIds.length);
+
     context
         .riverPodReadStateNotifier(hiddenColumnNotifier.notifier)
         .updateValue(this.hiddenColumnIds.length.toString());
@@ -302,14 +315,17 @@ class TableManager {
       this.columnNames = List<String>.from(this.staticColumnsData);
       this.rowData = [];
       this.rowData = List<Map<String, dynamic>>.from(this.staticRowData);
-      this.datagridRow = [];
-      this.datagridRow = List<DataGridRow>.from(this.decoupleCellObjects());
+      this.dataGridRow = [];
+      this.dataGridRow = List<DataGridRow>.from(this.decoupleCellObjects());
 
       //apply if any row column pinning and filters are there
       this.applyAnyFilterHiddenColumnRowAndColumnPinningIfExists(context);
       context
           .riverPodReadStateNotifier(hiddenColumnNotifier.notifier)
           .updateValue(this.hiddenColumnIds.length.toString());
+      context
+          .riverPodReadStateNotifier(hiddenColumnNumberNotifier.notifier)
+          .updateValue(hiddenColumnIds.length);
 
       //refresh table
       this.refreshDataTable(context);
@@ -322,11 +338,11 @@ class TableManager {
     int colIndex = this.columnIds.indexOf(columnId);
     for (var rowsData in this.rowData) {
       List<DataGridCell<dynamic>> dataGridCells =
-          datagridRow[rowIndex].getCells();
+          dataGridRow[rowIndex].getCells();
       var value = colIndex != -1 ? dataGridCells.removeAt(colIndex) : null;
       if (value != null) {
         dataGridCells.insert(sendTo > 0 ? sendTo - 1 : 0, value);
-        datagridRow[rowIndex] = DataGridRow(cells: dataGridCells);
+        dataGridRow[rowIndex] = DataGridRow(cells: dataGridCells);
       }
 
       rowIndex++;
@@ -374,10 +390,10 @@ class TableManager {
         rowActData.remove(columnId);
 
         List<DataGridCell<dynamic>> dataGridCells =
-            datagridRow[rowIndex].getCells();
+            dataGridRow[rowIndex].getCells();
         var value = dataGridCells.removeAt(colIndex);
         dataGridCells.insert(insertIndex, value);
-        datagridRow[rowIndex] = DataGridRow(cells: dataGridCells);
+        dataGridRow[rowIndex] = DataGridRow(cells: dataGridCells);
 
         rowIndex++;
       }
@@ -422,10 +438,10 @@ class TableManager {
       int rowIndex = 0;
       for (var rowActData in tempRowData) {
         List<DataGridCell<dynamic>> dataGridCells =
-            datagridRow[rowIndex].getCells();
+            dataGridRow[rowIndex].getCells();
         var value = dataGridCells.removeAt(colIndex);
         dataGridCells.insert(insertIndex, value);
-        datagridRow[rowIndex] = DataGridRow(cells: dataGridCells);
+        dataGridRow[rowIndex] = DataGridRow(cells: dataGridCells);
 
         rowIndex++;
       }
@@ -454,41 +470,12 @@ class TableManager {
   void singleRowPinning(
       int currentPosition, bool isUnPin, BuildContext context) {
     if (!isUnPin) {
-      // int insertIndex = this.pinnedRowInfo.length > 0
-      //     ? this.pinnedRowInfo.length == datagridRow.length
-      //         ? this.pinnedRowInfo.length - 1
-      //         : this.pinnedRowInfo.length
-      //     : 0;
-
-      // var value = datagridRow.removeAt(currentPosition);
-      // datagridRow.insert(insertIndex, value);
-      // RowPinningInfo info = RowPinningInfo();
-      // info.currentPosition = insertIndex;
-      // info.lastPosition = currentPosition;
-
-      // this.pinnedRowInfo.add(info);
-      //Notify client about pinned or unpinned row
       context
           .riverPodReadStateNotifier(frozenRowCountNotifier.notifier)
           .increment();
 
     } else {
-      // int insertIndex = this.pinnedRowInfo.length > 0
-      //     ? (this
-      //                 .pinnedRowInfo
-      //                 .firstWhere((element) =>
-      //                     element.currentPosition == currentPosition)
-      //                 .lastPosition ??
-      //             0) +
-      //         (this.pinnedRowInfo.length > 1 ? this.pinnedRowInfo.length : 0)
-      //     : 0;
 
-      // var value = datagridRow.removeAt(currentPosition);
-      // datagridRow.insert(insertIndex, value);
-      // this
-      //     .pinnedRowInfo
-      //     .removeWhere((element) => element.currentPosition == currentPosition);
-      //Notify client about pinned or unpinned row
 
       context
           .riverPodReadStateNotifier(frozenRowCountNotifier.notifier)
@@ -549,8 +536,8 @@ class TableManager {
 
     //Pin rows if there are any
     this.pinnedRowInfo = [];
-    if (this.onRowpinning != null) {
-      this.onRowpinning!();
+    if (this.onRowPinning != null) {
+      this.onRowPinning!();
     }
     // if (tempRowInfos.length > 0) {
     //   for (var pinnedROwInfos in tempRowInfos) {
@@ -608,8 +595,8 @@ class TableManager {
     //Pin rows if there are any
     var tempRowInfos = this.pinnedRowInfo.map((e) => e.copyFrom()).toList();
     this.pinnedRowInfo = [];
-    if (this.onRowpinning != null) {
-      this.onRowpinning!();
+    if (this.onRowPinning != null) {
+      this.onRowPinning!();
     }
 
     // if (tempRowInfos.length > 0) {
@@ -630,7 +617,7 @@ class TableManager {
   void updateCellValue(int rowIndex, int colIndex, String value,
       Function() onCellDoubleClick, BuildContext context) {
     this.rowData[rowIndex][this.columnIds[colIndex]] = value;
-    List<DataGridCell> cells = this.datagridRow[rowIndex].getCells();
+    List<DataGridCell> cells = this.dataGridRow[rowIndex].getCells();
 
     cells[colIndex] = DataGridCell(
         columnName: this.columnNames[colIndex],
@@ -640,7 +627,7 @@ class TableManager {
           colIndex: colIndex,
           title: rowData[rowIndex][this.columnIds[colIndex]].toString(),
         ));
-    this.datagridRow[rowIndex] = DataGridRow(cells: cells);
+    this.dataGridRow[rowIndex] = DataGridRow(cells: cells);
     this.refreshDataTable(context);
   }
 

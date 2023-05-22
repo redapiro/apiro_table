@@ -112,3 +112,16 @@ class ShouldShowFilterUI extends StateNotifier<bool> {
 
   void toggleValue() => state = !state;
 }
+
+final hiddenColumnNumberNotifier =
+StateNotifierProvider<HiddenColumnNumberNotifier, int>((ref) {
+  return HiddenColumnNumberNotifier();
+});
+
+class HiddenColumnNumberNotifier extends StateNotifier<int> {
+  HiddenColumnNumberNotifier() : super(0);
+
+  void updateValue(int val) => state = val;
+  void increment ()=> state +=1;
+  void decrement ()=> state -=1;
+}

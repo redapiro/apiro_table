@@ -18,7 +18,7 @@ class TableDataGrid extends DataGridSource {
       this.evenRowColor});
 
   @override
-  List<DataGridRow> get rows => TableManager.getInstance().datagridRow;
+  List<DataGridRow> get rows => TableManager.getInstance().dataGridRow;
 
   @override
   DataGridRowAdapter buildRow(DataGridRow row) {
