@@ -5,6 +5,7 @@ import 'package:apiro_table/utils/app_colors.dart';
 import 'package:apiro_table/utils/controller/global_controllers.dart';
 import 'package:apiro_table/utils/provider_helper.dart';
 import 'package:apiro_table/utils/table_manager/table_manager.dart';
+import 'package:apiro_table/widgets/custom_selectable_text.dart';
 import 'package:apiro_table/widgets/custom_widgets/adaptive_elevated_button.dart';
 import 'package:apiro_table/widgets/custom_widgets/custom_drop_down.dart';
 import 'package:apiro_table/widgets/custom_widgets/custom_pop_up_menu_item.dart';
@@ -164,21 +165,14 @@ class TableColumnHeaderPopMenuButtonWidget extends StatelessWidget {
                 children: [
                   Expanded(
                     child: Tooltip(
-                      message: this.toolTipName,
-                      child: (this.selectableText)
-                          ? SelectableText(this.title,
-                              textAlign: TextAlign.center,
-                              style: _themeData!.textTheme.titleSmall!.copyWith(
-                                  color: value.watch(isPopUpButtonPressed)
-                                      ? AppColors.appBlueColor
-                                      : AppColors.dividerColor))
-                          : Text(this.title,
-                              textAlign: TextAlign.center,
-                              style: _themeData!.textTheme.titleSmall!.copyWith(
-                                  color: value.watch(isPopUpButtonPressed)
-                                      ? AppColors.appBlueColor
-                                      : AppColors.dividerColor)),
-                    ),
+                        message: this.toolTipName,
+                        child: CustomSelectableText(this.title,
+                            textAlign: TextAlign.center,
+                            style: _themeData!.textTheme.titleSmall!.copyWith(
+                                color: value.watch(isPopUpButtonPressed)
+                                    ? AppColors.appBlueColor
+                                    : AppColors.dividerColor),
+                            isSelectableText: selectableText)),
                   ),
                   SizedBox(width: 3),
                   _getTableColumnFilterIcon(),

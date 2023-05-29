@@ -76,6 +76,11 @@ class TableManager {
           .toggleValue();
     }
   }
+  void upPinAllItems(BuildContext context){
+    pinnedColumnInfo = [];
+    context.riverPodReadStateNotifier(frozenColumnCountNotifier.notifier).updateValue(0);
+    refreshDataTable(context);
+  }
 
   void addFilterToColumn(String columnId, BuildContext context) {
     List<Map<String, dynamic>> tempRowData = [];

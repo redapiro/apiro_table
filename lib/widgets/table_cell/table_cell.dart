@@ -5,6 +5,8 @@ import 'package:apiro_table/utils/table_manager/table_manager.dart';
 import 'package:apiro_table/widgets/custom_widgets/app_text_field.dart';
 import 'package:flutter/material.dart';
 
+import '../custom_selectable_text.dart';
+
 class TableGridCell extends StatelessWidget {
   final String title;
   final TextStyle? style;
@@ -69,23 +71,16 @@ class TableGridCell extends StatelessWidget {
                   key: _cellKey,
                   // color: cellStatus.getBackgroundColorForTableCellStatus(),
                   alignment: AlignmentDirectional.center,
-                  child: this.isSelectable
-                      ? (SelectableText(
-                          this.title,
-                          textAlign: TextAlign.center,
-                        )
-                          // style: _themeData.textTheme.subtitle2!.copyWith(
-                          //     color: this
-                          //         .cellStatus
-                          //         .getTextColorFromTableCellStatus()))
-                          )
-                      : (Text(this.title,
-                          textAlign: TextAlign.center,
-                          style: _themeData.textTheme.titleSmall!.copyWith(
-                              // color: this
-                              //     .cellStatus
-                              //     .getTextColorFromTableCellStatus()
-                              )))));
+                  child: CustomSelectableText(
+                    this.title,
+                    textAlign: TextAlign.center,
+                    isSelectableText: isSelectable,
+                  )
+                      // style: _themeData.textTheme.subtitle2!.copyWith(
+                      //     color: this
+                      //         .cellStatus
+                      //         .getTextColorFromTableCellStatus()))
+                      ));
         });
   }
 
@@ -148,7 +143,7 @@ class TableGridCell extends StatelessWidget {
                   padding: EdgeInsets.symmetric(vertical: 5, horizontal: 5),
                   child: Row(
                     children: [
-                      Text(
+                     CustomSelectableText(
                         Constants.cellPopupMenuOptions[index],
                         style: _themeData.textTheme.titleMedium!
                             .copyWith(color: AppColors.dividerColor),

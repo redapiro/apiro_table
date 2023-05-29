@@ -180,6 +180,7 @@ class HiddenColumnDropDown extends StatelessWidget {
 
   void _clearAllFiltersPressed(BuildContext context) {
     TableManager.getInstance().removeAllFilter(context);
+    TableManager.getInstance().upPinAllItems(context);
     this.clearAllPress!();
   }
 }
