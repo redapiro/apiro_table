@@ -76,10 +76,41 @@ class TableManager {
           .toggleValue();
     }
   }
-  void upPinAllItems(BuildContext context){
-    pinnedColumnInfo = [];
-    context.riverPodReadStateNotifier(frozenColumnCountNotifier.notifier).updateValue(0);
-    refreshDataTable(context);
+
+  void upPinAllItems(BuildContext context) {
+    if (context.riverPodReadStateNotifier(frozenColumnCountNotifier) != 0) {
+      var tempPinnedColumnInfo = pinnedColumnInfo;
+
+      for (int i = 0; i < tempPinnedColumnInfo.length; i++) {
+        var tempRowData = List<Map<String, dynamic>>.from(this.rowData);
+        int insertIndex = tempPinnedColumnInfo[i].lastPosition!;
+
+        int rowIndex = 0;
+        for (var rowActData in tempRowData) {
+          List<DataGridCell<dynamic>> dataGridCells =
+              dataGridRow[rowIndex].getCells();
+          var value =
+              dataGridCells.removeAt(tempPinnedColumnInfo[i].currentPosition!);
+          dataGridCells.insert(insertIndex, value);
+          dataGridRow[rowIndex] = DataGridRow(cells: dataGridCells);
+          rowIndex++;
+        }
+
+        var value =
+            this.columnNames.removeAt(tempPinnedColumnInfo[i].currentPosition!);
+        this.columnNames.insert(insertIndex, value);
+        value =
+            this.columnIds.removeAt(tempPinnedColumnInfo[i].currentPosition!);
+        this.columnIds.insert(insertIndex, value);
+
+        // pinnedColumnInfo.removeAt(i);
+      }
+      context
+          .riverPodReadStateNotifier(frozenColumnCountNotifier.notifier)
+          .updateValue(0);
+      pinnedColumnInfo = [];
+      refreshDataTable(context);
+    }
   }
 
   void addFilterToColumn(String columnId, BuildContext context) {
@@ -171,7 +202,13 @@ class TableManager {
       } else {}
     }
     if (pinnedColumnInfo.any((element) => element.columnId == columnId)) {
-      singleColumnPinning(colIndex, columnId, true, context);
+      singleColumnPinning(
+          pinnedColumnInfo
+              .firstWhere((element) => element.columnId == columnId)
+              .lastPosition!,
+          columnId,
+          true,
+          context);
     }
     context
         .riverPodReadStateNotifier(hiddenColumnNumberNotifier.notifier)

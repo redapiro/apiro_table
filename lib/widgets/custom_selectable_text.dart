@@ -19,33 +19,33 @@ class CustomSelectableText extends StatelessWidget {
       textAlign: textAlign,
       style: style,
       enableInteractiveSelection: isSelectableText?? false,
-      contextMenuBuilder:
-          (BuildContext context, EditableTextState editableTextState) {
-        return AdaptiveTextSelectionToolbar(
-          anchors: editableTextState.contextMenuAnchors,
-          // Build the default buttons, but make them look custom.
-          // In a real project you may want to build different
-          // buttons depending on the platform.
-          children: editableTextState.contextMenuButtonItems
-              .map((ContextMenuButtonItem buttonItem) {
-            return CupertinoButton(
-              borderRadius: null,
-              color: Colors.black,
-              disabledColor: AppColors.disabledColor,
-              onPressed: buttonItem.onPressed,
-              padding: const EdgeInsets.all(10.0),
-              pressedOpacity: 0.7,
-              child: SizedBox(
-                width: 200.0,
-                child: Text(
-                  CupertinoTextSelectionToolbarButton.getButtonLabel(
-                      context, buttonItem),
-                ),
-              ),
-            );
-          }).toList(),
-        );
-      },
+      // contextMenuBuilder:
+      //     (BuildContext context, EditableTextState editableTextState) {
+      //   return AdaptiveTextSelectionToolbar(
+      //     anchors: editableTextState.contextMenuAnchors,
+      //     // Build the default buttons, but make them look custom.
+      //     // In a real project you may want to build different
+      //     // buttons depending on the platform.
+      //     children: editableTextState.contextMenuButtonItems
+      //         .map((ContextMenuButtonItem buttonItem) {
+      //       return CupertinoButton(
+      //         borderRadius: null,
+      //         color: Colors.black,
+      //         disabledColor: AppColors.disabledColor,
+      //         onPressed: buttonItem.onPressed,
+      //         padding: const EdgeInsets.all(10.0),
+      //         pressedOpacity: 0.7,
+      //         child: SizedBox(
+      //           width: 200.0,
+      //           child: Text(
+      //             CupertinoTextSelectionToolbarButton.getButtonLabel(
+      //                 context, buttonItem),
+      //           ),
+      //         ),
+      //       );
+      //     }).toList(),
+      //   );
+      // },
     );
   }
 }
