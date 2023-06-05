@@ -447,6 +447,7 @@ class ApiroTableWidget extends StatelessWidget {
   }
 
   void _onHideColumnClick(String columnId) {
+    print("Clicked here");
     _tableManager.hideColumn(columnId, context);
     sendUpdateCallback();
   }
