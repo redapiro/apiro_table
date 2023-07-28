@@ -253,7 +253,25 @@ class ApiroTableWidget extends StatelessWidget {
             width:
                 kIsWeb ? MediaQuery.of(context).size.width : double.maxFinite,
             child: SfDataGrid(
-                source: _tableDataGridSource(),
+                source: _tableDataGridSource(),allowColumnsDragging: true,
+                onColumnDragging: (DataGridColumnDragDetails details) {
+                  if (details.action == DataGridColumnDragAction.dropped &&
+                      details.to != null) {
+                    // List<DataGridRow> currentItems =
+                    //     List.from(_tableManager.dataGridRow);
+                    // final GridColumn rearrangeColumn = columns[details.from];
+                    // columns.removeAt(details.from);
+                    // columns.insert(details.to!, rearrangeColumn);
+                    // var removedItem = currentItems.removeAt(details.from);
+                    // currentItems.insert(details.to!, removedItem);
+                    //
+                    // // TableDataGrid.buildDataGridRows();
+                    // // _tableDataGridSource().;
+                    _onColumnOrdering(
+                        columnIds[details.from], details.to! + 1, details.from+1);
+                  }
+                  return true;
+                },
                 frozenColumnsCount: ref.read(frozenColumnCountNotifier),
                 frozenRowsCount: ref.watch(frozenRowCountNotifier),
                 defaultColumnWidth: 150,

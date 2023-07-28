@@ -82,7 +82,7 @@ class TableColumnHeaderPopMenuButtonWidget extends StatelessWidget {
 
   ThemeData? _themeData;
   late BuildContext context;
-  GlobalKey _key = GlobalKey();
+
 
   final isPopUpButtonPressed =
   StateNotifierProvider<IsPopUpButtonPressed, bool>((ref) {
@@ -139,7 +139,7 @@ class TableColumnHeaderPopMenuButtonWidget extends StatelessWidget {
   Widget _getPopUpMenuButton() {
     return Container(
         height: 50,
-        key: _key,
+
         color: AppColors.secondaryColor,
         child: Consumer(builder: (context, value, child) {
           return GestureDetector(
@@ -418,7 +418,7 @@ class TableColumnHeaderPopMenuButtonWidget extends StatelessWidget {
   ///on Click methods
 
   void _showPopUpMenu(BuildContext context, WidgetRef ref) {
-    RenderBox renderBox = _key.currentContext!.findRenderObject()! as RenderBox;
+    RenderBox renderBox =context.findRenderObject()! as RenderBox;
     Offset position = renderBox.localToGlobal(Offset.zero);
 
     double left = position.dx;
