@@ -391,8 +391,10 @@ class TableColumnHeaderPopMenuButtonWidget extends StatelessWidget {
 
   Widget _getMetadataWidget(BuildContext context) {
     return GestureDetector(onTap: (){
-      _showMapPopup(context, metaData);
-    },
+      if(metaData.isNotEmpty){
+          _showMapPopup(context, metaData);
+        }
+      },
       child: Container(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
