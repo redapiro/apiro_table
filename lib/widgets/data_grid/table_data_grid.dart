@@ -46,4 +46,9 @@ class TableDataGrid extends DataGridSource {
           );
         }).toList());
   }
+
+  void refreshTableDataGrid(){
+    notifyDataSourceListeners();
+    notifyListeners();
+  }
 }

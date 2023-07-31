@@ -14,8 +14,8 @@ class FilterListViewNotifier extends StateNotifier<bool> {
 }
 
 class AddFilterWidget extends StatefulWidget {
-  final Function(List<String>)? onApplyFilterClick;
-  final Function()? removeFilterUI;
+  final Function(List<String>,BuildContext context)? onApplyFilterClick;
+  final Function(BuildContext context)? removeFilterUI;
   final String columnName;
   final List<String> filterList;
   final Function clearAllCallback;
@@ -132,7 +132,7 @@ class _AddFilterWidget extends State<AddFilterWidget> {
             if (onDeleteClick != null) {
               onDeleteClick();
             } else {
-              widget.removeFilterUI!();
+              widget.removeFilterUI!(context);
             }
           },
         )
@@ -178,7 +178,7 @@ class _AddFilterWidget extends State<AddFilterWidget> {
           height: 40,
           width: 80,
           buttonBackgroundColor: Colors.black,
-          onPressed: _onApplyClick,
+          onPressed: ()=>_onApplyClick,
         ),
         SizedBox(width: 5),
         AdaptiveTextButton(
@@ -254,8 +254,8 @@ class _AddFilterWidget extends State<AddFilterWidget> {
     widget.clearAllCallback();
   }
 
-  void _onApplyClick() {
-    widget.onApplyFilterClick!(this.filterList!);
+  void _onApplyClick(BuildContext context) {
+    widget.onApplyFilterClick!(this.filterList!,context);
   }
 
   //Showing snack bar method

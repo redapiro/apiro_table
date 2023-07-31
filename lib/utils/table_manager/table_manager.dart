@@ -247,6 +247,7 @@ class TableManager {
     return gridCells;
   }
 
+
   //remove data from datagrid row if exists
   DataGridCell? removeDataGridRowForColumn(
       int colIndex, int rowIndex, String colId) {
@@ -674,8 +675,13 @@ class TableManager {
   void refreshDataTable(BuildContext context) {
     // AppNotifiers.getInstance().refreshDataTableNotifier.value =
     //     !AppNotifiers.getInstance().refreshDataTableNotifier.value;
-    context
-        .riverPodReadStateNotifier(refreshDataTableNotifier.notifier)
-        .toggleValue();
+    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+      if(context.mounted){
+        context
+            .riverPodReadStateNotifier(refreshDataTableNotifier.notifier)
+            .toggleValue();
+      }
+    });
+
   }
 }

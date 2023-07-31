@@ -75,7 +75,7 @@ class ApiroTableWidget extends StatelessWidget {
     setupData(inConstructor: this.gridRow.length != 0);
 
     _tableManager.hiddenColumnIds =
-        List<Map<String, dynamic>>.from(this.hiddenColumnInfos);
+    List<Map<String, dynamic>>.from(this.hiddenColumnInfos);
     _tableManager.onRowPinning = this.onPinRow;
     _tableManager.tableColumnFilterList = List<String>.from(this.filterList);
     print("setting column pinning info");
@@ -87,7 +87,7 @@ class ApiroTableWidget extends StatelessWidget {
 
     perPageRowCountList = paginationPageSizes.map((e) => e.toString()).toList();
     perPageRowCountNotifier.value = paginationPageSizes.firstWhere(
-        (element) => element == this.paginationPageSize, orElse: () {
+            (element) => element == this.paginationPageSize, orElse: () {
       return 0;
     }).toString();
 
@@ -153,10 +153,9 @@ class ApiroTableWidget extends StatelessWidget {
   int totalNumberOfPages;
 
 
-
   //Callback for row pinning
   Function(Stream<List<Map<String, dynamic>>>, Function(int, bool))?
-      getPinnedRowStream;
+  getPinnedRowStream;
 
   //****************Pagination callback methods */
   Function(int, int) onPageNumberClick;
@@ -166,7 +165,7 @@ class ApiroTableWidget extends StatelessWidget {
   Function(int, int) onPreviousClick;
   Function(int, int) onPageNumberTextFieldSubmit;
   Function(String, Function(bool), Function(Map<String, dynamic>))?
-      onColumnClick;
+  onColumnClick;
 
   //************* Call back methods to work after filter and hide columns */
   Function(List<Map<String, dynamic>>)? updateDataOnHideColumn;
@@ -174,7 +173,7 @@ class ApiroTableWidget extends StatelessWidget {
   Function(String, int)? updateDataOnColumnPinned;
 
   Function(String columnName, int sendTo, int currentPosition)?
-      updateDataOnColumnOrdering;
+  updateDataOnColumnOrdering;
 
   //***********Variables to manage hideen columns and filters if any */
   List<String> filterList = [];
@@ -187,6 +186,7 @@ class ApiroTableWidget extends StatelessWidget {
 
   TextEditingController _jumpToPageController = TextEditingController();
   FocusNode _jumpToPageTextFiledFocusNode = FocusNode();
+
   //****** Will be called from here when fliter reset all data */
   Function()? onPinRow;
 
@@ -198,6 +198,8 @@ class ApiroTableWidget extends StatelessWidget {
 
   List<String> colData = [];
   List<String> colIds = [];
+  List<GridColumn> columns = [];
+
   // List<Map<String, dynamic>> rowData = [];
 
   @override
@@ -209,12 +211,21 @@ class ApiroTableWidget extends StatelessWidget {
     return Scaffold(
       key: key,
       body: Consumer(builder: (context, value, child) {
+        if(columns.isEmpty){
+
+        }
         return Container(
             width:
-                kIsWeb ? MediaQuery.of(context).size.width : double.maxFinite,
+            kIsWeb ? MediaQuery
+                .of(context)
+                .size
+                .width : double.maxFinite,
             constraints: BoxConstraints(
                 maxHeight: kIsWeb
-                    ? MediaQuery.of(context).size.height
+                    ? MediaQuery
+                    .of(context)
+                    .size
+                    .height
                     : double.maxFinite),
             child: Column(
               children: [
@@ -249,26 +260,25 @@ class ApiroTableWidget extends StatelessWidget {
       return Column(
         children: [
           Container(
-            height: tableHeight - 120,
-            width:
-                kIsWeb ? MediaQuery.of(context).size.width : double.maxFinite,
-            child: SfDataGrid(
-                source: _tableDataGridSource(),allowColumnsDragging: true,
+              height: tableHeight - 120,
+              width:
+              kIsWeb ? MediaQuery
+                  .of(context)
+                  .size
+                  .width : double.maxFinite,
+              child: SfDataGrid(
+                source: _tableDataGridSource(),
+                allowColumnsDragging: true,
                 onColumnDragging: (DataGridColumnDragDetails details) {
                   if (details.action == DataGridColumnDragAction.dropped &&
                       details.to != null) {
-                    // List<DataGridRow> currentItems =
-                    //     List.from(_tableManager.dataGridRow);
-                    // final GridColumn rearrangeColumn = columns[details.from];
-                    // columns.removeAt(details.from);
-                    // columns.insert(details.to!, rearrangeColumn);
-                    // var removedItem = currentItems.removeAt(details.from);
-                    // currentItems.insert(details.to!, removedItem);
-                    //
-                    // // TableDataGrid.buildDataGridRows();
-                    // // _tableDataGridSource().;
+
+                     // var removedItem = columns.removeAt(details.from);
+                     // columns.insert(details.to!, removedItem);
                     _onColumnOrdering(
-                        columnIds[details.from], details.to! + 1, details.from+1);
+                        _tableManager.columnIds[details.from], details.to!+1, details.from+1);
+                    _reloadTableData();
+
                   }
                   return true;
                 },
@@ -281,14 +291,14 @@ class ApiroTableWidget extends StatelessWidget {
                 rowHeight: 60,
                 gridLinesVisibility: GridLinesVisibility.none,
                 columns:
-                    List.generate(_tableManager.columnNames.length, (index) {
+                List.generate(_tableManager.columnNames.length, (index) {
                   ColumnPinningInfo colInfo;
                   colInfo = _tableManager.pinnedColumnInfo.firstWhere(
-                      (element) =>
-                          element.columnId == _tableManager.columnIds[index],
+                          (element) =>
+                      element.columnId == _tableManager.columnIds[index],
                       orElse: () {
-                    return ColumnPinningInfo();
-                  });
+                        return ColumnPinningInfo();
+                      });
 
                   return GridColumn(
                     minimumWidth: 150,
@@ -309,7 +319,7 @@ class ApiroTableWidget extends StatelessWidget {
                       isColumnOrderingOn: this.columnOrderingOn,
                       isColumnHidingOn: this.columnHidingOn,
                       selectableText: selectableColumnText,
-                      metadata: {},
+                      metaData: {},
                       tableSortWidget: this.tableSortWidget,
                       isPinned: colInfo.columnId != null,
                       id: _tableManager.columnIds[index],
@@ -343,8 +353,8 @@ class ApiroTableWidget extends StatelessWidget {
                       columnIndex: index,
                     ),
                   );
-                })),
-          ),
+                }),
+              )),
           Row(
             children: [
               Expanded(
@@ -356,36 +366,35 @@ class ApiroTableWidget extends StatelessWidget {
                     },
                     onNextClick: () {
                       _onNextClick();
-                        },
-                        onItemsPerPageChange: () {
-                          _onItemPerPageChange();
-                        },
-                        jumpToPageTextFieldFocusNode:
-                            _jumpToPageTextFiledFocusNode,
-                        jumpToPageNumberController: _jumpToPageController,
-                        onPageNumberSelect: (selectedPageNumber) {
-                          _onPageNumberDropDownSelect(selectedPageNumber);
-                        },
-                        onPreviousClick: () {
-                          _onPreviousClick();
-                        },
-                        onTextFieldSubmit: (data) {
-
-                          _onTextFiledSubmit();
-                        },
-                        pageNumbers: perPageRowCountList,
-                        // paginationPageNumberNotifier:
-                        //     AppNotifiers.getInstance().paginationPageNumberNotifier,
-                        perPageRowCountNotifier: this.perPageRowCountNotifier,
-                        totalNumberOfPages: this.totalNumberOfPages,
-                      ),
-                    ),
+                    },
+                    onItemsPerPageChange: () {
+                      _onItemPerPageChange();
+                    },
+                    jumpToPageTextFieldFocusNode:
+                    _jumpToPageTextFiledFocusNode,
+                    jumpToPageNumberController: _jumpToPageController,
+                    onPageNumberSelect: (selectedPageNumber) {
+                      _onPageNumberDropDownSelect(selectedPageNumber);
+                    },
+                    onPreviousClick: () {
+                      _onPreviousClick();
+                    },
+                    onTextFieldSubmit: (data) {
+                      _onTextFiledSubmit();
+                    },
+                    pageNumbers: perPageRowCountList,
+                    // paginationPageNumberNotifier:
+                    //     AppNotifiers.getInstance().paginationPageNumberNotifier,
+                    perPageRowCountNotifier: this.perPageRowCountNotifier,
+                    totalNumberOfPages: this.totalNumberOfPages,
                   ),
-                ],
-              )
+                ),
+              ),
             ],
-          );
-        });
+          )
+        ],
+      );
+    });
   }
 
   TableDataGrid _tableDataGridSource() {
@@ -409,7 +418,10 @@ class ApiroTableWidget extends StatelessWidget {
 
   //Pin Columns from firebase
   void pinColumnsFromRemote() {
-   WidgetsBinding.instance.addPostFrameCallback((timeStamp) {  context.riverPodReadStateNotifier(isRefreshingTable.notifier).updateValue(false);});
+    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+      context.riverPodReadStateNotifier(isRefreshingTable.notifier).updateValue(
+          false);
+    });
     _tableManager.pinnedColumnInfo = [];
     for (var i = 0; i < this.pinnedColumnInfo.length; i++) {
       String key = this.pinnedColumnInfo[i].keys.toList()[0];
@@ -422,16 +434,20 @@ class ApiroTableWidget extends StatelessWidget {
       print("column pinning info added -- ${this.pinnedColumnInfo}");
     }
     print(
-        "value to compare here -- ${context.riverPodReadStateNotifier(frozenColumnCountNotifier)} and ${_tableManager.pinnedColumnInfo.length}");
+        "value to compare here -- ${context.riverPodReadStateNotifier(
+            frozenColumnCountNotifier)} and ${_tableManager.pinnedColumnInfo
+            .length}");
     if (context.riverPodReadStateNotifier(frozenColumnCountNotifier) <
-            _tableManager.pinnedColumnInfo.length &&
+        _tableManager.pinnedColumnInfo.length &&
         context.riverPodReadStateNotifier(frozenColumnCountNotifier) !=
             _tableManager.pinnedColumnInfo.length) {
       this._reloadTableData();
     } else {
-     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {  context
-         .riverPodReadStateNotifier(frozenColumnCountNotifier.notifier)
-         .updateValue(0);});
+      WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+        context
+            .riverPodReadStateNotifier(frozenColumnCountNotifier.notifier)
+            .updateValue(0);
+      });
       // AppNotifiers.getInstance().frozenColumnCountNotifier.value =0;
     }
   }
@@ -439,7 +455,9 @@ class ApiroTableWidget extends StatelessWidget {
   //OrderColumns from Firebase
   void orderColumnsFromRemoteData() {
     for (var i = 0; i < this.columnOrderingInfo.length; i++) {
-      if (this.columnOrderingInfo[i].keys.toList().length > 0) {
+      if (this.columnOrderingInfo[i].keys
+          .toList()
+          .length > 0) {
         String key = this.columnOrderingInfo[i].keys.toList()[0];
 
         this._onColumnOrdering(key, this.columnOrderingInfo[i][key][0],
@@ -498,7 +516,8 @@ class ApiroTableWidget extends StatelessWidget {
 
   //Pagination Methods
   void _onPageNumberClick(int pageNumber) {
-    context.riverPodReadStateNotifier(paginationPageNumberNotifier.notifier).updateValue(pageNumber);
+    context.riverPodReadStateNotifier(paginationPageNumberNotifier.notifier)
+        .updateValue(pageNumber);
 
     this.onPageNumberClick(
         context.riverPodReadStateNotifier(paginationPageNumberNotifier),
@@ -516,7 +535,8 @@ class ApiroTableWidget extends StatelessWidget {
             "Page number is not valid " + _jumpToPageController.text,
             context: context);
       } else {
-        context.riverPodReadStateNotifier(paginationPageNumberNotifier.notifier).updateValue(
+        context.riverPodReadStateNotifier(paginationPageNumberNotifier.notifier)
+            .updateValue(
             int.parse(_jumpToPageController.text.trim()));
         this.onPageNumberTextFieldSubmit(
             context.riverPodReadStateNotifier(paginationPageNumberNotifier),
@@ -532,13 +552,17 @@ class ApiroTableWidget extends StatelessWidget {
       SnackBar(
         content: Text(message),
         duration: const Duration(seconds: 4),
-        backgroundColor: Theme.of(context).colorScheme.error,
+        backgroundColor: Theme
+            .of(context)
+            .colorScheme
+            .error,
       ),
     );
   }
 
   void _onItemPerPageChange() {
-    context.riverPodReadStateNotifier(paginationPageNumberNotifier.notifier).updateValue(1);
+    context.riverPodReadStateNotifier(paginationPageNumberNotifier.notifier)
+        .updateValue(1);
 
     // this.totalNumberOfPages =
     //     (this.rowData.length ~/ int.parse(this.perPageRowCountNotifier.value));
@@ -556,7 +580,8 @@ class ApiroTableWidget extends StatelessWidget {
   }
 
   void _onNextClick() {
-    context.riverPodReadStateNotifier(paginationPageNumberNotifier.notifier).increment();
+    context.riverPodReadStateNotifier(paginationPageNumberNotifier.notifier)
+        .increment();
     this.onNextClick(
         context.riverPodReadStateNotifier(paginationPageNumberNotifier),
         this.totalNumberOfPages);
@@ -570,7 +595,8 @@ class ApiroTableWidget extends StatelessWidget {
   }
 
   void _onPreviousClick() {
-    context.riverPodReadStateNotifier(paginationPageNumberNotifier.notifier).decrement();
+    context.riverPodReadStateNotifier(paginationPageNumberNotifier.notifier)
+        .decrement();
     this.onPreviousClick(
         context.riverPodReadStateNotifier(paginationPageNumberNotifier),
         this.totalNumberOfPages);
@@ -590,18 +616,20 @@ class ApiroTableWidget extends StatelessWidget {
       _tableManager.staticColumnsData = List<String>.from(this.columnData);
 
       _tableManager.staticRowData =
-          List<Map<String, dynamic>>.from(this.rowData);
+      List<Map<String, dynamic>>.from(this.rowData);
       _tableManager.rowData = List<Map<String, dynamic>>.from(this.rowData);
 
       //Data grid row
       _tableManager.dataGridRow = [];
       List<DataGridRow> rowss = this.gridRow.map((e) {
         return DataGridRow(
-            cells: List.generate(e.getCells().length, (index) {
-          return DataGridCell(
-              value: e.getCells()[index].value,
-              columnName: this.columnIds[index]);
-        }));
+            cells: List.generate(e
+                .getCells()
+                .length, (index) {
+              return DataGridCell(
+                  value: e.getCells()[index].value,
+                  columnName: this.columnIds[index]);
+            }));
       }).toList();
       _tableManager.dataGridRow = List<DataGridRow>.from(this.gridRow);
 
@@ -613,10 +641,13 @@ class ApiroTableWidget extends StatelessWidget {
     }
 
     this.getPinnedRowStream!(
-        AppNotifiers.getInstance().isRowunpinController.stream,
-        (index, isUnPin) {
+        AppNotifiers
+            .getInstance()
+            .isRowunpinController
+            .stream,
+            (index, isUnPin) {
           _tableManager.singleRowPinning(index, isUnPin, context);
-    });
+        });
   }
 
   //*************** These methods will be added by the client whenever client sends customized rows */
@@ -650,6 +681,7 @@ class ApiroTableWidget extends StatelessWidget {
   }
 
   List<DataGridRow> _getDataGridRow() {
+
     Map<String, dynamic> rowData = json.decode(Constants.AUDIT_TASK_DATA);
     List<DataGridRow> gridRows = [];
 
@@ -661,39 +693,39 @@ class ApiroTableWidget extends StatelessWidget {
     gridRows = List.generate((rowData["results"] as List).length, (rowIndex) {
       return DataGridRow(
           cells: List.generate(this.colIds.length, (colIndex) {
-        return DataGridCell(
-            columnName: this.colIds[colIndex],
-            value: (colIndex == 0)
-                ? InkWell(
+            return DataGridCell(
+                columnName: this.colIds[colIndex],
+                value: (colIndex == 0)
+                    ? InkWell(
                     onTap: () {
                       _onRowClick(colIndex, rowIndex);
                     },
                     child: Container(
                         child: this.selectableCellText
                             ? SelectableText(rowData["results"][rowIndex]
-                                    [this.colIds[colIndex]]
-                                .toString())
+                        [this.colIds[colIndex]]
+                            .toString())
                             : Text(rowData["results"][rowIndex]
-                                    [this.colIds[colIndex]]
-                                .toString())))
-                : TableGridCell(
-                    onCellDoubleTap: () {
-                      _onDataCellDoubleTap(
-                          rowData["results"][rowIndex][this.colIds[colIndex]],
-                          "status",
-                          rowIndex: rowIndex,
-                          colName: this.colIds[colIndex],
-                          colIndex: colIndex);
-                    },
-                    cellMenuOn: cellMenuOn,
-                    isSelectable: this.selectableCellText,
-                    isEditable: this.cellInlineEditing,
-                    rowIndex: rowIndex,
-                    colIndex: colIndex,
-                    title: rowData["results"][rowIndex][this.colIds[colIndex]]
-                        .toString(),
-                  ));
-      }));
+                        [this.colIds[colIndex]]
+                            .toString())))
+                    : TableGridCell(
+                  onCellDoubleTap: () {
+                    _onDataCellDoubleTap(
+                        rowData["results"][rowIndex][this.colIds[colIndex]],
+                        "status",
+                        rowIndex: rowIndex,
+                        colName: this.colIds[colIndex],
+                        colIndex: colIndex);
+                  },
+                  cellMenuOn: cellMenuOn,
+                  isSelectable: this.selectableCellText,
+                  isEditable: this.cellInlineEditing,
+                  rowIndex: rowIndex,
+                  colIndex: colIndex,
+                  title: rowData["results"][rowIndex][this.colIds[colIndex]]
+                      .toString(),
+                ));
+          }));
     });
 
     this.rowData = tableRowData;
@@ -707,11 +739,13 @@ class ApiroTableWidget extends StatelessWidget {
     _tableManager.dataGridRow = [];
     List<DataGridRow> rowss = gridRows.map((e) {
       return DataGridRow(
-          cells: List.generate(e.getCells().length, (index) {
-        return DataGridCell(
-            value: e.getCells()[index].value,
-            columnName: this.columnIds[index]);
-      }));
+          cells: List.generate(e
+              .getCells()
+              .length, (index) {
+            return DataGridCell(
+                value: e.getCells()[index].value,
+                columnName: this.columnIds[index]);
+          }));
     }).toList();
 
     _tableManager.dataGridRow = List<DataGridRow>.from(gridRows);
@@ -730,47 +764,56 @@ class ApiroTableWidget extends StatelessWidget {
 
   void onRowPinClick(int index, int colIndex) {
     bool isUnpin = false;
-    isUnpin = TableManager.getInstance()
-            .pinnedRowInfo
-            .firstWhere((element) => element.lastPosition == index, orElse: () {
-          return RowPinningInfo();
-        }).lastPosition !=
+    isUnpin = TableManager
+        .getInstance()
+        .pinnedRowInfo
+        .firstWhere((element) => element.lastPosition == index, orElse: () {
+      return RowPinningInfo();
+    })
+        .lastPosition !=
         null;
     context
         .riverPodReadStateNotifier(pinnedRowWidgetNotifier.notifier)
         .updateValue(PinnedRowPopupWidget(
-          metadata: TableManager.getInstance().rowData[index]["metadata"] ?? [],
-          prodperties:
-              TableManager.getInstance().rowData[index]["metadata"] ?? [],
-          onRowPinClick: (closeOnly) {
-            if (closeOnly) {
-              context
-                  .riverPodReadStateNotifier(pinnedRowWidgetNotifier.notifier)
-                  .updateValue(null);
-            } else {
-              TableManager.getInstance()
-                  .singleRowPinning(index, isUnpin, context);
+      metadata: TableManager
+          .getInstance()
+          .rowData[index]["metadata"] ?? [],
+      prodperties:
+      TableManager
+          .getInstance()
+          .rowData[index]["metadata"] ?? [],
+      onRowPinClick: (closeOnly) {
+        if (closeOnly) {
+          context
+              .riverPodReadStateNotifier(pinnedRowWidgetNotifier.notifier)
+              .updateValue(null);
+        } else {
+          TableManager.getInstance()
+              .singleRowPinning(index, isUnpin, context);
 
-              context
-                  .riverPodReadStateNotifier(pinnedRowWidgetNotifier.notifier)
-                  .updateValue(null);
-            }
-          },
-          isPinned: isUnpin,
-          title: TableManager.getInstance().columnNames[index],
-          subtitle: TableManager.getInstance().columnIds[index],
-        ));
+          context
+              .riverPodReadStateNotifier(pinnedRowWidgetNotifier.notifier)
+              .updateValue(null);
+        }
+      },
+      isPinned: isUnpin,
+      title: TableManager
+          .getInstance()
+          .columnNames[index],
+      subtitle: TableManager
+          .getInstance()
+          .columnIds[index],
+    ));
   }
 
-  void _onDataCellDoubleTap(
-    String data,
-    String tableCellStatus, {
-    int? colIndex,
-    int? rowIndex,
-    String? colName,
-    String? finalValue = "",
-    bool? isEditable,
-  }) {
+  void _onDataCellDoubleTap(String data,
+      String tableCellStatus, {
+        int? colIndex,
+        int? rowIndex,
+        String? colName,
+        String? finalValue = "",
+        bool? isEditable,
+      }) {
     var metadata = rowData[rowIndex!]["attributes"] == null
         ? null
         : rowData[rowIndex]["attributes"]?[colIndex!]["metadata"];
@@ -790,17 +833,16 @@ class ApiroTableWidget extends StatelessWidget {
     }
   }
 
-  void _onCellDoubleTap(
-    List<dynamic> sourcesData,
-    dynamic agggregators,
-    String colName,
-    String data,
-    String tableCellStatus,
-    CellDataType dataType, {
-    bool shouldShowOnlyFinalValue = false,
-    dynamic finalValue,
-    required bool isEditable,
-  }) {
+  void _onCellDoubleTap(List<dynamic> sourcesData,
+      dynamic agggregators,
+      String colName,
+      String data,
+      String tableCellStatus,
+      CellDataType dataType, {
+        bool shouldShowOnlyFinalValue = false,
+        dynamic finalValue,
+        required bool isEditable,
+      }) {
     showDialog(
         context: this.context,
         builder: (context) {
