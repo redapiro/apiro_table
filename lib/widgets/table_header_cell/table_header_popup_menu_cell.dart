@@ -148,7 +148,7 @@ class TableColumnHeaderPopMenuButtonWidget extends StatelessWidget {
             key: filtersPopUpKey,
             behavior: HitTestBehavior.opaque,
             onTap: () {
-           
+
               // _showPopUpMenu(context, tapDetails.globalPosition);
               if (this.onColumnClick != null) {
                 this.onColumnClick!(this.id, (shouldShowSortWidget) {
