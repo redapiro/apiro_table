@@ -400,9 +400,7 @@ class TableColumnHeaderPopMenuButtonWidget extends StatelessWidget {
           if (metaData.isNotEmpty) {
             _showMapPopup(context, metaData,title);
           }
-          else{
-            CommonMethods.showSnackBarWithMessage("No Meta Data Available", context: context);
-          }
+
         },
         child: Container(
           padding: EdgeInsets.all(16), // Add some padding for button-like appearance
@@ -414,7 +412,7 @@ class TableColumnHeaderPopMenuButtonWidget extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                "Meta Data",
+                metaData.isNotEmpty ?"Meta Data":"No Meta Data",
                 style: _themeData!.textTheme.titleMedium!,
               ),
               // Add the commented code here if needed
