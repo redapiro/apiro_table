@@ -1,15 +1,17 @@
+import 'package:apiro_table/utils/common_methods.dart';
 import 'package:flutter/material.dart';
 
 class MapPopup extends StatelessWidget {
   final Map<String, dynamic> data;
+  final String title;
 
-  MapPopup({required this.data});
+  MapPopup({required this.data,required this.title});
 
   @override
   Widget build(BuildContext context) {
     return Center(
       child: AlertDialog(
-        title: Text('Meta Data'),
+        title: Center(child: Text('${CommonMethods.capitalizeFirstLetter(title)} Field Metadata')),alignment: Alignment.center,
         content: SizedBox(width: MediaQuery.of(context).size.width *.70,
           child: ListView.builder(
             shrinkWrap: true,
@@ -20,8 +22,8 @@ class MapPopup extends StatelessWidget {
               return Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  crossAxisAlignment: CrossAxisAlignment.center,
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Container(
                       width: 120,
@@ -33,17 +35,9 @@ class MapPopup extends StatelessWidget {
                         textAlign: TextAlign.center,
                       ),
                     ),
-                    Expanded(
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            entry.value.join(', '),
-                            textAlign: TextAlign.center,
-                          ),
-                        ],
-                      ),
+                    Text(
+                      entry.value.join(',\n'),
+                      textAlign: TextAlign.start,
                     ),
                   ],
                 ),

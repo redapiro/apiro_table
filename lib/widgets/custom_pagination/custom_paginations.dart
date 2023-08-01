@@ -172,36 +172,41 @@ class CustomPaginationWidget extends StatelessWidget {
               onPress: this.onPreviousClick),
         ],
       ),
-      Expanded(child: Container(height: 30, child: ListView.builder(
-          controller: _scrollController,
-          scrollDirection: Axis.horizontal,
-          itemCount: this.totalNumberOfPages, itemBuilder: (context, index) {
-        Color pageNumberBckColor =
-        ((ref.watch(paginationPageNumberNotifier) - 1) ==
-            index)
-            ? AppColors.appBlueColor
-            : Colors.transparent;
-        return InkWell(
-          onTap: () {
-            ref.read(paginationPageNumberNotifier.notifier).updateValue(
-                index + 1);
-            isListAlreadyScrolled = false;
-            this.onPageNumberClick(index + 1);
-          },
-          child: Container(
-            height: 28,
-            width: 40,
-            padding: EdgeInsets.all(8),
-            decoration: BoxDecoration(
-                color: pageNumberBckColor,
-                border: Border.all(color: pageNumberBckColor, width: 0.5),
-                // boxShadow: AppColors.boxShadow,
-                shape: BoxShape.circle),
+      Expanded(child: Container(height: 30, child: Consumer(
+        builder: (context,ref,child) {
+          var paginationNumberNotifier = ref.watch(paginationPageNumberNotifier);
+          return ListView.builder(
+              controller: _scrollController,
+              scrollDirection: Axis.horizontal,
+              itemCount: this.totalNumberOfPages, itemBuilder: (context, index) {
+            Color pageNumberBckColor =
+            ((paginationNumberNotifier - 1) ==
+                index)
+                ? AppColors.appBlueColor
+                : Colors.transparent;
+            return InkWell(
+              onTap: () {
+                ref.read(paginationPageNumberNotifier.notifier).updateValue(
+                    index + 1);
+                isListAlreadyScrolled = false;
+                this.onPageNumberClick(index + 1);
+              },
+              child: Container(
+                height: 28,
+                width: 40,
+                padding: EdgeInsets.all(8),
+                decoration: BoxDecoration(
+                    color: pageNumberBckColor,
+                    border: Border.all(color: pageNumberBckColor, width: 0.5),
+                    // boxShadow: AppColors.boxShadow,
+                    shape: BoxShape.circle),
 
-            child: Center(child: Text("${index + 1}",
-                style: _getSelectedPageTextStyle(index, ref))),),
-        );
-      }),)),
+                child: Center(child: Text("${index + 1}",
+                    style: _getSelectedPageTextStyle(index, ref))),),
+            );
+          });
+        }
+      ),)),
       _getPagingContainerWith(">",
           clickable: ((this.totalNumberOfPages > 1) &&
               ref.watch(paginationPageNumberNotifier) <

@@ -2,6 +2,7 @@
 
 import 'package:apiro_table/model/column_pinning_info.dart';
 import 'package:apiro_table/utils/app_colors.dart';
+import 'package:apiro_table/utils/common_methods.dart';
 import 'package:apiro_table/utils/controller/global_controllers.dart';
 import 'package:apiro_table/utils/provider_helper.dart';
 import 'package:apiro_table/utils/table_manager/table_manager.dart';
@@ -390,40 +391,57 @@ class TableColumnHeaderPopMenuButtonWidget extends StatelessWidget {
   }
 
   Widget _getMetadataWidget(BuildContext context) {
-    return GestureDetector(onTap: (){
-      if(metaData.isNotEmpty){
-          _showMapPopup(context, metaData);
-        }
-      },
-      child: Container(
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(
-              "Meta Data",
-              style: _themeData!.textTheme.titleMedium!,
-            ),
-            // Column(
-            //   children: List.generate(this.metaData.length, (index) {
-            //     return Row(
-            //       children: [
-            //         Text(this.metaData.entries.toList()[index].key+ ": ",
-            //             style: _themeData!.textTheme.titleSmall!),
-            //         Column(children: [
-            //           for(int i = 0 ; i < metaData.entries.toList()[index].value.length;i++)
-            //             Text(metaData.entries.toList()[index].value[i],
-            //                   style: _themeData!.textTheme.titleSmall!),
-            //
-            //         ],)
-            //       ],
-            //     );
-            //   }),
-            // )
-          ],
+    return Material( // Wrap with Material widget for button-like behavior
+      color: Colors.transparent, // Set the background color to transparent
+      borderRadius: BorderRadius.circular(8), // Apply rounded corners
+      clipBehavior: Clip.antiAlias, // Clip content to rounded corners
+      child: InkWell( // Use InkWell for the ripple effect
+        onTap: () {
+          if (metaData.isNotEmpty) {
+            _showMapPopup(context, metaData,title);
+          }
+          else{
+            CommonMethods.showSnackBarWithMessage("No Meta Data Available", context: context);
+          }
+        },
+        child: Container(
+          padding: EdgeInsets.all(16), // Add some padding for button-like appearance
+          decoration: BoxDecoration(
+            border: Border.all(color: Colors.black), // Add a border to resemble a button
+            borderRadius: BorderRadius.circular(8), // Apply rounded corners to the border
+          ),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                "Meta Data",
+                style: _themeData!.textTheme.titleMedium!,
+              ),
+              // Add the commented code here if needed
+              // Column(
+              //   children: List.generate(this.metaData.length, (index) {
+              //     return Row(
+              //       children: [
+              //         Text(this.metaData.entries.toList()[index].key + ": ",
+              //             style: _themeData!.textTheme.titleSmall!),
+              //         Column(
+              //           children: [
+              //             for (int i = 0; i < metaData.entries.toList()[index].value.length; i++)
+              //               Text(metaData.entries.toList()[index].value[i],
+              //                   style: _themeData!.textTheme.titleSmall!),
+              //           ],
+              //         )
+              //       ],
+              //     );
+              //   }),
+              // )
+            ],
+          ),
         ),
       ),
     );
   }
+
 
   ///on Click methods
 
@@ -512,11 +530,11 @@ class TableColumnHeaderPopMenuButtonWidget extends StatelessWidget {
         .toggleValue();
   }
 
-  void _showMapPopup(BuildContext context,Map<String, dynamic> data) {
+  void _showMapPopup(BuildContext context,Map<String, dynamic> data,String name) {
     showDialog(
       context: context,
       builder: (BuildContext context) {
-        return MapPopup(data: data);
+        return MapPopup(data: data,title: title);
       },
     );
   }
