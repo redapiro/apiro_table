@@ -2,7 +2,6 @@
 
 import 'package:apiro_table/model/column_pinning_info.dart';
 import 'package:apiro_table/utils/app_colors.dart';
-import 'package:apiro_table/utils/common_methods.dart';
 import 'package:apiro_table/utils/controller/global_controllers.dart';
 import 'package:apiro_table/utils/provider_helper.dart';
 import 'package:apiro_table/utils/table_manager/table_manager.dart';
@@ -212,8 +211,9 @@ class TableColumnHeaderPopMenuButtonWidget extends StatelessWidget {
             padding: EdgeInsets.only(left: 5, right: 5),
             color: Colors.white,
             child: AddFilterWidget(
-              onApplyFilterClick: _applyFilterCallback,
-              removeFilterUI: _hideFilterUI,
+              onApplyFilterClick: (val, context) =>
+                  _applyFilterCallback(val, context),
+              removeFilterUI: (context) => _hideFilterUI(context),
               columnName: this.title,
               clearAllCallback: this.clearAllCallback ?? () {},
               filterList: this.tableFilterList ?? [],
@@ -304,15 +304,16 @@ class TableColumnHeaderPopMenuButtonWidget extends StatelessWidget {
         Row(
           children: [
             _getButtonWithTitle(this.isPinned ? "UnPin" : "Pin",
-                Icons.push_pin_outlined, AppColors.dividerColor,context,
+                Icons.push_pin_outlined, AppColors.dividerColor, context,
                 textColor: Theme.of(context).scaffoldBackgroundColor,
-                onClick: _onColumnPinClick,
+                onClick: () => _onColumnPinClick(context),
                 columnKey: columnPinKey),
             SizedBox(width: 5),
             if (this.isFilterOn)
               _getButtonWithTitle("Filter", Icons.filter_alt_rounded,
-                  Theme.of(context).scaffoldBackgroundColor,context,
-                  addBorder: true, onClick: _onColumnFilterClick),
+                  Theme.of(context).scaffoldBackgroundColor, context,
+                  addBorder: true,
+                  onClick: () => _onColumnFilterClick(context)),
             SizedBox(width: 5),
             if (this.shouldShowSortWidget) this.tableSortWidget ?? Container()
           ],
@@ -322,8 +323,9 @@ class TableColumnHeaderPopMenuButtonWidget extends StatelessWidget {
           children: [
             if (this.isColumnHidingOn)
               _getButtonWithTitle("Hide", Icons.remove_red_eye_outlined,
-                  Theme.of(context).scaffoldBackgroundColor,context,
-                  onClick: _onColumnHideClick, columnKey: hideKey),
+                  Theme.of(context).scaffoldBackgroundColor, context,
+                  onClick: () => _onColumnHideClick(context),
+                  columnKey: hideKey),
             SizedBox(width: 5),
             if (this.isColumnOrderingOn) _getColumnOrderTextField(context),
           ],

@@ -178,7 +178,7 @@ class _AddFilterWidget extends State<AddFilterWidget> {
           height: 40,
           width: 80,
           buttonBackgroundColor: Colors.black,
-          onPressed: ()=>_onApplyClick,
+          onPressed: ()=>_onApplyClick(context),
         ),
         SizedBox(width: 5),
         AdaptiveTextButton(
