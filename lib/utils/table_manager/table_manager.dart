@@ -215,16 +215,20 @@ class TableManager {
       //     true,
       //     context);
     }
-    context
+    WidgetsBinding.instance.addPostFrameCallback((timeStamp) { context
         .riverPodReadStateNotifier(hiddenColumnNumberNotifier.notifier)
         .increment();
+    //refresh the table
+
+
+    });
+    refreshDataTable(context);
+    WidgetsBinding.instance.addPostFrameCallback((timeStamp) { context
+        .riverPodReadStateNotifier(hiddenColumnNotifier.notifier)
+        .updateValue(this.hiddenColumnIds.length.toString());});
     print("HERE NOW");
 
-    //refresh the table
-    refreshDataTable(context);
-    context
-        .riverPodReadStateNotifier(hiddenColumnNotifier.notifier)
-        .updateValue(this.hiddenColumnIds.length.toString());
+
   }
 
   List<DataGridRow> decoupleCellObjects({List<DataGridRow>? gridRows}) {
@@ -344,13 +348,13 @@ class TableManager {
       this.dataGridRow = List<DataGridRow>.from(this.decoupleCellObjects());
 
       //apply if any row column pinning and filters are there
-      this.applyAnyFilterHiddenColumnRowAndColumnPinningIfExists(context);
+      WidgetsBinding.instance.addPostFrameCallback((timeStamp) { this.applyAnyFilterHiddenColumnRowAndColumnPinningIfExists(context);
       context
           .riverPodReadStateNotifier(hiddenColumnNotifier.notifier)
           .updateValue(this.hiddenColumnIds.length.toString());
       context
           .riverPodReadStateNotifier(hiddenColumnNumberNotifier.notifier)
-          .updateValue(hiddenColumnIds.length);
+          .updateValue(hiddenColumnIds.length);});
 
       //refresh table
       this.refreshDataTable(context);
@@ -404,7 +408,10 @@ class TableManager {
     // print("pinned col info --- ${columnId}");
 
     if (!isUnPin) {
-     context.riverPodReadStateNotifier(isRefreshingTable.notifier).updateValue(true);
+      WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+        context.riverPodReadStateNotifier(isRefreshingTable.notifier)
+            .updateValue(true);
+      });
       var tempRowData = List<Map<String, dynamic>>.from(this.rowData);
 
       int insertIndex =
@@ -442,9 +449,11 @@ class TableManager {
 
       //update frozen column count
       if(existingDataWithId.columnId == null) {
-        context
-            .riverPodReadStateNotifier(frozenColumnCountNotifier.notifier)
-            .increment();
+        WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+          context
+              .riverPodReadStateNotifier(frozenColumnCountNotifier.notifier)
+              .increment();
+        });
       }
     } else {
       var tempRowData = List<Map<String, dynamic>>.from(this.rowData);
