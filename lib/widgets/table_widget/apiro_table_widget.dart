@@ -75,19 +75,20 @@ class ApiroTableWidget extends StatelessWidget {
     setupData(inConstructor: this.gridRow.length != 0);
 
     _tableManager.hiddenColumnIds =
-    List<Map<String, dynamic>>.from(this.hiddenColumnInfos);
+        List<Map<String, dynamic>>.from(this.hiddenColumnInfos);
     _tableManager.onRowPinning = this.onPinRow;
     _tableManager.tableColumnFilterList = List<String>.from(this.filterList);
     print("setting column pinning info");
     this.orderColumnsFromRemoteData();
-    this.pinColumnsFromRemote();
+    // this.hideColumnsFromRemoteData();
+    // this.pinColumnsFromRemote();
 
     _tableManager
         .applyAnyFilterHiddenColumnRowAndColumnPinningIfExists(context);
 
     perPageRowCountList = paginationPageSizes.map((e) => e.toString()).toList();
     perPageRowCountNotifier.value = paginationPageSizes.firstWhere(
-            (element) => element == this.paginationPageSize, orElse: () {
+        (element) => element == this.paginationPageSize, orElse: () {
       return 0;
     }).toString();
 
@@ -469,6 +470,21 @@ class ApiroTableWidget extends StatelessWidget {
     // this._reloadTableData();
   }
 
+  void hideColumnsFromRemoteData() {
+    for (var i = 0; i < this.hiddenColumnInfos.length; i++) {
+      if (this.hiddenColumnInfos[i].keys.toList().length > 0) {
+        String key = this.hiddenColumnInfos[i].keys.toList()[0];
+        _onHideColumnClick(key);
+
+        // this._onColumnOrdering(key, this.columnOrderingInfo[i][key][0],
+        //     this.columnOrderingInfo[i][key][1]);
+        print("column ordering info added -- $columnOrderingInfo");
+      }
+    }
+
+    // this._reloadTableData();
+  }
+
   ///
 
   ///
@@ -483,7 +499,6 @@ class ApiroTableWidget extends StatelessWidget {
   }
 
   void _onHideColumnClick(String columnId) {
-    print("Clicked here");
     _tableManager.hideColumn(columnId, context);
     sendUpdateCallback();
   }

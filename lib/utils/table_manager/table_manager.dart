@@ -162,9 +162,7 @@ class TableManager {
 
   //Hidden ColumnsWorking
   void hideColumn(String columnId, BuildContext context) {
-    print("HERE NOW 1");
     int rowIndex = 0;
-
     List<DataGridCell> cells = [];
     for (var row in this.rowData) {
       //Remove col data fro rows
@@ -215,20 +213,19 @@ class TableManager {
       //     true,
       //     context);
     }
-    WidgetsBinding.instance.addPostFrameCallback((timeStamp) { context
-        .riverPodReadStateNotifier(hiddenColumnNumberNotifier.notifier)
-        .increment();
-    //refresh the table
-
-
+    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+      context
+          .riverPodReadStateNotifier(hiddenColumnNumberNotifier.notifier)
+          .increment();
+      //refresh the table
     });
     refreshDataTable(context);
-    WidgetsBinding.instance.addPostFrameCallback((timeStamp) { context
-        .riverPodReadStateNotifier(hiddenColumnNotifier.notifier)
-        .updateValue(this.hiddenColumnIds.length.toString());});
+    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+      context
+          .riverPodReadStateNotifier(hiddenColumnNotifier.notifier)
+          .updateValue(this.hiddenColumnIds.length.toString());
+    });
     print("HERE NOW");
-
-
   }
 
   List<DataGridRow> decoupleCellObjects({List<DataGridRow>? gridRows}) {
@@ -268,15 +265,12 @@ class TableManager {
     return cell;
   }
 
-  void showColumn(String columnId, BuildContext context) {
-
-    this
-        .hiddenColumnIds
-        .removeWhere((element) => element.keys.toList().contains(columnId));
+  void showColumn(String columnId, BuildContext context) async {
+    this.hiddenColumnIds.removeWhere((element) => element.keys.toList().contains(columnId));
     this.rowData = [];
 
     this.dataGridRow = [];
-
+    //
     this.rowData = List<Map<String, dynamic>>.from(this.staticRowData);
     this.dataGridRow = this.decoupleCellObjects();
 
@@ -289,9 +283,11 @@ class TableManager {
         .riverPodReadStateNotifier(hiddenColumnNumberNotifier.notifier)
         .decrement();
 
-
     ///refresh table
     this.applyAnyFilterHiddenColumnRowAndColumnPinningIfExists(context);
+    // context
+    //     .riverPodReadStateNotifier(frozenColumnCountNotifier.notifier)
+    //     .decrement();
     if (pinnedColumnInfo.any((element) => element.columnId == columnId)) {
       context
           .riverPodReadStateNotifier(frozenColumnCountNotifier.notifier)
@@ -563,6 +559,7 @@ class TableManager {
     this.pinnedColumnInfo = [];
     if (tempColInfos.length > 0) {
       for (var pinnedColInfos in tempColInfos) {
+        print("column id to pin -- $pinnedColInfos");
         this.singleColumnPinning(pinnedColInfos.lastPosition ?? 0,
             pinnedColInfos.columnId ?? "", false, context);
       }
