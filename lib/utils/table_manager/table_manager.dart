@@ -549,7 +549,7 @@ class TableManager {
         //   return;
         // }
         print("column id to hide -- $columnId");
-        this.hideColumn(columnId, context);
+        // this.hideColumn(columnId, context);
       }
     }
 

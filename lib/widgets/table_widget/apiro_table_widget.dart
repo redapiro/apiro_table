@@ -80,8 +80,8 @@ class ApiroTableWidget extends StatelessWidget {
     _tableManager.tableColumnFilterList = List<String>.from(this.filterList);
     print("setting column pinning info");
     this.orderColumnsFromRemoteData();
-    // this.hideColumnsFromRemoteData();
-    // this.pinColumnsFromRemote();
+    this.hideColumnsFromRemoteData();
+    this.pinColumnsFromRemote();
 
     _tableManager
         .applyAnyFilterHiddenColumnRowAndColumnPinningIfExists(context);
