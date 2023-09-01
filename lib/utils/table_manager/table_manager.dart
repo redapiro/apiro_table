@@ -225,7 +225,7 @@ class TableManager {
           .riverPodReadStateNotifier(hiddenColumnNotifier.notifier)
           .updateValue(this.hiddenColumnIds.length.toString());
     });
-    print("HERE NOW");
+
   }
 
   List<DataGridRow> decoupleCellObjects({List<DataGridRow>? gridRows}) {
@@ -265,8 +265,12 @@ class TableManager {
     return cell;
   }
 
-  void showColumn(String columnId, BuildContext context) async {
-    this.hiddenColumnIds.removeWhere((element) => element.keys.toList().contains(columnId));
+  void showColumn(
+      String columnId, BuildContext context, Function hideColumns) async {
+    this
+        .hiddenColumnIds
+        .removeWhere((element) => element.keys.toList().contains(columnId));
+
     this.rowData = [];
 
     this.dataGridRow = [];
@@ -282,6 +286,7 @@ class TableManager {
     context
         .riverPodReadStateNotifier(hiddenColumnNumberNotifier.notifier)
         .decrement();
+
 
     ///refresh table
     this.applyAnyFilterHiddenColumnRowAndColumnPinningIfExists(context);
@@ -307,6 +312,8 @@ class TableManager {
     context
         .riverPodReadStateNotifier(hiddenColumnNotifier.notifier)
         .updateValue(this.hiddenColumnIds.length.toString());
+
+    hideColumns();
 
     this.refreshDataTable(context);
   }

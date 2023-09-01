@@ -11,9 +11,12 @@ class HiddenColumnDropDown extends StatelessWidget {
   final Function? clearAllPress;
   final Function? showColumnPress;
   final Function? showAllPress;
+  final Function? hideColumns;
+
   HiddenColumnDropDown({
     Key? key,
     this.leftWidget,
+    this.hideColumns,
     this.clearAllPress,
     this.showAllPress,
     this.showColumnPress,
@@ -24,8 +27,7 @@ class HiddenColumnDropDown extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     _themeData = Theme.of(context);
-    return Container(
-        child: Column(
+    return Column(
       children: [
         // Divider(height: 0.3, color: AppColors.disabledColor),
         SizedBox(height: 10),
@@ -41,7 +43,7 @@ class HiddenColumnDropDown extends StatelessWidget {
         SizedBox(height: 10),
         Divider(height: 0.2, color: AppColors.tableRowBackgroundColor),
       ],
-    ));
+    );
   }
 
   Widget _getClearAllButton(BuildContext context) {
@@ -173,7 +175,7 @@ class HiddenColumnDropDown extends StatelessWidget {
   }
 
   void _onHiddenColumnShowPress(String colName, BuildContext context) {
-    TableManager.getInstance().showColumn(colName,context);
+    TableManager.getInstance().showColumn(colName, context, hideColumns!);
     if (this.showColumnPress != null) this.showColumnPress!();
     Navigator.pop(context);
   }

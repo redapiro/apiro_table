@@ -65,6 +65,7 @@ class ApiroTableWidget extends StatelessWidget {
     this.columnOrderingInfo = const [],
     this.paginationPageSize = 50,
     this.updateDataOnColumnOrdering,
+    this.onUnHideTheItem,
     this.paginationPageSizes = const [5, 10, 50, 100, 500],
   }) : super(key: key) {
     //Init table manager
@@ -76,6 +77,12 @@ class ApiroTableWidget extends StatelessWidget {
 
     _tableManager.hiddenColumnIds =
         List<Map<String, dynamic>>.from(this.hiddenColumnInfos);
+    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+      context
+          .riverPodReadStateNotifier(hiddenColumnNumberNotifier.notifier)
+          .updateValue(0);
+      //refresh the table
+    });
     _tableManager.onRowPinning = this.onPinRow;
     _tableManager.tableColumnFilterList = List<String>.from(this.filterList);
     print("setting column pinning info");
@@ -165,8 +172,9 @@ class ApiroTableWidget extends StatelessWidget {
   Function(int, int, int) onPageNumberDropDownSelect;
   Function(int, int) onPreviousClick;
   Function(int, int) onPageNumberTextFieldSubmit;
+
   Function(String, Function(bool), Function(Map<String, dynamic>))?
-  onColumnClick;
+      onColumnClick;
 
   //************* Call back methods to work after filter and hide columns */
   Function(List<Map<String, dynamic>>)? updateDataOnHideColumn;
@@ -174,7 +182,8 @@ class ApiroTableWidget extends StatelessWidget {
   Function(String, int)? updateDataOnColumnPinned;
 
   Function(String columnName, int sendTo, int currentPosition)?
-  updateDataOnColumnOrdering;
+      updateDataOnColumnOrdering;
+  Function()? onUnHideTheItem;
 
   //***********Variables to manage hideen columns and filters if any */
   List<String> filterList = [];
@@ -233,6 +242,7 @@ class ApiroTableWidget extends StatelessWidget {
                 if (this.showTableHeaderBar)
                   HiddenColumnDropDown(
                       leftWidget: this.widgetInTableHeaderRow,
+                      hideColumns: onUnHideTheItem,
                       clearAllPress: () {
                         this.updateDataOnFilterColumn!([], "");
                       },
