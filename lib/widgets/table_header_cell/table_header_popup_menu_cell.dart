@@ -7,6 +7,7 @@ import 'package:apiro_table/utils/provider_helper.dart';
 import 'package:apiro_table/utils/table_manager/table_manager.dart';
 import 'package:apiro_table/widgets/custom_selectable_text.dart';
 import 'package:apiro_table/widgets/custom_widgets/adaptive_elevated_button.dart';
+import 'package:apiro_table/widgets/custom_widgets/app_text_field.dart';
 import 'package:apiro_table/widgets/custom_widgets/custom_drop_down.dart';
 import 'package:apiro_table/widgets/custom_widgets/custom_pop_up_menu_item.dart';
 import 'package:apiro_table/widgets/map_popup.dart';
@@ -18,6 +19,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 class TableColumnHeaderPopMenuButtonWidget extends StatelessWidget {
   final String title;
   final String id;
+  final int? index;
 
   final String subtitle;
   final String toolTipName;
@@ -54,6 +56,7 @@ class TableColumnHeaderPopMenuButtonWidget extends StatelessWidget {
       required this.columnIndex,
       this.pinnedColumnInfo,
       this.onColumnFilterClick,
+      this.index,
       this.onColumnHideClick,
       this.clearAllCallback,
       this.tableFilterList,
@@ -90,7 +93,7 @@ class TableColumnHeaderPopMenuButtonWidget extends StatelessWidget {
     return IsPopUpButtonPressed();
   });
   final shouldShowFilterUI =
-  StateNotifierProvider<ShouldShowFilterUI, bool>((ref) {
+      StateNotifierProvider<ShouldShowFilterUI, bool>((ref) {
     return ShouldShowFilterUI();
   });
   late ValueNotifier<int> selectedColumnOrderIndex;
@@ -99,6 +102,7 @@ class TableColumnHeaderPopMenuButtonWidget extends StatelessWidget {
   List<String> columnNameList = [];
   List<String> pinnedColumnNameList = [];
   late TableManager _tableManager;
+  TextEditingController _addFilterTextController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -161,27 +165,67 @@ class TableColumnHeaderPopMenuButtonWidget extends StatelessWidget {
               }
               value.read(isPopUpButtonPressed.notifier).toggleValue();
             },
-            child: Container(
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Expanded(
-                    child: Tooltip(
-                        message: this.toolTipName,
-                        child: CustomSelectableText(this.title,
-                            textAlign: TextAlign.center,
-                            style: _themeData!.textTheme.titleSmall!.copyWith(
-                                color: value.watch(isPopUpButtonPressed)
-                                    ? AppColors.appBlueColor
-                                    : AppColors.dividerColor),
-                            isSelectableText: selectableText)),
+            child: Column(
+              children: [
+                Expanded(
+                  flex: 2,
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Expanded(
+                        child: Tooltip(
+                            message: this.toolTipName,
+                            child: CustomSelectableText(this.title,
+                                textAlign: TextAlign.center,
+                                style: _themeData!.textTheme.titleSmall!
+                                    .copyWith(
+                                        color: value.watch(isPopUpButtonPressed)
+                                            ? AppColors.appBlueColor
+                                            : AppColors.dividerColor),
+                                isSelectableText: selectableText)),
+                      ),
+                      SizedBox(width: 3),
+                      _getTableColumnFilterIcon(),
+                      Icon(Icons.keyboard_arrow_down,
+                          size: 15, color: AppColors.disabledColor)
+                    ],
                   ),
-                  SizedBox(width: 3),
-                  _getTableColumnFilterIcon(),
-                  Icon(Icons.keyboard_arrow_down,
-                      size: 15, color: AppColors.disabledColor)
-                ],
-              ),
+                ),
+                Flexible(
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 10),
+                    child: AppTextField(
+                      autoFocus: false,
+                      label: "Filter",
+                      textFieldHeight: 10,
+                      controller: _tableManager.columnNameControllers[index!],
+                      backgroundColor: Colors.transparent,
+                      validator: (text) {},
+                      onChanged: (text) {
+                        if (text!.isNotEmpty && text.length > 3) {
+                        } else if (text.isNotEmpty) {
+                          for (int i = 0;
+                              i < _tableManager.columnNameControllers.length;
+                              i++) {
+                            if (i == index) {
+                            } else {
+                              _tableManager.columnNameControllers[i].clear();
+                            }
+                          }
+
+                          if (context.mounted) {
+                            context
+                                .riverPodReadStateNotifier(
+                                    refreshDataTableNotifier.notifier)
+                                .toggleValue();
+                          }
+                        }
+                      },
+                      onSaved: (value) {},
+                    ),
+                  ),
+                )
+              ],
             ),
           );
         }));

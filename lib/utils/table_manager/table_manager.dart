@@ -18,6 +18,7 @@ class TableManager {
 
   //Column data variables
   List<String> columnNames = [];
+  List<TextEditingController> columnNameControllers = [];
   List<String> staticColumnsData = [];
   List<String> columnIds = [];
   List<String> staticColumnIds = [];
@@ -590,6 +591,8 @@ class TableManager {
       this.setColumnOrdering(columnOrderData[columnId][0],
           columnOrderData[columnId][1], columnId, context);
     }
+    columnNameControllers = List.generate(
+        staticColumnIds.length, (index) => TextEditingController());
   }
 
   void applyHideColumnRowAndColumnPinningIfExists(BuildContext context) {

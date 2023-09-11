@@ -314,7 +314,7 @@ class ApiroTableWidget extends StatelessWidget {
                   return GridColumn(
                     minimumWidth: 150,
                     columnName: _tableManager.columnNames[index],
-                    label: TableColumnHeaderPopMenuButtonWidget(
+                    label: TableColumnHeaderPopMenuButtonWidget(index: index,
                       title: _tableManager.columnIds[index],
                       pinnedColumnInfo: _tableManager.pinnedColumnInfo,
                       popUpButtonHeight: 50,
@@ -725,14 +725,19 @@ class ApiroTableWidget extends StatelessWidget {
                     onTap: () {
                       _onRowClick(colIndex, rowIndex);
                     },
-                    child: Container(
-                        child: this.selectableCellText
-                            ? SelectableText(rowData["results"][rowIndex]
-                        [this.colIds[colIndex]]
-                            .toString())
-                            : Text(rowData["results"][rowIndex]
-                        [this.colIds[colIndex]]
-                            .toString())))
+                    child: Column(
+                      children: [
+                        Container(
+                            child: this.selectableCellText
+                                ? SelectableText(rowData["results"][rowIndex]
+                            [this.colIds[colIndex]]
+                                .toString())
+                                : Text(rowData["results"][rowIndex]
+                            [this.colIds[colIndex]]
+                                .toString())),
+
+                      ],
+                    ))
                     : TableGridCell(
                   onCellDoubleTap: () {
                     _onDataCellDoubleTap(

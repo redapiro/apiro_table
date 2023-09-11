@@ -86,6 +86,7 @@ class _AppTextFieldState extends State<AppTextField> {
           child: TextFormField(
               focusNode: widget.focusNode ?? FocusNode(),
               autofocus: widget.autoFocus,
+              onChanged: widget.onChanged,
               onEditingComplete: widget.onEditingComplete ?? () {},
               enabled: widget.editable,
               key: ValueKey(widget.label),
