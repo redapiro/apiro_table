@@ -24,7 +24,7 @@ class TableDataGrid extends DataGridSource {
   @override
   List<DataGridRow> get rows => controllerInfo.index != -1 &&
           controllerInfo.text.isNotEmpty &&
-          controllerInfo.text.length > 3
+          controllerInfo.text.length > 2
       ? TableManager.getInstance()
           .dataGridRow
           .where((element) => element

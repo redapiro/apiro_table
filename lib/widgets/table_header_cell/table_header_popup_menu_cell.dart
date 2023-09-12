@@ -205,7 +205,7 @@ class TableColumnHeaderPopMenuButtonWidget extends StatelessWidget {
                         return null;
                       },
                       onChanged: (text) {
-                        if (text!.isNotEmpty && text.length > 3) {
+                        if (text!.isNotEmpty && text.length > 2) {
                           if (context.mounted) {
                             context
                                 .riverPodReadStateNotifier(
