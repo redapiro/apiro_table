@@ -11,8 +11,8 @@ class TableColumnFilterIconWidget extends StatelessWidget {
 
   final Function? onIconClick;
   TableColumnFilterIconWidget(
-      {this.height = 25,
-      this.width = 25,
+      {this.height = 20,
+      this.width = 20,
       this.color,
       this.onIconClick,
       this.text,

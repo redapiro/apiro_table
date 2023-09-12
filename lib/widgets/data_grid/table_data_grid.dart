@@ -1,3 +1,4 @@
+import 'package:apiro_table/model/controller_info.dart';
 import 'package:apiro_table/utils/app_colors.dart';
 import 'package:apiro_table/utils/table_manager/table_manager.dart';
 import 'package:flutter/material.dart';
@@ -17,11 +18,28 @@ class TableDataGrid extends DataGridSource {
       this.oddRowColor,
       this.evenRowColor});
 
+  ControllerInfo controllerInfo =
+      TableManager.getInstance().getTextFromFirstNonEmptyController();
+
   @override
-  List<DataGridRow> get rows => TableManager.getInstance().dataGridRow;
+  List<DataGridRow> get rows => controllerInfo.index != -1 &&
+          controllerInfo.text.isNotEmpty &&
+          controllerInfo.text.length > 3
+      ? TableManager.getInstance()
+          .dataGridRow
+          .where((element) => element
+              .getCells()[controllerInfo.index]
+              .value
+              .value
+              .toString()
+              .toLowerCase()
+              .startsWith(controllerInfo.text.toLowerCase()))
+          .toList()
+      : TableManager.getInstance().dataGridRow;
 
   @override
   DataGridRowAdapter buildRow(DataGridRow row) {
+
     Color getBackgroundColor() {
       if (this.rowColor != null) {
         return this.rowColor!;

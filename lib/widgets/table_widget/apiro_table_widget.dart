@@ -95,7 +95,7 @@ class ApiroTableWidget extends StatelessWidget {
 
     perPageRowCountList = paginationPageSizes.map((e) => e.toString()).toList();
     perPageRowCountNotifier.value = paginationPageSizes.firstWhere(
-        (element) => element == this.paginationPageSize, orElse: () {
+            (element) => element == this.paginationPageSize, orElse: () {
       return 0;
     }).toString();
 
@@ -221,9 +221,7 @@ class ApiroTableWidget extends StatelessWidget {
     return Scaffold(
       key: key,
       body: Consumer(builder: (context, value, child) {
-        if(columns.isEmpty){
-
-        }
+        if (columns.isEmpty) {}
         return Container(
             width:
             kIsWeb ? MediaQuery
@@ -283,13 +281,11 @@ class ApiroTableWidget extends StatelessWidget {
                 onColumnDragging: (DataGridColumnDragDetails details) {
                   if (details.action == DataGridColumnDragAction.dropped &&
                       details.to != null) {
-
-                     // var removedItem = columns.removeAt(details.from);
-                     // columns.insert(details.to!, removedItem);
-                    _onColumnOrdering(
-                        _tableManager.columnIds[details.from], details.to!+1, details.from+1);
+                    // var removedItem = columns.removeAt(details.from);
+                    // columns.insert(details.to!, removedItem);
+                    _onColumnOrdering(_tableManager.columnIds[details.from],
+                        details.to! + 1, details.from + 1);
                     _reloadTableData();
-
                   }
                   return true;
                 },
@@ -314,7 +310,8 @@ class ApiroTableWidget extends StatelessWidget {
                   return GridColumn(
                     minimumWidth: 150,
                     columnName: _tableManager.columnNames[index],
-                    label: TableColumnHeaderPopMenuButtonWidget(index: index,
+                    label: TableColumnHeaderPopMenuButtonWidget(
+                      index: index,
                       title: _tableManager.columnIds[index],
                       pinnedColumnInfo: _tableManager.pinnedColumnInfo,
                       popUpButtonHeight: 50,
@@ -706,7 +703,6 @@ class ApiroTableWidget extends StatelessWidget {
   }
 
   List<DataGridRow> _getDataGridRow() {
-
     Map<String, dynamic> rowData = json.decode(Constants.AUDIT_TASK_DATA);
     List<DataGridRow> gridRows = [];
 

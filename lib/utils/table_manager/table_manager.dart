@@ -1,4 +1,5 @@
 import 'package:apiro_table/model/column_pinning_info.dart';
+import 'package:apiro_table/model/controller_info.dart';
 import 'package:apiro_table/model/row_pinning_info.dart';
 import 'package:apiro_table/utils/app_notifiers.dart';
 import 'package:apiro_table/utils/controller/global_controllers.dart';
@@ -692,12 +693,22 @@ class TableManager {
     // AppNotifiers.getInstance().refreshDataTableNotifier.value =
     //     !AppNotifiers.getInstance().refreshDataTableNotifier.value;
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
-      if(context.mounted){
+      if (context.mounted) {
         context
             .riverPodReadStateNotifier(refreshDataTableNotifier.notifier)
             .toggleValue();
       }
     });
+  }
 
+  ControllerInfo getTextFromFirstNonEmptyController() {
+    for (int i = 0; i < columnNameControllers.length; i++) {
+      TextEditingController controller = columnNameControllers[i];
+      if (controller.text.isNotEmpty) {
+        return ControllerInfo(i, controller.text);
+      }
+    }
+    // If no controller has text, return an empty string and -1 as the index or any default values you prefer.
+    return ControllerInfo(-1, "");
   }
 }

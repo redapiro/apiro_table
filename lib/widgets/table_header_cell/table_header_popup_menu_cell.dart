@@ -168,11 +168,11 @@ class TableColumnHeaderPopMenuButtonWidget extends StatelessWidget {
             child: Column(
               children: [
                 Expanded(
-                  flex: 2,
+                  flex: 3,
                   child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
+                    mainAxisAlignment: MainAxisAlignment.start,
                     children: [
-                      Expanded(
+                      Expanded(flex:3,
                         child: Tooltip(
                             message: this.toolTipName,
                             child: CustomSelectableText(this.title,
@@ -184,14 +184,15 @@ class TableColumnHeaderPopMenuButtonWidget extends StatelessWidget {
                                             : AppColors.dividerColor),
                                 isSelectableText: selectableText)),
                       ),
-                      SizedBox(width: 3),
-                      _getTableColumnFilterIcon(),
-                      Icon(Icons.keyboard_arrow_down,
-                          size: 15, color: AppColors.disabledColor)
+                      Flexible(child: _getTableColumnFilterIcon()),
+                      Flexible(
+                        child: Icon(Icons.keyboard_arrow_down,
+                            size: 15, color: AppColors.disabledColor),
+                      )
                     ],
                   ),
                 ),
-                Flexible(
+               if(title.toLowerCase() != 'status' && title.toLowerCase() != 'substatus') Flexible(
                   child: Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 10),
                     child: AppTextField(
@@ -200,9 +201,17 @@ class TableColumnHeaderPopMenuButtonWidget extends StatelessWidget {
                       textFieldHeight: 10,
                       controller: _tableManager.columnNameControllers[index!],
                       backgroundColor: Colors.transparent,
-                      validator: (text) {},
+                      validator: (text) {
+                        return null;
+                      },
                       onChanged: (text) {
                         if (text!.isNotEmpty && text.length > 3) {
+                          if (context.mounted) {
+                            context
+                                .riverPodReadStateNotifier(
+                                refreshDataTableNotifier.notifier)
+                                .toggleValue();
+                          }
                         } else if (text.isNotEmpty) {
                           for (int i = 0;
                               i < _tableManager.columnNameControllers.length;
