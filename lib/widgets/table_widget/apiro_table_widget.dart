@@ -294,7 +294,7 @@ class ApiroTableWidget extends StatelessWidget {
                 defaultColumnWidth: 150,
                 columnWidthMode: ColumnWidthMode.fill,
                 headerGridLinesVisibility: GridLinesVisibility.none,
-                headerRowHeight: 60,
+                headerRowHeight: 90,
                 rowHeight: 60,
                 gridLinesVisibility: GridLinesVisibility.none,
                 columns:
@@ -314,7 +314,7 @@ class ApiroTableWidget extends StatelessWidget {
                       index: index,
                       title: _tableManager.columnIds[index],
                       pinnedColumnInfo: _tableManager.pinnedColumnInfo,
-                      popUpButtonHeight: 50,
+                      popUpButtonHeight: 150,
                       columnOrderKey: Key('columnOrderKey_' +
                           _tableManager.columnNames[index].toLowerCase()),
                       hideKey: Key('hideKey_' +

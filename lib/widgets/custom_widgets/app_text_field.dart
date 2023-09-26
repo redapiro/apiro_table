@@ -78,6 +78,7 @@ class _AppTextFieldState extends State<AppTextField> {
     return Container(
       margin: widget.margin,
       width: widget.textFieldWidth,
+      height: widget.textFieldHeight,
       child: GestureDetector(
         behavior: HitTestBehavior.opaque,
         onTap: widget.onTap,

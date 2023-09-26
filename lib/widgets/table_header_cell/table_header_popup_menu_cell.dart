@@ -143,7 +143,7 @@ class TableColumnHeaderPopMenuButtonWidget extends StatelessWidget {
 
   Widget _getPopUpMenuButton() {
     return Container(
-        height: 50,
+        height: 150,
 
         color: AppColors.secondaryColor,
         child: Consumer(builder: (context, value, child) {
@@ -165,75 +165,72 @@ class TableColumnHeaderPopMenuButtonWidget extends StatelessWidget {
               }
               value.read(isPopUpButtonPressed.notifier).toggleValue();
             },
-            child: Column(
+            child: Column(mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
-                Expanded(
-                  flex: 3,
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    children: [
-                      Expanded(flex:3,
-                        child: Tooltip(
-                            message: this.toolTipName,
-                            child: CustomSelectableText(this.title,
-                                textAlign: TextAlign.center,
-                                style: _themeData!.textTheme.titleSmall!
-                                    .copyWith(
-                                        color: value.watch(isPopUpButtonPressed)
-                                            ? AppColors.appBlueColor
-                                            : AppColors.dividerColor),
-                                isSelectableText: selectableText)),
-                      ),
-                      Flexible(child: _getTableColumnFilterIcon()),
-                      Flexible(
-                        child: Icon(Icons.keyboard_arrow_down,
-                            size: 15, color: AppColors.disabledColor),
-                      )
-                    ],
-                  ),
-                ),
-               if(title.toLowerCase() != 'status' && title.toLowerCase() != 'substatus') Flexible(
-                  child: Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 10),
-                    child: AppTextField(
-                      autoFocus: false,
-                      label: "Filter",
-                      textFieldHeight: 10,
-                      controller: _tableManager.columnNameControllers[index!],
-                      backgroundColor: Colors.transparent,
-                      validator: (text) {
-                        return null;
-                      },
-                      onChanged: (text) {
-                        if (text!.isNotEmpty && text.length > 2) {
-                          if (context.mounted) {
-                            context
-                                .riverPodReadStateNotifier(
-                                refreshDataTableNotifier.notifier)
-                                .toggleValue();
-                          }
-                        } else if (text.isNotEmpty) {
-                          for (int i = 0;
-                              i < _tableManager.columnNameControllers.length;
-                              i++) {
-                            if (i == index) {
-                            } else {
-                              _tableManager.columnNameControllers[i].clear();
-                            }
-                          }
 
-                          if (context.mounted) {
-                            context
-                                .riverPodReadStateNotifier(
-                                    refreshDataTableNotifier.notifier)
-                                .toggleValue();
-                          }
-                        }
-                      },
-                      onSaved: (value) {},
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: [
+                    Expanded(flex:3,
+                      child: Tooltip(
+                          message: this.toolTipName,
+                          child: CustomSelectableText(this.title,
+                              textAlign: TextAlign.center,
+                              style: _themeData!.textTheme.titleSmall!
+                                  .copyWith(
+                                      color: value.watch(isPopUpButtonPressed)
+                                          ? AppColors.appBlueColor
+                                          : AppColors.dividerColor),
+                              isSelectableText: selectableText)),
                     ),
-                  ),
-                )
+                    Flexible(child: _getTableColumnFilterIcon()),
+                    Flexible(
+                      child: Icon(Icons.keyboard_arrow_down,
+                          size: 15, color: AppColors.disabledColor),
+                    )
+                  ],
+                ),
+               if(title.toLowerCase() != 'status' && title.toLowerCase() != 'substatus') Padding(
+                 padding:  EdgeInsets.symmetric(horizontal: 10),
+                 child: AppTextField(
+                   autoFocus: false,
+                   label: "Filter",
+                   textFieldHeight: 30,
+                   controller: _tableManager.columnNameControllers[index!],
+                   backgroundColor: Colors.transparent,
+                   validator: (text) {
+                     return null;
+                   },
+                   onChanged: (text) {
+                     if (text!.isNotEmpty && text.length > 2) {
+                       if (context.mounted) {
+                         context
+                             .riverPodReadStateNotifier(
+                             refreshDataTableNotifier.notifier)
+                             .toggleValue();
+                       }
+                     } else if (text.isNotEmpty) {
+                       for (int i = 0;
+                           i < _tableManager.columnNameControllers.length;
+                           i++) {
+                         if (i == index) {
+                         } else {
+                           _tableManager.columnNameControllers[i].clear();
+                         }
+                       }
+
+                       if (context.mounted) {
+                         context
+                             .riverPodReadStateNotifier(
+                                 refreshDataTableNotifier.notifier)
+                             .toggleValue();
+                       }
+                     }
+                   },
+                   onSaved: (value) {},
+                 ),
+               ),
+
               ],
             ),
           );
