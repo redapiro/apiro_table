@@ -22,6 +22,7 @@ import 'package:syncfusion_flutter_datagrid/datagrid.dart';
 import '../../utils/controller/global_controllers.dart';
 
 // ignore: must_be_immutable
+typedef TableSortWidgetFunction = Widget Function(int index);
 class ApiroTableWidget extends StatelessWidget {
   ApiroTableWidget({
     Key? key,
@@ -44,6 +45,7 @@ class ApiroTableWidget extends StatelessWidget {
     this.filterList = const [],
     this.onColumnClick,
     this.onPinRow,
+    this.sortIcons,
     this.columnIdFilterAppliedOn = "",
     this.widgetInTableHeaderRow,
     this.updateDataOnColumnPinned,
@@ -110,10 +112,11 @@ class ApiroTableWidget extends StatelessWidget {
   List<DataGridRow> gridRow = [];
 
   Widget? widgetInTableHeaderRow;
-  Widget? tableSortWidget;
+  TableSortWidgetFunction ? tableSortWidget;
 
   //Column pinning properties
   bool groupColumnPinning;
+  List<String>? sortIcons;
 
   //Row column pinning
   bool rowGroupPinning;
@@ -315,6 +318,7 @@ class ApiroTableWidget extends StatelessWidget {
                       title: _tableManager.columnIds[index],
                       pinnedColumnInfo: _tableManager.pinnedColumnInfo,
                       popUpButtonHeight: 150,
+                      sortIcon: sortIcons?[index]??'null',
                       columnOrderKey: Key('columnOrderKey_' +
                           _tableManager.columnNames[index].toLowerCase()),
                       hideKey: Key('hideKey_' +
@@ -328,7 +332,7 @@ class ApiroTableWidget extends StatelessWidget {
                       isColumnHidingOn: this.columnHidingOn,
                       selectableText: selectableColumnText,
                       metaData: {},
-                      tableSortWidget: this.tableSortWidget,
+                      tableSortWidget: tableSortWidget,
                       isPinned: colInfo.columnId != null,
                       id: _tableManager.columnIds[index],
                       tableFilterList: _tableManager.tableColumnFilterList,

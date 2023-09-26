@@ -13,6 +13,7 @@ import 'package:apiro_table/widgets/custom_widgets/custom_pop_up_menu_item.dart'
 import 'package:apiro_table/widgets/map_popup.dart';
 import 'package:apiro_table/widgets/table_header_cell/add_filter_widget.dart';
 import 'package:apiro_table/widgets/table_header_cell/table_column_filter_icon_widget.dart';
+import 'package:apiro_table/widgets/table_widget/apiro_table_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -23,6 +24,7 @@ class TableColumnHeaderPopMenuButtonWidget extends StatelessWidget {
 
   final String subtitle;
   final String toolTipName;
+  final String? sortIcon;
 
   late Map<String, dynamic> metaData;
   final bool isPinned;
@@ -49,12 +51,13 @@ class TableColumnHeaderPopMenuButtonWidget extends StatelessWidget {
   final Key? hideKey;
   final List<ColumnPinningInfo>? pinnedColumnInfo;
 
-  Widget? tableSortWidget;
+  TableSortWidgetFunction? tableSortWidget;
 
   TableColumnHeaderPopMenuButtonWidget(
       {required this.metaData,
       required this.columnIndex,
       this.pinnedColumnInfo,
+      this.sortIcon,
       this.onColumnFilterClick,
       this.index,
       this.onColumnHideClick,
@@ -191,46 +194,66 @@ class TableColumnHeaderPopMenuButtonWidget extends StatelessWidget {
                   ],
                 ),
                if(title.toLowerCase() != 'status' && title.toLowerCase() != 'substatus') Padding(
-                 padding:  EdgeInsets.symmetric(horizontal: 10),
-                 child: AppTextField(
-                   autoFocus: false,
-                   label: "Filter",
-                   textFieldHeight: 30,
-                   controller: _tableManager.columnNameControllers[index!],
-                   backgroundColor: Colors.transparent,
-                   validator: (text) {
-                     return null;
-                   },
-                   onChanged: (text) {
-                     if (text!.isNotEmpty && text.length > 2) {
-                       if (context.mounted) {
-                         context
-                             .riverPodReadStateNotifier(
-                             refreshDataTableNotifier.notifier)
-                             .toggleValue();
-                       }
-                     } else if (text.isNotEmpty) {
-                       for (int i = 0;
-                           i < _tableManager.columnNameControllers.length;
-                           i++) {
-                         if (i == index) {
-                         } else {
-                           _tableManager.columnNameControllers[i].clear();
-                         }
-                       }
+                    padding: EdgeInsets.symmetric(horizontal: 10),
+                    child: Row(
+                      children: [
+                        Expanded(
+                          flex: 3,
+                          child: AppTextField(
+                            autoFocus: false,
+                            label: "Filter",
+                            textFieldHeight: 30,
+                            controller:
+                                _tableManager.columnNameControllers[index!],
+                            backgroundColor: Colors.transparent,
+                            validator: (text) {
+                              return null;
+                            },
+                            onChanged: (text) {
+                              if (text!.isNotEmpty && text.length > 2) {
+                                if (context.mounted) {
+                                  context
+                                      .riverPodReadStateNotifier(
+                                          refreshDataTableNotifier.notifier)
+                                      .toggleValue();
+                                }
+                              } else if (text.isNotEmpty) {
+                                for (int i = 0;
+                                    i <
+                                        _tableManager
+                                            .columnNameControllers.length;
+                                    i++) {
+                                  if (i == index) {
+                                  } else {
+                                    _tableManager.columnNameControllers[i]
+                                        .clear();
+                                  }
+                                }
 
-                       if (context.mounted) {
-                         context
-                             .riverPodReadStateNotifier(
-                                 refreshDataTableNotifier.notifier)
-                             .toggleValue();
-                       }
-                     }
-                   },
-                   onSaved: (value) {},
-                 ),
-               ),
-
+                                if (context.mounted) {
+                                  context
+                                      .riverPodReadStateNotifier(
+                                          refreshDataTableNotifier.notifier)
+                                      .toggleValue();
+                                }
+                              }
+                            },
+                            onSaved: (value) {},
+                          ),
+                        ),
+                        if (sortIcon != "null") ...[
+                          SizedBox(width: 5),
+                          Flexible(
+                            child: Icon(
+                                sortIcon == "true"
+                                    ? Icons.arrow_downward
+                                    : Icons.arrow_upward,
+                                color: AppColors.dividerColor),
+                          )
+                        ]
+                      ],
+                    ),
+                  ),
               ],
             ),
           );
@@ -365,7 +388,7 @@ class TableColumnHeaderPopMenuButtonWidget extends StatelessWidget {
                   addBorder: true,
                   onClick: () => _onColumnFilterClick(context)),
             SizedBox(width: 5),
-            if (this.shouldShowSortWidget) this.tableSortWidget ?? Container()
+            if (this.shouldShowSortWidget) this.tableSortWidget?.call(index!) ?? Container()
           ],
         ),
         SizedBox(height: 10),
