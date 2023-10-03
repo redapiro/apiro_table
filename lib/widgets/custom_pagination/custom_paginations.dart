@@ -23,6 +23,7 @@ class CustomPaginationWidget extends StatelessWidget {
   final Function(String) onTextFieldSubmit;
   final List<String> pageNumbers;
   final int totalNumberOfPages;
+  final int totalNumberOfItems;
 
   // final ValueNotiAppNotifiers.getInstance().paginationPageNumberNotifier;
   final ValueNotifier perPageRowCountNotifier;
@@ -38,7 +39,7 @@ class CustomPaginationWidget extends StatelessWidget {
     required this.pageNumbers,
     required this.totalNumberOfPages,
     required this.onTextFieldSubmit,
-    required this.jumpToPageNumberController,
+    required this.jumpToPageNumberController,required this.totalNumberOfItems,
     // required AppNotifiers.getInstance().paginationPageNumberNotifier,
     required this.jumpToPageTextFieldFocusNode,
     required this.perPageRowCountNotifier,
@@ -94,6 +95,11 @@ class CustomPaginationWidget extends StatelessWidget {
                                       child: _getPaginationPagesWidget(value)),
                                   _getJumpToPageNumberWidget(),
                                   Container(child: _getPageNumberDropDown()),
+                                  SizedBox(),
+                                  Container(
+                                      margin: EdgeInsets.only(left: 10),
+                                      child: Text("Total Items $totalNumberOfItems")),
+
                                   Expanded(child: Container()),
                                 ],
                               ),

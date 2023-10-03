@@ -37,7 +37,7 @@ class MyApp extends StatelessWidget {
         GlobalCupertinoLocalizations.delegate,
       ],
       home: ApiroTableWidget(
-        columnData: [],
+        columnData: [],totalNumberOfItems: colIds.length,
         columnIds: colIds,context: context,
         rowData: rowData,
         filtersOn: true,

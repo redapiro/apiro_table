@@ -40,6 +40,7 @@ class ApiroTableWidget extends StatelessWidget {
     required this.onPageNumberTextFieldSubmit,
     required this.onPreviousClick,
     required this.totalNumberOfPages,
+    required this.totalNumberOfItems,
     this.tableSortWidget,
     this.hiddenColumnInfos = const [],
     this.filterList = const [],
@@ -162,6 +163,7 @@ class ApiroTableWidget extends StatelessWidget {
 
   //number of pages
   int totalNumberOfPages;
+  int totalNumberOfItems;
 
 
   //Callback for row pinning
@@ -394,7 +396,7 @@ class ApiroTableWidget extends StatelessWidget {
                     onTextFieldSubmit: (data) {
                       _onTextFiledSubmit();
                     },
-                    pageNumbers: perPageRowCountList,
+                    pageNumbers: perPageRowCountList,totalNumberOfItems: totalNumberOfItems,
                     // paginationPageNumberNotifier:
                     //     AppNotifiers.getInstance().paginationPageNumberNotifier,
                     perPageRowCountNotifier: this.perPageRowCountNotifier,
