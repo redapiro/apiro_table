@@ -58,7 +58,7 @@ class ApiroTableWidget extends StatelessWidget {
     this.showTableHeaderBar = true,
     this.selectableColumnText = false,
     this.selectableCellText = false,
-    this.cellEditDialog = false,
+    this.cellEditDialog = false,this.isPaginationVisible= true,
     this.cellMenuOn = false,
     this.cellInlineEditing = true,
     this.columnOrderingOn = true,
@@ -148,6 +148,7 @@ class ApiroTableWidget extends StatelessWidget {
 
   //cell inline editing
   bool columnOrderingOn = true;
+  bool isPaginationVisible = true;
 
   //cell inline editing
   bool columnHidingOn = true;
@@ -369,7 +370,7 @@ class ApiroTableWidget extends StatelessWidget {
                   );
                 }),
               )),
-          Row(
+         if(isPaginationVisible) Row(
             children: [
               Expanded(
                 child: Container(
