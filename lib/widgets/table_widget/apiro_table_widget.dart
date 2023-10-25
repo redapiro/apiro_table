@@ -686,7 +686,8 @@ class ApiroTableWidget extends StatelessWidget {
     List<String> colNamesList = [];
     List<String> clIList = [];
 
-    List<dynamic> columnData = json.decode(Constants.AUDIT_TASK_COLUMN_DATA);
+    // List<dynamic> columnData = json.decode(Constants.AUDIT_TASK_COLUMN_DATA);
+    List<dynamic> columnData = [];
     for (var colData in columnData) {
       colNamesList.add(colData["displayName"]);
       clIList.add(colData["datafield"]);
