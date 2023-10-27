@@ -25,6 +25,7 @@ class TableColumnHeaderPopMenuButtonWidget extends StatelessWidget {
   final String subtitle;
   final String toolTipName;
   final String? sortIcon;
+  final bool isVisible;
 
   late Map<String, dynamic> metaData;
   final bool isPinned;
@@ -34,6 +35,7 @@ class TableColumnHeaderPopMenuButtonWidget extends StatelessWidget {
   final bool selectableText;
   final bool isColumnOrderingOn;
   final bool isColumnHidingOn;
+  final bool isFiltersTextFieldVisible;
 
   final Function()? onColumnPinClick;
   final Function()? onColumnHideClick;
@@ -60,13 +62,13 @@ class TableColumnHeaderPopMenuButtonWidget extends StatelessWidget {
       this.sortIcon,
       this.onColumnFilterClick,
       this.index,
-      this.onColumnHideClick,
+      this.onColumnHideClick,this.isVisible = true,
       this.clearAllCallback,
       this.tableFilterList,
       this.isFilterOn = true,
       this.isColumnHidingOn = true,
       this.isColumnOrderingOn = true,
-      this.selectableText = false,
+      this.selectableText = false,this.isFiltersTextFieldVisible = false,
       required this.toolTipName,
       required this.id,
       this.onColumnPinClick,
@@ -139,9 +141,7 @@ class TableColumnHeaderPopMenuButtonWidget extends StatelessWidget {
       }).toList();
     }
 
-    return Container(
-      child: _getPopUpMenuButton(),
-    );
+    return _getPopUpMenuButton();
   }
 
   Widget _getPopUpMenuButton() {
@@ -154,23 +154,23 @@ class TableColumnHeaderPopMenuButtonWidget extends StatelessWidget {
             key: filtersPopUpKey,
             behavior: HitTestBehavior.opaque,
             onTap: () {
-
-              // _showPopUpMenu(context, tapDetails.globalPosition);
-              if (this.onColumnClick != null) {
-                this.onColumnClick!(this.id, (shouldShowSortWidget) {
-                  this.shouldShowSortWidget = shouldShowSortWidget;
-                }, (metadata) {
-                  this.metaData = metadata;
-                });
+              if(isVisible){
+                // _showPopUpMenu(context, tapDetails.globalPosition);
+                if (this.onColumnClick != null) {
+                  this.onColumnClick!(this.id, (shouldShowSortWidget) {
+                    this.shouldShowSortWidget = shouldShowSortWidget;
+                  }, (metadata) {
+                    this.metaData = metadata;
+                  });
+                }
+                if (context.mounted) {
+                  _showPopUpMenu(context, value);
+                }
+                value.read(isPopUpButtonPressed.notifier).toggleValue();
               }
-              if (context.mounted) {
-                _showPopUpMenu(context, value);
-              }
-              value.read(isPopUpButtonPressed.notifier).toggleValue();
             },
             child: Column(mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
-
                 Row(
                   mainAxisAlignment: MainAxisAlignment.start,
                   children: [
@@ -187,13 +187,13 @@ class TableColumnHeaderPopMenuButtonWidget extends StatelessWidget {
                               isSelectableText: selectableText)),
                     ),
                     Flexible(child: _getTableColumnFilterIcon()),
-                    Flexible(
+                 if(isVisible)   Flexible(
                       child: Icon(Icons.keyboard_arrow_down,
                           size: 15, color: AppColors.disabledColor),
                     )
                   ],
                 ),
-               if(title.toLowerCase() != 'status' && title.toLowerCase() != 'substatus') Padding(
+               if(title.toLowerCase() != 'status' && title.toLowerCase() != 'substatus'&& isFiltersTextFieldVisible) Padding(
                     padding: EdgeInsets.symmetric(horizontal: 10),
                     child: Row(
                       children: [

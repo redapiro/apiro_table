@@ -58,17 +58,19 @@ class ApiroTableWidget extends StatelessWidget {
     this.showTableHeaderBar = true,
     this.selectableColumnText = false,
     this.selectableCellText = false,
-    this.cellEditDialog = false,this.isPaginationVisible= true,
+    this.cellEditDialog = false,
+    this.isPaginationVisible = true,
     this.cellMenuOn = false,
     this.cellInlineEditing = true,
     this.columnOrderingOn = true,
-    this.columnHidingOn = true,
+    this.columnHidingOn = true, this.headerWidgetIsVisible = true,
     this.filtersOn = true,
     this.pinnedColumnInfo = const [],
     this.columnOrderingInfo = const [],
     this.paginationPageSize = 50,
     this.updateDataOnColumnOrdering,
     this.onUnHideTheItem,
+    this.hiddenFilterTextFieldListIds,
     this.paginationPageSizes = const [5, 10, 50, 100, 500],
   }) : super(key: key) {
     //Init table manager
@@ -109,6 +111,7 @@ class ApiroTableWidget extends StatelessWidget {
   final BuildContext context;
 
   List<String> columnIds = [];
+
   List<Map<String, dynamic>> rowData = [];
   List<DataGridRow> gridRow = [];
 
@@ -124,6 +127,7 @@ class ApiroTableWidget extends StatelessWidget {
 
   //Selectable column header text
   bool selectableColumnText;
+  bool headerWidgetIsVisible;
 
   //Selectable table cell text
   bool selectableCellText;
@@ -136,6 +140,7 @@ class ApiroTableWidget extends StatelessWidget {
 
   //Pagination page size
   List<int> paginationPageSizes;
+  List<String>? hiddenFilterTextFieldListIds;
 
   //Cell menu
   bool cellMenuOn = false;
@@ -312,16 +317,22 @@ class ApiroTableWidget extends StatelessWidget {
                       orElse: () {
                         return ColumnPinningInfo();
                       });
-
                   return GridColumn(
                     minimumWidth: 150,
                     columnName: _tableManager.columnNames[index],
                     label: TableColumnHeaderPopMenuButtonWidget(
-                      index: index,
+                      index: index,isVisible: headerWidgetIsVisible,
                       title: _tableManager.columnIds[index],
+                      isFiltersTextFieldVisible:
+                          hiddenFilterTextFieldListIds != null
+                              ? hiddenFilterTextFieldListIds!.isNotEmpty
+                                  ? !hiddenFilterTextFieldListIds!
+                                      .contains(_tableManager.columnIds[index])
+                                  : true
+                              : true,
                       pinnedColumnInfo: _tableManager.pinnedColumnInfo,
                       popUpButtonHeight: 150,
-                      sortIcon: sortIcons?[index]??'null',
+                      sortIcon: sortIcons?[index] ?? 'null',
                       columnOrderKey: Key('columnOrderKey_' +
                           _tableManager.columnNames[index].toLowerCase()),
                       hideKey: Key('hideKey_' +
