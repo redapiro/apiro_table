@@ -61,6 +61,7 @@ class TableDataGrid extends DataGridSource {
             alignment: Alignment.center,
             // padding: EdgeInsets.all(3.0),
             child: e.value,
+            color: Color.fromARGB(200, 20, 200, 20)
           );
         }).toList());
   }
