@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:apiro_table/model/controller_info.dart';
 import 'package:apiro_table/utils/app_colors.dart';
 import 'package:apiro_table/utils/table_manager/table_manager.dart';
@@ -52,7 +54,10 @@ class TableDataGrid extends DataGridSource {
       }
     }
 
-    return DataGridRowAdapter(
+    final _random = Random();
+
+
+        return DataGridRowAdapter(
         key: UniqueKey(),
         color: getBackgroundColor(),
         cells: row.getCells().map<Widget>((e) {
@@ -61,7 +66,7 @@ class TableDataGrid extends DataGridSource {
             alignment: Alignment.center,
             // padding: EdgeInsets.all(3.0),
             child: e.value,
-            color: Color.fromARGB(200, 20, 200, 20)
+            color: Color.fromARGB(200, _random.nextInt(256),_random.nextInt(256),_random.nextInt(256))
           );
         }).toList());
   }
