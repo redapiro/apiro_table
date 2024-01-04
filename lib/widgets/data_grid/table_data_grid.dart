@@ -2,6 +2,7 @@ import 'dart:math';
 
 import 'package:apiro_table/model/controller_info.dart';
 import 'package:apiro_table/utils/app_colors.dart';
+import 'package:apiro_table/utils/flash_colorable.dart';
 import 'package:apiro_table/utils/table_manager/table_manager.dart';
 import 'package:flutter/material.dart';
 import 'package:syncfusion_flutter_datagrid/datagrid.dart';
@@ -57,17 +58,31 @@ class TableDataGrid extends DataGridSource {
     final _random = Random();
 
 
+
         return DataGridRowAdapter(
         key: UniqueKey(),
         color: getBackgroundColor(),
         cells: row.getCells().map<Widget>((e) {
-          return Container(
+          var child=e.value;
+          Color? col;
+          if (child is FlashColorable) {
+            col=child.getFlashColor();
+          }
+          Container cont= Container(
             key: UniqueKey(),
             alignment: Alignment.center,
             // padding: EdgeInsets.all(3.0),
-            child: e.value,
-            color: Color.fromARGB(200, _random.nextInt(256),_random.nextInt(256),_random.nextInt(256))
+            child: child,
+            color: col,
+            //color: Color.fromARGB(200, _random.nextInt(256),_random.nextInt(256),_random.nextInt(256))
           );
+
+
+
+
+
+          return cont;
+
         }).toList());
   }
 
