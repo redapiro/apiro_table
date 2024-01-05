@@ -55,10 +55,6 @@ class TableDataGrid extends DataGridSource {
       }
     }
 
-    final _random = Random();
-
-
-
         return DataGridRowAdapter(
         key: UniqueKey(),
         color: getBackgroundColor(),
@@ -74,7 +70,6 @@ class TableDataGrid extends DataGridSource {
             // padding: EdgeInsets.all(3.0),
             child: child,
             color: col,
-            //color: Color.fromARGB(200, _random.nextInt(256),_random.nextInt(256),_random.nextInt(256))
           );
 
 
