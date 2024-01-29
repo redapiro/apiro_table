@@ -46,6 +46,7 @@ class ApiroTableWidget extends StatelessWidget {
     this.filterList = const [],
     this.onColumnClick,
     this.onPinRow,
+    this.onStatusFilterChange,
     this.sortIcons,
     this.columnIdFilterAppliedOn = "",
     this.widgetInTableHeaderRow,
@@ -116,6 +117,7 @@ class ApiroTableWidget extends StatelessWidget {
   List<String> columnData = [];
   final List<String>? rateKeyData;
   final BuildContext context;
+  final Function(String?)? onStatusFilterChange;
 
   List<String> columnIds = [];
   final List<String> rateKeys = [];

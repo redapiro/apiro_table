@@ -21,12 +21,13 @@ class TableColumnHeaderPopMenuButtonWidget extends StatelessWidget {
   final String title;
   final String id;
   final int? index;
-  final List<String> ?rateKeyData;
-  final StateNotifierProvider<StatusSortNotifier, String> ? statusSortNotifier;
+  final List<String>? rateKeyData;
+  final StateNotifierProvider<StatusSortNotifier, String>? statusSortNotifier;
 
   final String subtitle;
   final String toolTipName;
   final String? sortIcon;
+  final Function(String?)? onStatusFilterChange;
   final bool isVisible;
 
   late Map<String, dynamic> metaData;
@@ -59,18 +60,23 @@ class TableColumnHeaderPopMenuButtonWidget extends StatelessWidget {
 
   TableColumnHeaderPopMenuButtonWidget(
       {required this.metaData,
-      required this.columnIndex,this.rateKeyData,
+      required this.columnIndex,
+      this.rateKeyData,
       this.pinnedColumnInfo,
-      this.sortIcon,this.statusSortNotifier,
+      this.onStatusFilterChange,
+      this.sortIcon,
+      this.statusSortNotifier,
       this.onColumnFilterClick,
       this.index,
-      this.onColumnHideClick,this.isVisible = true,
+      this.onColumnHideClick,
+      this.isVisible = true,
       this.clearAllCallback,
       this.tableFilterList,
       this.isFilterOn = true,
       this.isColumnHidingOn = true,
       this.isColumnOrderingOn = true,
-      this.selectableText = false,this.isFiltersTextFieldVisible = false,
+      this.selectableText = false,
+      this.isFiltersTextFieldVisible = false,
       required this.toolTipName,
       required this.id,
       this.onColumnPinClick,
@@ -262,15 +268,15 @@ class TableColumnHeaderPopMenuButtonWidget extends StatelessWidget {
                         if(p0 == 'VIOLATED'){
                           context
                               .riverPodReadStateNotifier(
-                              statusSortNotifier!.notifier)
-                              .updateValue('VIOLATED') ;
-                        }
-                        else{
+                                  statusSortNotifier!.notifier)
+                              .updateValue('VIOLATED');
+                        } else {
                           context
                               .riverPodReadStateNotifier(
-                              statusSortNotifier!.notifier)
+                                  statusSortNotifier!.notifier)
                               .updateValue(p0);
                         }
+                        onStatusFilterChange!(p0);
                       },
                       selectedItemIndex: statusFilter.indexWhere((element) =>
                           element == context.riverPodRead(statusSortNotifier!)))
