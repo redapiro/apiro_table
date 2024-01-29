@@ -63,9 +63,11 @@ class ApiroTableWidget extends StatelessWidget {
     this.cellMenuOn = false,
     this.cellInlineEditing = true,
     this.columnOrderingOn = true,
-    this.columnHidingOn = true, this.headerWidgetIsVisible = true,
+    this.columnHidingOn = true,
+    this.headerWidgetIsVisible = true,
     this.filtersOn = true,
     this.pinnedColumnInfo = const [],
+    this.rateKeyData,
     this.columnOrderingInfo = const [],
     this.paginationPageSize = 50,
     this.updateDataOnColumnOrdering,
@@ -100,7 +102,7 @@ class ApiroTableWidget extends StatelessWidget {
 
     perPageRowCountList = paginationPageSizes.map((e) => e.toString()).toList();
     perPageRowCountNotifier.value = paginationPageSizes.firstWhere(
-            (element) => element == this.paginationPageSize, orElse: () {
+        (element) => element == this.paginationPageSize, orElse: () {
       return 0;
     }).toString();
 
@@ -108,6 +110,7 @@ class ApiroTableWidget extends StatelessWidget {
   }
 
   List<String> columnData = [];
+  final List<String> ? rateKeyData;
   final BuildContext context;
 
   List<String> columnIds = [];
@@ -322,7 +325,7 @@ class ApiroTableWidget extends StatelessWidget {
                     minimumWidth: 150,
                     columnName: _tableManager.columnNames[index],
                     label: TableColumnHeaderPopMenuButtonWidget(
-                      index: index,
+                      index: index,rateKeyData: rateKeyData??[],
                       isVisible: headerWidgetIsVisible,
                       title: _tableManager.columnIds[index],
                       statusSortNotifier: statusSortNotifier,

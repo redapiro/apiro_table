@@ -21,6 +21,7 @@ class TableColumnHeaderPopMenuButtonWidget extends StatelessWidget {
   final String title;
   final String id;
   final int? index;
+  final List<String> ?rateKeyData;
   final StateNotifierProvider<StatusSortNotifier, String> ? statusSortNotifier;
 
   final String subtitle;
@@ -58,7 +59,7 @@ class TableColumnHeaderPopMenuButtonWidget extends StatelessWidget {
 
   TableColumnHeaderPopMenuButtonWidget(
       {required this.metaData,
-      required this.columnIndex,
+      required this.columnIndex,this.rateKeyData,
       this.pinnedColumnInfo,
       this.sortIcon,this.statusSortNotifier,
       this.onColumnFilterClick,
@@ -177,13 +178,13 @@ class TableColumnHeaderPopMenuButtonWidget extends StatelessWidget {
                     Expanded(flex:3,
                       child: Tooltip(
                           message: this.toolTipName,
-                          child: CustomSelectableText(this.title,
+                          child: CustomSelectableText(rateKeyData!.contains(title)? "* $title *":this.title,
                               textAlign: TextAlign.center,
                               style: _themeData!.textTheme.titleSmall!
                                   .copyWith(
                                       color: value.watch(isPopUpButtonPressed)
                                           ? AppColors.appBlueColor
-                                          : AppColors.dividerColor),
+                                          : AppColors.dividerColor,fontWeight: rateKeyData!.contains(title)?FontWeight.w600:FontWeight.w400),
                               isSelectableText: selectableText)),
                     ),
                     Flexible(child: _getTableColumnFilterIcon()),
