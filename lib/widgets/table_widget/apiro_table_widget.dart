@@ -111,12 +111,13 @@ class ApiroTableWidget extends StatelessWidget {
   final BuildContext context;
 
   List<String> columnIds = [];
+  final List<String> rateKeys = [];
 
   List<Map<String, dynamic>> rowData = [];
   List<DataGridRow> gridRow = [];
 
   Widget? widgetInTableHeaderRow;
-  TableSortWidgetFunction ? tableSortWidget;
+  TableSortWidgetFunction? tableSortWidget;
 
   //Column pinning properties
   bool groupColumnPinning;
@@ -287,7 +288,7 @@ class ApiroTableWidget extends StatelessWidget {
                   .size
                   .width : double.maxFinite,
               child: SfDataGrid(
-                source: _tableDataGridSource(),
+                source: _tableDataGridSource(ref),
                 allowColumnsDragging: true,
                 onColumnDragging: (DataGridColumnDragDetails details) {
                   if (details.action == DataGridColumnDragAction.dropped &&
@@ -321,8 +322,10 @@ class ApiroTableWidget extends StatelessWidget {
                     minimumWidth: 150,
                     columnName: _tableManager.columnNames[index],
                     label: TableColumnHeaderPopMenuButtonWidget(
-                      index: index,isVisible: headerWidgetIsVisible,
+                      index: index,
+                      isVisible: headerWidgetIsVisible,
                       title: _tableManager.columnIds[index],
+                      statusSortNotifier: statusSortNotifier,
                       isFiltersTextFieldVisible:
                           hiddenFilterTextFieldListIds != null
                               ? hiddenFilterTextFieldListIds!.isNotEmpty
@@ -383,49 +386,66 @@ class ApiroTableWidget extends StatelessWidget {
               )),
          if(isPaginationVisible) Row(
             children: [
-              Expanded(
-                child: Container(
-                  height: 50,
-                  child: CustomPaginationWidget(
-                    onPageNumberClick: (value) {
-                      _onPageNumberClick(value);
-                    },
-                    onNextClick: () {
-                      _onNextClick();
-                    },
-                    onItemsPerPageChange: () {
-                      _onItemPerPageChange();
-                    },
-                    jumpToPageTextFieldFocusNode:
-                    _jumpToPageTextFiledFocusNode,
-                    jumpToPageNumberController: _jumpToPageController,
-                    onPageNumberSelect: (selectedPageNumber) {
-                      _onPageNumberDropDownSelect(selectedPageNumber);
-                    },
-                    onPreviousClick: () {
-                      _onPreviousClick();
-                    },
-                    onTextFieldSubmit: (data) {
-                      _onTextFiledSubmit();
-                    },
-                    pageNumbers: perPageRowCountList,totalNumberOfItems: totalNumberOfItems,
-                    // paginationPageNumberNotifier:
-                    //     AppNotifiers.getInstance().paginationPageNumberNotifier,
-                    perPageRowCountNotifier: this.perPageRowCountNotifier,
-                    totalNumberOfPages: this.totalNumberOfPages,
+                Expanded(
+                  child: Container(
+                    height: 50,
+                    child: CustomPaginationWidget(
+                      onPageNumberClick: (value) {
+                        _onPageNumberClick(value);
+                      },
+                      onNextClick: () {
+                        _onNextClick();
+                      },
+                      onItemsPerPageChange: () {
+                        _onItemPerPageChange();
+                      },
+                      jumpToPageTextFieldFocusNode:
+                          _jumpToPageTextFiledFocusNode,
+                      jumpToPageNumberController: _jumpToPageController,
+                      onPageNumberSelect: (selectedPageNumber) {
+                        _onPageNumberDropDownSelect(selectedPageNumber);
+                      },
+                      onPreviousClick: () {
+                        _onPreviousClick();
+                      },
+                      onTextFieldSubmit: (data) {
+                        _onTextFiledSubmit();
+                      },
+                      pageNumbers: perPageRowCountList,
+                      totalNumberOfItems: totalNumberOfItems,
+                      // paginationPageNumberNotifier:
+                      //     AppNotifiers.getInstance().paginationPageNumberNotifier,
+                      perPageRowCountNotifier: this.perPageRowCountNotifier,
+                      totalNumberOfPages: this.totalNumberOfPages,
+                    ),
                   ),
                 ),
-              ),
-            ],
-          )
+              ],
+            )
         ],
       );
     });
   }
 
-  TableDataGrid _tableDataGridSource() {
-    return TableDataGrid(
-        context: this.context, gridRow: _tableManager.dataGridRow);
+  final statusSortNotifier =
+      StateNotifierProvider<StatusSortNotifier, String>((ref) {
+    return StatusSortNotifier();
+  });
+
+  TableDataGrid _tableDataGridSource(WidgetRef ref) {
+    var modifiedDataGridRow = List<DataGridRow>.from(_tableManager.dataGridRow);
+    if (ref.watch(statusSortNotifier) != 'All') {
+      modifiedDataGridRow.removeWhere((element) {
+        return element
+                .getCells()
+                .firstWhere((element) => element.columnName == 'status')
+                .value
+                .value !=
+            ref.watch(statusSortNotifier);
+      });
+    }
+
+    return TableDataGrid(context: this.context, gridRow: modifiedDataGridRow);
   }
 
   //On click methods

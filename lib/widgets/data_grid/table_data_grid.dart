@@ -28,8 +28,7 @@ class TableDataGrid extends DataGridSource {
   List<DataGridRow> get rows => controllerInfo.index != -1 &&
           controllerInfo.text.isNotEmpty &&
           controllerInfo.text.length > 2
-      ? TableManager.getInstance()
-          .dataGridRow
+      ? gridRow
           .where((element) => element
               .getCells()[controllerInfo.index]
               .value
@@ -38,7 +37,7 @@ class TableDataGrid extends DataGridSource {
               .toLowerCase()
               .startsWith(controllerInfo.text.toLowerCase()))
           .toList()
-      : TableManager.getInstance().dataGridRow;
+      : gridRow;
 
   @override
   DataGridRowAdapter buildRow(DataGridRow row) {

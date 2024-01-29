@@ -21,6 +21,7 @@ class TableColumnHeaderPopMenuButtonWidget extends StatelessWidget {
   final String title;
   final String id;
   final int? index;
+  final StateNotifierProvider<StatusSortNotifier, String> ? statusSortNotifier;
 
   final String subtitle;
   final String toolTipName;
@@ -59,7 +60,7 @@ class TableColumnHeaderPopMenuButtonWidget extends StatelessWidget {
       {required this.metaData,
       required this.columnIndex,
       this.pinnedColumnInfo,
-      this.sortIcon,
+      this.sortIcon,this.statusSortNotifier,
       this.onColumnFilterClick,
       this.index,
       this.onColumnHideClick,this.isVisible = true,
@@ -91,10 +92,8 @@ class TableColumnHeaderPopMenuButtonWidget extends StatelessWidget {
 
   ThemeData? _themeData;
 
-
-
   final isPopUpButtonPressed =
-  StateNotifierProvider<IsPopUpButtonPressed, bool>((ref) {
+      StateNotifierProvider<IsPopUpButtonPressed, bool>((ref) {
     return IsPopUpButtonPressed();
   });
   final shouldShowFilterUI =
@@ -103,6 +102,7 @@ class TableColumnHeaderPopMenuButtonWidget extends StatelessWidget {
   });
   late ValueNotifier<int> selectedColumnOrderIndex;
   late ValueNotifier<int> selectedPinnedColumnOrderIndex;
+  List<String> statusFilter = ['All', 'Valid', 'Violation'];
   double? screenWidth;
   List<String> columnNameList = [];
   List<String> pinnedColumnNameList = [];
@@ -254,6 +254,17 @@ class TableColumnHeaderPopMenuButtonWidget extends StatelessWidget {
                       ],
                     ),
                   ),
+                if (title.toLowerCase() == 'status')
+                  CustomDropDownWidget(
+                      items: statusFilter,
+                      onChange: (p0) {
+                        context
+                            .riverPodReadStateNotifier(
+                                statusSortNotifier!.notifier)
+                            .updateValue(p0);
+                      },
+                      selectedItemIndex: statusFilter.indexWhere((element) =>
+                          element == context.riverPodRead(statusSortNotifier!)))
               ],
             ),
           );
