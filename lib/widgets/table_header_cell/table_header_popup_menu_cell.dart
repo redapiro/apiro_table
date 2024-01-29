@@ -103,7 +103,7 @@ class TableColumnHeaderPopMenuButtonWidget extends StatelessWidget {
   });
   late ValueNotifier<int> selectedColumnOrderIndex;
   late ValueNotifier<int> selectedPinnedColumnOrderIndex;
-  List<String> statusFilter = ['All', 'Valid', 'Violation'];
+  List<String> statusFilter = ['ALL', 'VALID', 'VIOLATED'];
   double? screenWidth;
   List<String> columnNameList = [];
   List<String> pinnedColumnNameList = [];
@@ -259,10 +259,18 @@ class TableColumnHeaderPopMenuButtonWidget extends StatelessWidget {
                   CustomDropDownWidget(
                       items: statusFilter,
                       onChange: (p0) {
-                        context
-                            .riverPodReadStateNotifier(
-                                statusSortNotifier!.notifier)
-                            .updateValue(p0);
+                        if(p0 == 'VIOLATED'){
+                          context
+                              .riverPodReadStateNotifier(
+                              statusSortNotifier!.notifier)
+                              .updateValue('VIOLATED') ;
+                        }
+                        else{
+                          context
+                              .riverPodReadStateNotifier(
+                              statusSortNotifier!.notifier)
+                              .updateValue(p0);
+                        }
                       },
                       selectedItemIndex: statusFilter.indexWhere((element) =>
                           element == context.riverPodRead(statusSortNotifier!)))

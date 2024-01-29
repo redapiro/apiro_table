@@ -64,6 +64,7 @@ class ApiroTableWidget extends StatelessWidget {
     this.cellInlineEditing = true,
     this.columnOrderingOn = true,
     this.columnHidingOn = true,
+    this.defaultStatusSortFilter,
     this.headerWidgetIsVisible = true,
     this.filtersOn = true,
     this.pinnedColumnInfo = const [],
@@ -88,6 +89,9 @@ class ApiroTableWidget extends StatelessWidget {
       context
           .riverPodReadStateNotifier(hiddenColumnNumberNotifier.notifier)
           .updateValue(0);
+      context
+          .riverPodReadStateNotifier(statusSortNotifier.notifier)
+          .updateValue(defaultStatusSortFilter ?? 'ALL');
       //refresh the table
     });
     _tableManager.onRowPinning = this.onPinRow;
@@ -110,11 +114,12 @@ class ApiroTableWidget extends StatelessWidget {
   }
 
   List<String> columnData = [];
-  final List<String> ? rateKeyData;
+  final List<String>? rateKeyData;
   final BuildContext context;
 
   List<String> columnIds = [];
   final List<String> rateKeys = [];
+  final String? defaultStatusSortFilter;
 
   List<Map<String, dynamic>> rowData = [];
   List<DataGridRow> gridRow = [];
@@ -437,14 +442,18 @@ class ApiroTableWidget extends StatelessWidget {
 
   TableDataGrid _tableDataGridSource(WidgetRef ref) {
     var modifiedDataGridRow = List<DataGridRow>.from(_tableManager.dataGridRow);
-    if (ref.watch(statusSortNotifier) != 'All') {
+    if (ref.watch(statusSortNotifier) != 'ALL') {
       modifiedDataGridRow.removeWhere((element) {
         return element
                 .getCells()
                 .firstWhere((element) => element.columnName == 'status')
                 .value
-                .value !=
-            ref.watch(statusSortNotifier);
+                .value
+                .toString()
+                .toLowerCase() !=
+            (ref.watch(statusSortNotifier) != 'VIOLATED'
+                ? ref.watch(statusSortNotifier).toLowerCase()
+                : 'violation');
       });
     }
 

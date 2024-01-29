@@ -131,7 +131,7 @@ class HiddenColumnNumberNotifier extends StateNotifier<int> {
 
 
 class StatusSortNotifier extends StateNotifier<String> {
-  StatusSortNotifier() : super('All');
+  StatusSortNotifier() : super('ALL');
 
   void updateValue(String val) => state = val;
 }
