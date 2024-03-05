@@ -3,6 +3,7 @@ class Constants {
     "Approve",
     "Recalculate",
   ];
+  static const statusFilters =['ALL', 'VALID', 'VIOLATED'];
   static const String AUDIT_TASK_COLUMN_DATA = """ 
    [{
  		"displayName": "Date",

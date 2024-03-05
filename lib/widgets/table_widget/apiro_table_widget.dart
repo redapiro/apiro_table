@@ -75,7 +75,7 @@ class ApiroTableWidget extends StatelessWidget {
     this.updateDataOnColumnOrdering,
     this.onUnHideTheItem,
     this.hiddenFilterTextFieldListIds,
-    this.paginationPageSizes = const [5, 10, 50, 100, 500],
+    this.paginationPageSizes = const [5, 10, 50, 100, 500],  this.statusFilter = Constants.statusFilters,
   }) : super(key: key) {
     //Init table manager
     if (shouldResetTableConfigs)
@@ -118,6 +118,7 @@ class ApiroTableWidget extends StatelessWidget {
   final List<String>? rateKeyData;
   final BuildContext context;
   final Function(String?)? onStatusFilterChange;
+  final List<String> statusFilter;
 
   List<String> columnIds = [];
   final List<String> rateKeys = [];
@@ -333,7 +334,7 @@ class ApiroTableWidget extends StatelessWidget {
                     columnName: _tableManager.columnNames[index],
                     label: TableColumnHeaderPopMenuButtonWidget(
                       index: index,rateKeyData: rateKeyData??[],
-                      isVisible: headerWidgetIsVisible,
+                      isVisible: headerWidgetIsVisible,statusFilter: statusFilter,
                       title: _tableManager.columnIds[index],
                       statusSortNotifier: statusSortNotifier,
                       isFiltersTextFieldVisible:
@@ -444,11 +445,12 @@ class ApiroTableWidget extends StatelessWidget {
 
   TableDataGrid _tableDataGridSource(WidgetRef ref) {
     var modifiedDataGridRow = List<DataGridRow>.from(_tableManager.dataGridRow);
+    // print("ENTEFRED HERE ${ref.watch(statusSortNotifier)}");
     if (ref.watch(statusSortNotifier) != 'ALL') {
       modifiedDataGridRow.removeWhere((element) {
         return element
                 .getCells()
-                .firstWhere((element) => element.columnName == 'status')
+                .firstWhere((element) => element.columnName.toLowerCase() == 'status')
                 .value
                 .value
                 .toString()

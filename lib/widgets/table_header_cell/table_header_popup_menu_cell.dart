@@ -2,6 +2,7 @@
 
 import 'package:apiro_table/model/column_pinning_info.dart';
 import 'package:apiro_table/utils/app_colors.dart';
+import 'package:apiro_table/utils/constants.dart';
 import 'package:apiro_table/utils/controller/global_controllers.dart';
 import 'package:apiro_table/utils/provider_helper.dart';
 import 'package:apiro_table/utils/table_manager/table_manager.dart';
@@ -55,6 +56,7 @@ class TableColumnHeaderPopMenuButtonWidget extends StatelessWidget {
   final Key? columnPinKey;
   final Key? hideKey;
   final List<ColumnPinningInfo>? pinnedColumnInfo;
+  final List<String> statusFilter;
 
   TableSortWidgetFunction? tableSortWidget;
 
@@ -90,7 +92,8 @@ class TableColumnHeaderPopMenuButtonWidget extends StatelessWidget {
       this.filtersPopUpKey,
       this.columnOrderKey,
       this.columnPinKey,
-      this.hideKey}) {
+      this.hideKey,
+      this.statusFilter = Constants.statusFilters}) {
     _tableManager = TableManager.getInstance();
 
     selectedColumnOrderIndex = ValueNotifier<int>(0);
@@ -109,7 +112,7 @@ class TableColumnHeaderPopMenuButtonWidget extends StatelessWidget {
   });
   late ValueNotifier<int> selectedColumnOrderIndex;
   late ValueNotifier<int> selectedPinnedColumnOrderIndex;
-  List<String> statusFilter = ['ALL', 'VALID', 'VIOLATED'];
+
   double? screenWidth;
   List<String> columnNameList = [];
   List<String> pinnedColumnNameList = [];
@@ -276,7 +279,9 @@ class TableColumnHeaderPopMenuButtonWidget extends StatelessWidget {
                                   statusSortNotifier!.notifier)
                               .updateValue(p0);
                         }
-                        onStatusFilterChange!(p0);
+                        if(onStatusFilterChange != null){
+                          onStatusFilterChange!(p0);
+                        }
                       },
                       selectedItemIndex: statusFilter.indexWhere((element) =>
                           element == context.riverPodRead(statusSortNotifier!)))
