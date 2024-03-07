@@ -71,11 +71,13 @@ class ApiroTableWidget extends StatelessWidget {
     this.pinnedColumnInfo = const [],
     this.rateKeyData,
     this.columnOrderingInfo = const [],
+    this.descriptionOfTitle,
     this.paginationPageSize = 50,
     this.updateDataOnColumnOrdering,
     this.onUnHideTheItem,
     this.hiddenFilterTextFieldListIds,
-    this.paginationPageSizes = const [5, 10, 50, 100, 500],  this.statusFilter = Constants.statusFilters,
+    this.paginationPageSizes = const [5, 10, 50, 100, 500],
+    this.statusFilter = Constants.statusFilters,
   }) : super(key: key) {
     //Init table manager
     if (shouldResetTableConfigs)
@@ -119,6 +121,7 @@ class ApiroTableWidget extends StatelessWidget {
   final BuildContext context;
   final Function(String?)? onStatusFilterChange;
   final List<String> statusFilter;
+  final Map<String, dynamic>? descriptionOfTitle;
 
   List<String> columnIds = [];
   final List<String> rateKeys = [];
@@ -389,7 +392,10 @@ class ApiroTableWidget extends StatelessWidget {
                         _onColumnOrdering(_tableManager.columnIds[index],
                             indexToShiftOn, index);
                       },
-                      toolTipName: _tableManager.columnNames[index],
+                      toolTipName: descriptionOfTitle != null
+                          ? descriptionOfTitle![
+                              _tableManager.columnNames[index]].toString()
+                          : _tableManager.columnNames[index],
                       columnIndex: index,
                     ),
                   );
