@@ -79,8 +79,8 @@ class CustomPaginationWidget extends StatelessWidget {
                 child: Column(
                   children: [
                     Container(
-                        height: 0.5,
-                        color: _themeData!.disabledColor,
+                        height: 0.8,
+                        color: Colors.black,
                         width: double.maxFinite),
                     Expanded(child: Container()),
                     Container(
@@ -107,10 +107,10 @@ class CustomPaginationWidget extends StatelessWidget {
                           ),
                         ])),
                     Expanded(child: Container()),
-                    Container(
-                        height: 0.5,
-                        color: _themeData!.disabledColor,
-                        width: double.maxFinite),
+              Container(
+                  height: 0.8,
+                  color: Colors.black,
+                  width: double.maxFinite),
                   ],
                 ));
           }),
